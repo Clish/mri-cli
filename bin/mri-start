@@ -3,16 +3,44 @@
 'user strict';
 
 const program = require('commander');
+const exists = require('fs').existsSync;
+const readFile = require('fs').readFileSync;
 const join = require('path').join;
+const _ = require('lodash');
 
 program.usage('[options] path').parse(process.argv);
 
-if (!program.args[0]) {
-    program.help();
-} else {
-    console.log(process.cwd());
-    // const file =
+const args = program.args[0];
+
+printHelp(!args)(); 
+
+const filePath = executable(args);
+printHelp(!filePath)();
+
+const { routes } = JSON.parse(readFile(filePath, 'utf8'));
+printHelp(!routes)();
+
+let pageDir = executable('./pages');
+if(pageDir) {
+    
+}
+console.log(pageDir);
+_.forEach(routes, (value, name) => {
+    
+    console.log(value, name);
+});
+
+function executable(filePath) {
+    let file = join(process.cwd(), filePath);
+    if (exists(file)) return file;
 }
 
-console.log(program.args[0]);
-console.log(__dirname);
+function printHelp(isNext) {
+    if(!!isNext) {
+        return function() {
+            program.help();
+            return;
+        }
+    }
+    return function() {};
+}

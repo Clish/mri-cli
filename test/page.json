@@ -1,0 +1,8 @@
+{
+    "routes": {
+        "demo": "/demo",
+        "index": "/index",
+        "tutorial": "/tutorial",
+        "search-result": "/search/result"
+    }
+}

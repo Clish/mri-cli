@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-// mri start -p ./theme/index.js
-
 'use strict';
 
 const program = require('commander');
