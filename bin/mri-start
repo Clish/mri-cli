@@ -10,6 +10,7 @@ program.usage('[options] path').parse(process.argv);
 if (!program.args[0]) {
     program.help();
 } else {
+    console.log(process.cwd());
     // const file =
 }
 
