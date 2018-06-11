@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+// mri start -p ./theme/index.js
+
+'use strict';
+
+const program = require('commander');
+const exists = require('fs').existsSync;
+const join = require('path').join;
+const spawn = require('cross-spawn');
+const chalk = require('chalk');
+
+program
+    .usage('<command> [options]')
+    .on('--help', echoHelp)
+    .parse(process.argv);
+
+const args = process.argv.slice(3);
+let subCmd = program.args[0];
+
+if (!subCmd) {
+    program.help();
+} else {
+    const bin = executable(subCmd);
+    !bin ? program.help() : wrap(spawn(bin, args, { stdio: 'inherit' }));
+}
+
+function wrap(sp) {
+    sp.on('close', function(code) {
+        process.exit(code);
+    });
+}
+
+function executable(subCmd) {
+    let file = join(__dirname, 'mri-' + subCmd);
+    if (exists(file)) return file;
+}
+
+function echoHelp() {
+    console.log('  Commands:');
+    console.log();
+    console.log(chalk.green('    start    ') + 'Start a mri project with path');
+}

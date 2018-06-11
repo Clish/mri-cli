@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+
+'user strict';
+
+const program = require('commander');
+const join = require('path').join;
+
+program.usage('[options] path').parse(process.argv);
+
+if (!program.args[0]) {
+    program.help();
+} else {
+    // const file =
+}
+
+console.log(program.args[0]);
+console.log(__dirname);

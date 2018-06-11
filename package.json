@@ -1,0 +1,19 @@
+{
+    "name": "mri-cli",
+    "version": "0.0.1",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "bin": {
+        "mri": "./bin/mri"
+    },
+    "author": "clish wang",
+    "license": "MIT",
+    "dependencies": {
+        "chalk": "^2.4.1",
+        "commander": "^2.15.1",
+        "cross-spawn": "^6.0.5"
+    }
+}
