@@ -2,4 +2,5 @@
 tmp
 node_modules
 lib
+pages
 package-lock.json

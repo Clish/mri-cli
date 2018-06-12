@@ -3,10 +3,10 @@
 'use strict';
 
 const program = require('commander');
-const exists = require('fs').existsSync;
-const join = require('path').join;
-const spawn = require('cross-spawn');
-const chalk = require('chalk');
+const exists  = require('fs').existsSync;
+const join    = require('path').join;
+const spawn   = require('cross-spawn');
+const chalk   = require('chalk');
 
 program
     .usage('<command> [options]')
