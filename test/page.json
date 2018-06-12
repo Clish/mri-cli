@@ -1,5 +1,11 @@
 {
     "routes": {
+        "demo": {
+            "component": "demo",
+            "path": ["/demo"],
+            "layout": "SocialNoneLayout",
+            "token": false
+        },
         "404": {
             "component": "Social404",
             "path": ["/404"],
@@ -8,7 +14,7 @@
         },
         "index": {
             "component": "SocialIndex",
-            "path": ["/idnex", "/"],
+            "path": ["/index", "/"],
             "layout": "SocialNoneLayout",
             "token": true
         },
