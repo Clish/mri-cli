@@ -35,7 +35,6 @@ fse.mkdirsSync(pagePath);
 // create files
 _.forEach(routes, ({ path = [] }, name) => {
     path = _.uniq(path.map(item => _.trim(_.replace(item, '/' + DEF_INDEX, ''), '/')));
-    console.log(path);
     _.forEach(path, str => {
         if(!str) str = DEF_INDEX;
         let filePath = createPageDir(str.split('/'), pagePath);
