@@ -9,8 +9,11 @@ const readFile = require('fs').readFileSync;
 const join     = require('path').join;
 const _        = require('lodash');
 
+const DEF_PAGES_PATH = './src/pages';
+const DEF_INDEX = 'index';
+
 program
-    .usage('[options] path')
+    .usage('[options] jsonPath targetPath')
     .option('-t, --ts', 'create index file with .ts')
     .option('-j, --js', 'create index file with .js')
     .parse(process.argv);
@@ -26,16 +29,16 @@ printHelp(!filePath)();
 const { routes } = JSON.parse(readFile(filePath, 'utf8'));
 printHelp(!routes)();
 // create clean page dir
-const pagePath = join(process.cwd(), './pages');
+const pagePath = join(process.cwd(), program.args[1] || DEF_PAGES_PATH);
 if(exists(pagePath)) fse.removeSync(pagePath);
 fse.mkdirsSync(pagePath);
 // create files
 _.forEach(routes, ({ path = [] }, name) => {
-    path = _.uniq(path.map(item => _.trim(item, '/index')));
+    path = _.uniq(path.map(item => _.trim(item, '/' + DEF_INDEX)));
     _.forEach(path, str => {
-        if(!str) str = 'index';
+        if(!str) str = DEF_INDEX;
         let filePath = createPageDir(str.split('/'), pagePath);
-        writeFile(join(filePath, `index${fileSuffix}`), name);
+        writeFile(join(filePath, `${DEF_INDEX}${fileSuffix}`), name);
     });
 });
 
