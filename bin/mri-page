@@ -8,6 +8,7 @@ const exists   = require('fs').existsSync;
 const readFile = require('fs').readFileSync;
 const join     = require('path').join;
 const _        = require('lodash');
+const chalk    = require('chalk');
 
 const DEF_PAGES_PATH = './src/pages';
 const DEF_INDEX = 'index';
@@ -41,6 +42,8 @@ _.forEach(routes, ({ path = [] }, name) => {
         writeFile(join(filePath, `${DEF_INDEX}${fileSuffix}`), name);
     });
 });
+
+console.log(chalk.green('    Successfully generation pages. n(*≧▽≦*)n~~~~~    '));
 
 function createPageDir(arr, pagePath) {
     _.forEach(arr, dir => {

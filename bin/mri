@@ -37,5 +37,5 @@ function executable(subCmd) {
 function echoHelp() {
     console.log('  Commands:');
     console.log();
-    console.log(chalk.green('    start    ') + 'Start a mri project with path');
+    console.log(chalk.green('    page    ') + 'generate pages for mri project with path');
 }
