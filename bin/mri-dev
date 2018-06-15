@@ -1,0 +1,187 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const program = require('commander');
+const fse = require('fs-extra');
+const exists = require('fs').existsSync;
+const readFileSync = require('fs').readFileSync;
+const createReadStream = require('fs').createReadStream;
+const join = require('path').join;
+const _ = require('lodash');
+const chalk = require('chalk');
+const shell = require('shelljs');
+const {log, error, debug} = console;
+const {green, red, yellow, grey} = chalk;
+
+const DEF_PAGES_PATH = './src/pages';
+const DEF_INDEX = 'index';
+
+let getRoutesPath = (theme) => {
+    return `./src/theme/${theme}/${theme}-routes.ts`;
+    // return `./test/page.ts`;
+};
+
+let ifnvl = (value, repeat) => {
+    return _.isNil(value) ? repeat : value;
+};
+
+let createPageDir = (arr, pagePath) => {
+    _.forEach(arr, dir => {
+        pagePath = join(pagePath, './' + dir);
+        if(!exists(pagePath)) {
+            fse.mkdirsSync(pagePath);
+        }
+    });
+    return pagePath;
+};
+
+let writeFile = (path, name) => {
+    fse.outputFileSync(path, `
+        import $theme from 'src/theme';
+        const module = $theme.getModule('${name}');
+        const component = module.component;
+        export default component;
+    `);
+
+    log(`${green('::: pages 文件生成 => ')} ${path}`);
+};
+
+let printHelp = (isNext) => {
+    if(!!isNext) {
+        return function() {
+            program.help();
+            return void 0;
+        }
+    }
+    return function() {};
+};
+
+
+/**
+ *  mri dev ${theme}
+ *  启动 MRI 项目
+ */
+
+program
+    .usage('theme [options]')
+    .description('运行MRI的开发环境')
+    .version('0.0.1')
+    .option('-p, --port [port]', 'server port')
+    .option('-hd, --hardSource', '是否开启Hard Source模式')
+    .option('-bs, --browser', '是否默认打开浏览器')
+    .parse(process.argv);
+
+// 获得当前运行主题
+const theme = program.args[0];
+let {port, hardSource, browser} = process;
+
+if(!theme) {
+    error(`${red('### ERRO =>')} theme 未输入`);
+    return void 0;
+} else {}
+
+/**
+ * // @todo 检测当前主题是否存在
+ * 检测 src/theme/${theme} 是否存在
+ */
+
+log(`o 检测当前主题是否存在`);
+
+/**
+ * // @todo 检测配置文件
+ * @type {string}
+ */
+
+log(`oo 检测当前主题配置文件是否完整`);
+
+/**
+ * 生成 pages 文件
+ */
+
+log(`ooo 获取当前路由配置文件`);
+
+const routesPath = getRoutesPath(theme);
+
+if(exists(routesPath)) {
+    // 获取route配置信息
+    let info = String(readFileSync(routesPath, 'utf-8'));
+    let routes;
+
+    info = info.replace(/\n/g, '');
+    info = info.replace(/component?:(.*?)([,}])/g, 'component: "$1"$2');
+    info = info.replace(/layout?:(.*?)([,}])/g, 'layout: "$1"$2');
+    info = info.replace(/^.*?let.*?=(.*)?[;]export default.*$/g, '$1');
+
+    log(`oooo 检测路由配置信息`);
+
+    try {
+        routes = eval(`(${info})`);
+    } catch(e) {
+        error(`${red('@@@ =>')} 不能正确读取路由信息 \n`, e);
+        return void 0;
+    }
+
+    /**
+     * 根据路由模块，写入 pages，生成相应的文件夹及文件
+     */
+
+    log(`ooooo 正在写入路由文件`);
+
+    // 删除 pages 文件夹，避免缓存
+    fse.removeSync(DEF_PAGES_PATH);
+    // 生成 pages 文件夹
+    fse.mkdirsSync(DEF_PAGES_PATH);
+
+    // 创建 / 写入文件
+    _.forEach(routes, ({path = []}, name) => {
+        path = _.uniq(path.map(item => _.trim(_.replace(item, '/' + DEF_INDEX, ''), '/')));
+        _.forEach(path, str => {
+            if(!str) {
+                str = DEF_INDEX;
+            }
+            let filePath = createPageDir(str.split('/'), DEF_PAGES_PATH);
+            writeFile(join(filePath, `${DEF_INDEX}.ts`), name);
+        });
+    });
+
+    log(`oooooo 路由文件写入完成`);
+
+} else {
+    error(`${red('@@@ =>')} 路由文件不存在`);
+    return void 0;
+}
+
+log(`ooooooo 读取环境变量`);
+
+port = ifnvl(port, 6000);
+hardSource = ifnvl(hardSource, true);
+browser = ifnvl(browser, false);
+
+log(`${('::: 运行环境 => ')} dev (不可更改)`);
+log(`${('::: 主题 => ')} ${theme}`);
+log(`${('::: 端口 => ')} ${port || 8000}`);
+log(`${('::: TS_CONFIG_PATHS_PLUGIN => ')} true（强制开启）`);
+log(`${('::: HARD_SOURCE => ')} ${hardSource}`);
+log(`${('::: BROWSER => ')} ${browser}`);
+
+log(`${grey(`!!! 设置环境变量，可以在 src/${theme}/${theme}-theme-config.ts 中配置`)}`);
+
+log(`oooooooo 正在启动主题 => ${green(theme)}` );
+
+shell.exec(`
+    _uv=${theme}
+    _cross=./node_modules/.bin/cross-env
+    _umi=./node_modules/.bin/umi
+    
+    $_cross \\
+        BROWSER=none \\
+        BABEL_CACHE=none \\
+        HARD_SOURCE=1 \\
+        TS_CONFIG_PATHS_PLUGIN=1 \\
+        MRI_ENV=dev \\
+        THEME=$_uv \\
+    $_umi dev
+`);
+
+

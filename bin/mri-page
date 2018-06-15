@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-'user strict';
+'use strict';
 
-const program  = require('commander');
-const fse      = require('fs-extra');
-const exists   = require('fs').existsSync;
+const program = require('commander');
+const fse = require('fs-extra');
+const exists = require('fs').existsSync;
 const readFile = require('fs').readFileSync;
-const join     = require('path').join;
-const _        = require('lodash');
-const chalk    = require('chalk');
+const join = require('path').join;
+const _ = require('lodash');
+const chalk = require('chalk');
 
 const DEF_PAGES_PATH = './src/pages';
 const DEF_INDEX = 'index';
@@ -27,17 +27,21 @@ printHelp(!args)();
 const filePath = executable(args);
 printHelp(!filePath)();
 // load file of pages config
-const { routes } = JSON.parse(readFile(filePath, 'utf8'));
+const {routes} = JSON.parse(readFile(filePath, 'utf8'));
 printHelp(!routes)();
 // create clean page dir
 const pagePath = join(process.cwd(), program.args[1] || DEF_PAGES_PATH);
-if(exists(pagePath)) fse.removeSync(pagePath);
+if(exists(pagePath)) {
+    fse.removeSync(pagePath);
+}
 fse.mkdirsSync(pagePath);
 // create files
-_.forEach(routes, ({ path = [] }, name) => {
+_.forEach(routes, ({path = []}, name) => {
     path = _.uniq(path.map(item => _.trim(_.replace(item, '/' + DEF_INDEX, ''), '/')));
     _.forEach(path, str => {
-        if(!str) str = DEF_INDEX;
+        if(!str) {
+            str = DEF_INDEX;
+        }
         let filePath = createPageDir(str.split('/'), pagePath);
         writeFile(join(filePath, `${DEF_INDEX}${fileSuffix}`), name);
     });
@@ -48,7 +52,9 @@ console.log(chalk.green('    Successfully generation pages. n(*≧▽≦*)n~~~~~
 function createPageDir(arr, pagePath) {
     _.forEach(arr, dir => {
         pagePath = join(pagePath, './' + dir);
-        if(!exists(pagePath)) fse.mkdirsSync(pagePath);
+        if(!exists(pagePath)) {
+            fse.mkdirsSync(pagePath);
+        }
     });
     return pagePath;
 }
@@ -56,8 +62,8 @@ function createPageDir(arr, pagePath) {
 function writeFile(path, name) {
     fse.outputFileSync(path, `
         import $theme from 'src/theme';
-        let module = $theme.getModule('${name}');
-        let component = module.component;
+        const module = $theme.getModule('${name}');
+        const component = module.component;
         export default component;
     `);
 }
@@ -69,14 +75,16 @@ function isFile(str) {
 
 function executable(filePath) {
     let file = join(process.cwd(), filePath);
-    if (exists(file)) return file;
+    if(exists(file)) {
+        return file;
+    }
 }
 
 function printHelp(isNext) {
     if(!!isNext) {
         return function() {
             program.help();
-            return;
+            return void 0;
         }
     }
     return function() {};

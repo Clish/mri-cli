@@ -4,3 +4,4 @@ node_modules
 lib
 src
 package-lock.json
+.idea/
