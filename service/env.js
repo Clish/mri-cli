@@ -22,8 +22,8 @@ module.exports = function env(theme, env) {
     // 默认配置
     let def = {
         PORT: 6000,
-        HARD_SOURCE: 'none',
-        BABEL_CACHE: 'none',
+        HARD_SOURCE: 1,
+        BABEL_CACHE: 1,
         BROWSER: 'none',
         PUBLIC_PATH: void 0,
         BASE_URL: void 0
