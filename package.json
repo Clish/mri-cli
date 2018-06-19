@@ -7,8 +7,7 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "bin": {
-        "mri": "./bin/mri",
-        "mmri": "./bin/mri"
+        "mri": "./bin/mri"
     },
     "author": "clish wang",
     "license": "MIT",
