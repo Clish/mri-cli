@@ -26,7 +26,9 @@ module.exports = function command(env) {
 
         .option('-bc, --BABEL_CACHE', '是否使用BabelCache模式')
         .option('-pp, --PUBLIC_PATH', '二级目录')
-        .option('-bu, --BASE_URL', 'route目录');
+        .option('-bu, --BASE_URL', 'route目录')
+        .option('-esl, --ESLINT', 'eslint 校验')
+        .option('-tsl, --TSLINT', 'tslint 校验');
 
     if(env === 'dev') {
         _program
