@@ -17,16 +17,19 @@ const {green, red, yellow, grey} = _chalk;
 
 module.exports = function command(env) {
     _program
-        .usage('theme [options]')
+        .usage('${theme} [options]')
         .description('运行MRI的开发环境')
-        .version('0.0.1')
+        .description('更多的环境变量\n  参考 https://umijs.org/guide/env-variables.html\n  在src/theme/${theme}/${theme}-config.js 中进行配置')
+        .version('0.0.8')
         .option('-hs, --HARD_SOURCE', '是否开启Hard Source模式')
 
         .option('-bc, --BABEL_CACHE', '是否使用BabelCache模式')
-        .option('-pb, --PUBLIC', '二级目录 (若需要更复杂的配置，直接在 ${theme}/mri.js中配置)');
+        .option('-pp, --PUBLIC_PATH', '二级目录')
+        .option('-bu, --BASE_URL', 'route目录');
 
     if(env === 'dev') {
-        _program.option('-p, --PORT [port]', 'server port')
+        _program
+            .option('-p, --PORT [port]', 'server port')
             .option('-bs, --BROWSER', '是否默认打开浏览器');
     }
 

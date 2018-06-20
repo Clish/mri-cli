@@ -41,9 +41,13 @@ module.exports = function env(theme, env) {
         mri = Object.assign(mri, envConfig[env] || {});
     }
 
-    let {PORT, HARD_SOURCE, BROWSER, BABEL_CACHE, PUBLIC} = _program;
-    let self = {PORT, HARD_SOURCE, BROWSER, BABEL_CACHE, PUBLIC};
+    let {PORT, HARD_SOURCE, BROWSER, BABEL_CACHE, PUBLIC_PATH, BASE_URL} = _program;
+
+    let self = {PORT, HARD_SOURCE, BROWSER, BABEL_CACHE, PUBLIC_PATH, BASE_URL};
+
     self = _.omitBy(self, _.isNil);
+    def = _.omitBy(def, _.isNil);
+    mri = _.omitBy(mri, _.isNil);
 
     let config = Object.assign(def, mri, self);
 

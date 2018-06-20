@@ -7,9 +7,11 @@ const exists  = require('fs').existsSync;
 const join    = require('path').join;
 const spawn   = require('cross-spawn');
 const chalk   = require('chalk');
+const pk = require('../package.json');
 
 program
     .usage('<command> [options]')
+    .version(pk.version)
     .on('--help', echoHelp)
     .parse(process.argv);
 
@@ -37,6 +39,8 @@ function executable(subCmd) {
 function echoHelp() {
     console.log('\n  Commands:');
     console.log();
-    console.log(chalk.green('   page    ') + 'generate pages for mri project with path');
-    console.log(chalk.green('   mri dev    ') + '运行MRI开发环境');
+    console.log(chalk.green('   mri pages   ') + '按路由文件生成pages文件夹');
+    console.log(chalk.green('   mri dev     ') + '运行MRI开发环境');
+    console.log(chalk.green('   mri build   ') + '编译MRI test测试环境项目');
+    console.log(chalk.green('   mri prod    ') + '编译MRI prod生产环境项目');
 }
