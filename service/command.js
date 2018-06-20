@@ -14,13 +14,14 @@ const _path = require('path');
 const _program = require('commander');
 const {log, error, debug} = console;
 const {green, red, yellow, grey} = _chalk;
+const _pk = require('../package.json');
 
 module.exports = function command(env) {
     _program
         .usage('${theme} [options]')
         .description('运行MRI的开发环境')
         .description('更多的环境变量\n  参考 https://umijs.org/guide/env-variables.html\n  在src/theme/${theme}/${theme}-config.js 中进行配置')
-        .version('0.0.8')
+        .version(_pk.version)
         .option('-hs, --HARD_SOURCE', '是否开启Hard Source模式')
 
         .option('-bc, --BABEL_CACHE', '是否使用BabelCache模式')
@@ -32,6 +33,10 @@ module.exports = function command(env) {
             .option('-p, --PORT [port]', 'server port')
             .option('-bs, --BROWSER', '是否默认打开浏览器');
     }
+
+    // _program.action(function(name){
+    //     console.log('Deploying "%s"', name);
+    // });
 
     _program.parse(process.argv);
 };
