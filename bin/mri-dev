@@ -32,8 +32,6 @@ $command(MRI_ENV);
 // 获得当前运行主题
 const theme = _program.args[0];
 
-
-
 if(!theme) {
     error(`${red('### ERRO =>')} theme 未输入`);
     return void 0;
@@ -75,6 +73,8 @@ log(`\n\n---=> 正在启动主题 => ${green(theme)}` );
 _shell.exec(`
     _cross=./node_modules/.bin/cross-env
     _umi=./node_modules/.bin/umi
+    echo 'umi ${MRI_ENV}' 
+    $_umi -v 
     $_cross MRI_ENV=${MRI_ENV} ${env} $_umi dev
 `);
 
