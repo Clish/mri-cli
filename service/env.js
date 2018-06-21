@@ -28,7 +28,7 @@ module.exports = function env(theme, env) {
         PUBLIC_PATH: void 0,
         BASE_URL: void 0,
         TSLINT: 'none',
-        ESLINT: 'none'
+        ESLINT: 'none',
     };
 
     let mri;
