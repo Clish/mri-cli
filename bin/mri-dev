@@ -23,6 +23,7 @@ const $command = require('../service/command');
 const $util = require('../service/util');
 const $pages = require('../service/pages');
 const $env = require('../service/env');
+const $insertThemeIndex = require('../service/insertThemeIndex');
 
 const MRI_ENV = 'dev';
 
@@ -60,6 +61,11 @@ if(!$pages(theme, MRI_ENV)) {
     return void 0;
 }
 
+/**
+ * 写入 src/theme/index.ts
+ */
+$insertThemeIndex(theme);
+
 log(`\n\n---=> 读取环境配置信息`);
 
 let env = $env(theme, MRI_ENV);
@@ -73,8 +79,8 @@ log(`\n\n---=> 正在启动主题 => ${green(theme)}` );
 _shell.exec(`
     _cross=./node_modules/.bin/cross-env
     _umi=./node_modules/.bin/umi
-    echo 'umi ${MRI_ENV}' 
-    $_umi -v 
+    echo 'umi ${MRI_ENV}'
+    $_umi -v
     $_cross MRI_ENV=${MRI_ENV} ${env} $_umi dev
 `);
 

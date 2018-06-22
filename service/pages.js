@@ -16,11 +16,14 @@ const PAGES_PATH = './src/pages';
 const DEF_INDEX = 'index';
 
 let writeFile = (path, name) => {
+    // todo 改成 ejs
     _fse.outputFileSync(path, `
-        import $theme from 'src/theme';
-        const module = $theme.getModule('${name}');
-        const component = module.component;
-        export default component;
+import $theme from 'src/theme';
+
+const module = $theme.getModule('${name}');
+const component = module.component;
+export default component;
+
     `);
 
     log(`${green('::: pages 文件生成 => ')} ${path}`);

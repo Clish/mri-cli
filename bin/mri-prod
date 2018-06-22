@@ -23,6 +23,7 @@ const $command = require('../service/command');
 const $util = require('../service/util');
 const $pages = require('../service/pages');
 const $env = require('../service/env');
+const $insertThemeIndex = require('../service/insertThemeIndex');
 
 const MRI_ENV = 'prod';
 
@@ -61,6 +62,12 @@ if(!$pages(theme, MRI_ENV)) {
     error(red(`@@@=> 路由文件写入失败`));
     return void 0;
 }
+
+/**
+ * 写入 src/theme/index.ts
+ */
+$insertThemeIndex(theme);
+
 
 log(`\n\n---=> 读取环境配置信息`);
 
