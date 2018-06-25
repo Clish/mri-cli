@@ -1,0 +1,76 @@
+#!/usr/bin/env node
+
+'use strict';
+
+// mri component ${componentName} [-w] [targetPath]
+
+const program  = require('commander');
+const { join } = require('path');
+const fs       = require('fs-extra');
+const _        = require('lodash');
+const chalk    = require('chalk');
+
+const DEF_OUT_PATH = {
+    component: './src/components',
+    widget: './src/widgets',
+};
+const FILES        = [
+    {
+        name: 'index.ts',
+        content: `
+import $_{className} from './$_{name}';
+export default $_{className};`
+    }, {
+        name: 'style.less'
+    }, {
+        name: '$_{name}.ts',
+        content: `
+import './styles.less';
+
+class $_{className} extends React.Component {
+    render () {
+        return (<div>$_{className}</div>);
+    }
+}
+
+export default $_{className}; `
+    },
+];
+
+program
+    .usage('componentName [options] targetPath')
+    .option('-w, --widget', 'create component as widget ')
+    .parse(process.argv);
+
+const { args, widget: isWidget } = program;
+const comType = isWidget ? 'widget' : 'component';
+const outPath = args[1] || DEF_OUT_PATH[comType];
+
+checkValidity(args[0])();
+
+const dirPath = join(outPath, args[0]);
+if(fs.existsSync(dirPath)) {
+    console.log(chalk.red(`The name of ${args[0]} ${comType} has already exists. `));
+    console.log(chalk.green(`Please define a new name and create it. `));
+    return void 0;
+}
+fs.mkdirSync(dirPath);
+
+_.forEach(FILES, file => {
+    fs.outputFileSync(join(dirPath, replaceName(file.name)), replaceName(file.content || ''));
+});
+
+console.log(chalk.green(`Successfully generated ${comType} ${args[0]}`));
+
+function replaceName(str) {
+    let className = args[0].split('-').map(str => _.upperFirst(str)).join('');
+    return str.replace(/\$_\{name\}/ig, args[0]).replace(/\$_\{className\}/ig, className);
+}
+
+function checkValidity(argument) {
+    if(!!argument) return () => {};
+    return () => {
+        program.help();
+        return void 0;
+    };
+}
