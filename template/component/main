@@ -5,13 +5,13 @@ import * as _ from 'lodash';
 import {MrIf, MrElse, MrFill, MrCol, MrAutoBind, MrReq, MrPanel} from 'masterrt';
 import {Button, Input, Icon} from 'antd';
 import {$const, $service, $pool, $intl} from 'src/services';
-import './styles.less';
+import './<%=className%>.less';
 
-interface $_{className}Props {}
-interface $_{className}State {}
+interface <%=className%>Props {}
+interface <%=className%>State {}
 
-export default class $_{className} extends React.Component<$_{className}Props, $_{className}State> {
+export default class <%=className%> extends React.Component<<%=className%>Props, <%=className%>State> {
     render () {
-        return (<div>$_{className}</div>);
+        return (<div><%=className%> <%=type%></div>);
     }
 }
