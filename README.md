@@ -1,14 +1,14 @@
 This is a plugin of MRI project.
 
-##How to use it
+## How to use it
 
 ```
 >npm install mri-cli -g
 ```
 
-####Change log
+#### Change log
 
-#####V 0.1.1
+##### V 0.1.1
 支持命令方式创建component|widget
 ```
 >mri component componentName [-w|--widget] [targetPath]
