@@ -12,6 +12,7 @@ const _        = require('lodash');
 const chalk    = require('chalk');
 const ejs      = require('ejs');
 const util     = require('../service/util');
+const axios    = require('axios');
 
 const DEF_OUT_PATH = {
     component : './src/components',
@@ -44,14 +45,19 @@ if(fs.existsSync(dirPath)) {
     console.log(chalk.green(`Please define a new name and create it. `));
     return void 0;
 }
-fs.mkdirSync(dirPath);
+// fs.mkdirSync(dirPath);
 
-const ejsParams = { className: args[0].split('-').map(str => _.upperFirst(str)).join(''), type: _.upperFirst(comType) };
-let comments    = util.createComments(ejsParams);
-_.forEach(FILES, file => {
-    let content = readFile(join(__dirname, file.temp), { encoding: 'utf8' });
-    fs.outputFileSync(join(dirPath, ejs.render(file.name, ejsParams)), comments + ejs.render(content, ejsParams));
-});
+let aax = getWeather();
+
+// const ejsParams = {
+//     className: args[0].split('-').map(str => _.upperFirst(str)).join(''),
+//     type: _.upperFirst(comType)
+// };
+// const comments  = util.createComments(ejsParams);
+// _.forEach(FILES, file => {
+//     let content = readFile(join(__dirname, file.temp), { encoding: 'utf8' });
+//     fs.outputFileSync(join(dirPath, ejs.render(file.name, ejsParams)), comments + ejs.render(content, ejsParams));
+// });
 
 console.log(chalk.green(`Successfully generated ${comType} at ${dirPath}.`));
 
@@ -61,4 +67,19 @@ function checkValidity(argument) {
         program.help();
         return void 0;
     };
+}
+
+async function getWeather() {
+    // let ip = await axios.get('http://ifconfig.me/ip', { headers: {
+    //     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36',
+    //     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    // } }).then(res => res.date);
+    // if(!ip) return { weather: '' };
+    // let { data: cityInfo } = await axios.get('http://ip.taobao.com/service/getIpInfo.php?ip=' + _.trim('180.168.95.158')).then(res => res.data);
+    let weather = await axios.get('https://www.sojson.com/open/api/weather/json.shtml?city=' + encodeURIComponent('上海')).then(res => {
+        let { forecast } = res.data.data;
+        return forecast[0] || {};
+    });
+
+    return { weather: weather ? `${weather.type} ${weather.fx} ${weather.fl}` : '' };
 }
