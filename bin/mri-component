@@ -5,7 +5,8 @@
 // mri component ${componentName} [-w] [targetPath]
 
 const program  = require('commander');
-const { join } = require('path');
+const join     = require('path').join;
+const readFile = require('fs').readFileSync;
 const fs       = require('fs-extra');
 const _        = require('lodash');
 const chalk    = require('chalk');
@@ -15,26 +16,9 @@ const DEF_OUT_PATH = {
     widget: './src/widgets',
 };
 const FILES        = [
-    {
-        name: 'index.ts',
-        content: `
-import $_{className} from './$_{name}';
-export default $_{className};`
-    }, {
-        name: 'style.less'
-    }, {
-        name: '$_{name}.ts',
-        content: `
-import './styles.less';
-
-class $_{className} extends React.Component {
-    render () {
-        return (<div>$_{className}</div>);
-    }
-}
-
-export default $_{className}; `
-    },
+    { name: 'index.ts',     temp: '../template/component/index' },
+    { name: 'styles.less',  temp: '../template/component/styles' },
+    { name: '$_{name}.tsx', temp: '../template/component/main' },
 ];
 
 program
@@ -47,6 +31,10 @@ const comType = isWidget ? 'widget' : 'component';
 const outPath = args[1] || DEF_OUT_PATH[comType];
 
 checkValidity(args[0])();
+if(!fs.existsSync(outPath)) {
+    console.log(chalk.red('Please specify a valid path.'));
+    return void 0;
+}
 
 const dirPath = join(outPath, args[0]);
 if(fs.existsSync(dirPath)) {
@@ -57,10 +45,11 @@ if(fs.existsSync(dirPath)) {
 fs.mkdirSync(dirPath);
 
 _.forEach(FILES, file => {
-    fs.outputFileSync(join(dirPath, replaceName(file.name)), replaceName(file.content || ''));
+    let content = readFile(join(__dirname, file.temp), { encoding: 'utf8' });
+    fs.outputFileSync(join(dirPath, replaceName(file.name)), replaceName(content));
 });
 
-console.log(chalk.green(`Successfully generated ${comType} ${args[0]}`));
+console.log(chalk.green(`Successfully generated ${comType} at ${dirPath}.`));
 
 function replaceName(str) {
     let className = args[0].split('-').map(str => _.upperFirst(str)).join('');

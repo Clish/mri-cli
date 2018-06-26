@@ -1,0 +1,17 @@
+
+import * as React from 'react';
+import * as mu from 'mzmu';
+import * as _ from 'lodash';
+import {MrIf, MrElse, MrFill, MrCol, MrAutoBind, MrReq, MrPanel} from 'masterrt';
+import {Button, Input, Icon} from 'antd';
+import {$const, $service, $pool, $intl} from 'src/services';
+import './styles.less';
+
+interface $_{className}Props {}
+interface $_{className}State {}
+
+export default class $_{className} extends React.Component<$_{className}Props, $_{className}State> {
+    render () {
+        return (<div>$_{className}</div>);
+    }
+}
