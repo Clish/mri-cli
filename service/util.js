@@ -4,16 +4,6 @@ const _      = require('lodash');
 const _path  = require('path');
 const _fs    = require('fs');
 const moment = require('moment');
-const ejs    = require('ejs');
-
-const replaceTempVars = (temp, vars, value) => {
-    let obj = _.isObject(vars) ? vars : {[vars]: value || ''};
-    _.forEach(obj, (val, key) => {
-        let regex = new RegExp(_.escapeRegExp(`$_{${key}}`), 'ig');
-        temp = temp.replace(regex, val);
-    });
-    return temp;
-}
 
 module.exports = {
     ifnvl(src, target) {
@@ -45,6 +35,6 @@ module.exports = {
             obj[str] = gitConfig.match(regex)[1] || '';
         });
 
-        return ejs.render(commentFile, { ...options, ...obj });
+        return _.template(commentFile)({ ...options, ...obj });
     }
 };

@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import {MrIf, MrElse, MrFill, MrCol, MrAutoBind, MrReq, MrPanel} from 'masterrt';
 import {Button, Input, Icon} from 'antd';
 import {$const, $service, $pool, $intl} from 'src/services';
-import './<%=className%>.less';
+import './<%=fileName%>.less';
 
 interface <%=className%>Props {}
 interface <%=className%>State {}
