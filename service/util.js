@@ -41,9 +41,8 @@ module.exports = {
         let commentFile = _fs.readFileSync(_path.join(__dirname, '../template/comments'), { encoding: 'utf8' });
         let gitConfig = _fs.readFileSync(_path.join(process.cwd(), '.git/config'), { encoding: 'utf8' });
         _.forEach(['name', 'email'], str => {
-            let  rexStr = `${str} = `;
-            let  regex  = new RegExp(rexStr + '.*');
-            obj[str] = regex.exec(gitConfig) ? regex.exec(gitConfig)[0].replace(rexStr, '') : '';
+            let regex = new RegExp(`${str}\\s*=\\s*(\\S.*)`);
+            obj[str] = gitConfig.match(regex)[1] || '';
         });
 
         return ejs.render(commentFile, { ...options, ...obj });
