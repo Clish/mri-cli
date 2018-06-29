@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+
+'use strict';
+
+// mri upgrade [-r]
+
+const program = require('commander');
+const upgrade = require('../service/upgrade');
+
+program
+    .usage('[options]')
+    .option('-r, --reinstall', 'reinstall all packages')
+    .parse(process.argv);
+
+upgrade(program);
+
+
