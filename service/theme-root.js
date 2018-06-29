@@ -1,0 +1,45 @@
+const _util = require('./util');
+const _fs = require('fs');
+const _fse = require('fs-extra');
+const _ = require('lodash');
+const _chalk = require('chalk');
+const _path = require('path');
+const _ejs = require('ejs');
+const _upperCamelCase = require('simple-uppercamelcase');
+const _program = require('commander');
+const {log, error, debug} = console;
+const {green, red, yellow, grey} = _chalk;
+
+/**
+ * 该页用来创建 src/theme root 文件
+ * 避免使用 require.expression (动态路径)，引入资源文件，导致所有的模块都被打包
+ * @param theme
+ */
+module.exports = function initThemeRoot(theme, env) {
+    // console.log(process.cwd());
+    // console.log(_upperCamelCase('one-loreal'));
+
+    /**
+     * 创建 src/theme/index.ts 文件
+     */
+
+    let paths = [
+        '../template/theme/index.ts.ejs',
+        '../template/theme/config.mri.ts.ejs',
+        '../template/theme/route-guard.mri.tsx.ejs',
+        '../template/theme/const-env.mri.ts.ejs',
+    ];
+
+    _.each(paths, (path) => {
+        let path_ = path.replace(/(\.ejs)$/, '').replace('../template', 'src');
+
+        let temp = String(_fs.readFileSync(_path.join(__dirname, path), 'utf-8'));
+        let path__ = _path.join(process.cwd(), path_);
+        temp = _ejs.render(temp, {theme, env});
+        _fse.outputFileSync(path__, temp);
+
+        log(green('::: theme root 文件生成 =>'), path_);
+    });
+
+    log('---=> theme root 文件写入完成');
+};
