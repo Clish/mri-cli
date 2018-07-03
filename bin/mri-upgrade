@@ -2,13 +2,13 @@
 
 'use strict';
 
-// mri upgrade [-r]
+// mri upgrade [-r] [packageNames]
 
 const program = require('commander');
 const upgrade = require('../service/upgrade');
 
 program
-    .usage('[options]')
+    .usage('[options] [packageNames]')
     .option('-r, --reinstall', 'reinstall all packages')
     .parse(process.argv);
 
