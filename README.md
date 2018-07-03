@@ -13,8 +13,8 @@ This is a plugin of MRI project.
 ```
 mri upgrade [-r|--reinstall] [packageNames]
 ```
-> - [-r|--reinstall]: 删除`node_modules`目录并重新安装
-> - packageNames: 针对给定包名更新
+> - `[-r|--reinstall]`: 删除`node_modules`目录并重新安装
+> - `[packageNames]`: 针对给定包名更新
 
 #### V0.1.2
 - 增加生成文件头部注释
