@@ -14,6 +14,7 @@ const {green, red, yellow, grey} = _chalk;
  * 该页用来创建 src/theme root 文件
  * 避免使用 require.expression (动态路径)，引入资源文件，导致所有的模块都被打包
  * @param theme
+ * @param env
  */
 module.exports = function initThemeRoot(theme, env) {
     // console.log(process.cwd());
@@ -26,8 +27,9 @@ module.exports = function initThemeRoot(theme, env) {
     let paths = [
         '../template/theme/index.ts.ejs',
         '../template/theme/config.mri.ts.ejs',
-        '../template/theme/route-guard.mri.tsx.ejs',
+        '../template/theme/route-guard.mri.ts.ejs',
         '../template/theme/const-env.mri.ts.ejs',
+        '../template/theme/dva.mri.ts.ejs',
     ];
 
     _.each(paths, (path) => {

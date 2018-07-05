@@ -1,10 +1,9 @@
-
 import * as React from 'react';
 import * as mu from 'mzmu';
 import * as _ from 'lodash';
 import {MrIf, MrElse, MrFill, MrCol, MrAutoBind, MrReq, MrPanel} from 'masterrt';
 import {Button, Input, Icon} from 'antd';
-import {$const, $service, $pool, $intl} from 'src/services';
+import {$pool, $intl} from 'src/services';
 import './<%=fileName%>.less';
 
 interface <%=className%>Props {}

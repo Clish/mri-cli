@@ -17,7 +17,7 @@ const {green, red, yellow, grey} = _chalk;
 
 module.exports = function env(theme, env) {
 
-    let path = `./src/theme/${theme}/${theme}-config.js`;
+    let path = `./src/theme/${theme}/${theme}-umi.js`;
 
     // 默认配置
     let def = {
@@ -29,6 +29,7 @@ module.exports = function env(theme, env) {
         BASE_URL: void 0,
         TSLINT: 'none',
         ESLINT: 'none',
+        MRI_DEVICE: 'pc'
     };
 
     let mri;
