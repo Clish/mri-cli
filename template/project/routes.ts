@@ -13,7 +13,7 @@ import NoneLayoutWidget from 'src/widget/none-layout';
  * 该模块作为 mri-cli 读取路由配置，生成pages文件夹，
  * 所以大家只在对象里面进行编辑，其他地方不可动~~ 避免 mri-cli 不识别该文件
  */
-const SocialRoutes = {
+const <%=upperName%>Routes = {
 
     // [index]: module 名称，用于pages 引用 或 相关配置
     index: {
@@ -38,4 +38,4 @@ const SocialRoutes = {
     // ... 添加模块，重复上面配置
 };
 
-export default SocialRoutes;
+export default <%=upperName%>Routes;

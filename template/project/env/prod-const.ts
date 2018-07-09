@@ -5,13 +5,13 @@
 
 const envConst =  {
 
-    'ENV': 'dev',
+    'ENV': 'prod',
 
     // 是否打开debug模式
-    'DEBUG': true,
+    'DEBUG': false,
 
     // 当前开发环境的 origin
-    'X-ORIGIN': 'dev.masterrt.mri',
+    'X-ORIGIN': '<%=xOrigin%>'
 
 };
 

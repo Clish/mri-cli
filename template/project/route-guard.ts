@@ -7,14 +7,12 @@
  * @author ...
  */
 
-
 import router from 'umi/router';
 import * as mu from 'mzmu';
 import $theme from 'src/theme';
 
 export default function RouteGuard(module: any, props?: any): boolean {
-
-    const SocialConst: any = $theme.getProviders('SocialConst');
+    const <%=upperName%>Const: any = $theme.getProviders('<%=upperName%>Const');
 
     /**
      * 模块不存在
@@ -25,12 +23,12 @@ export default function RouteGuard(module: any, props?: any): boolean {
         return false;
     }
 
-    let token = mu.storage(SocialConst.STORAGE_X_TOKEN);
+    let token = mu.storage(<%=upperName%>Const.STORAGE_X_TOKEN);
 
     if (module.token) {
         if (!token) {
             console.warn('用户登录信息失效');
-            router.replace(SocialConst.INDEX_PAGE);
+            router.replace(<%=upperName%>Const.INDEX_PAGE);
             return false;
         }
     }

@@ -25,15 +25,7 @@ module.exports = {
      * 主题颜色配置
      */
     theme: {
-        'primary-color': '#3fce9e',
-        'font-size-base': '12px',
-
-        'mri-header-color': '#404040',
-        'mri-footer-color': '#404040',
-        'mri-side-color': '#404040',
-        'mri-main-color': '#fff',
-        'mri-main-width': '85%',
-        'mri-border-color': '#eee'
+        'primary-color': '<%=primaryColor%>',
     },
 
     /**
@@ -41,12 +33,12 @@ module.exports = {
      */
     mri: {
         // 当前主题
-        theme: 'social',
+        theme: '<%=name%>',
 
         // 项目运行设备
         MRI_DEVICE: 'pc',
 
         // dev 环境， web-server 启动端口
-        PORT: '6001'
+        PORT: '<%=port%>'
     }
 };

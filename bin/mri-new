@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+'use strict';
+
+// mri new name [key1:value1 key2:value2...]
+
+const program    = require('commander');
+const newProject = require('../service/new');
+
+program
+    .usage('name [key1:value1 key2:value2...]')
+    .parse(process.argv);
+
+newProject(program);
+
+

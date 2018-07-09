@@ -7,20 +7,19 @@
  */
 
 import $theme from 'src/theme';
-import {MrServices} from 'masterrt';
+import { MrServices } from 'masterrt';
 import * as mu from 'mzmu';
-import {$pool, $utils, $intl} from 'src/services';
+import { $pool, $utils, $intl } from 'src/services';
 
 export default function config() {
+    let <%=upperName%>Const = $theme.getProviders('<%=upperName%>Const');
 
-    let SocialConst = $theme.getProviders('SocialConst');
-
-    console.debug('init::-> dva social');
+    console.debug('init::-> dva <%=name%>');
 
     MrServices.setHeaders({
-        'X-TOKEN': () => mu.storage(SocialConst.STORAGE_X_TOKEN) || '',
-        'X-LANG': () => mu.storage(SocialConst.STORAGE_LOCALE) || SocialConst.LOCALE,
-        'X-ORIGIN': SocialConst['X-ORIGIN']
+        'X-TOKEN': () => mu.storage(<%=upperName%>Const.STORAGE_X_TOKEN) || '',
+        'X-LANG': () => mu.storage(<%=upperName%>Const.STORAGE_LOCALE) || <%=upperName%>Const.LOCALE,
+        'X-ORIGIN': <%=upperName%>Const['X-ORIGIN']
     });
 
     MrServices.setResourcePool($pool);

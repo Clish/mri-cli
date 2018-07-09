@@ -8,10 +8,11 @@ const envConst =  {
     'ENV': 'dev',
 
     // 是否打开debug模式
-    'DEBUG': false,
+    'DEBUG': true,
 
     // 当前开发环境的 origin
-    'X-ORIGIN': 'prod.masterrt.mri'
+    'X-ORIGIN': '<%=xOrigin%>',
+
 };
 
 export default envConst;
