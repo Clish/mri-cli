@@ -15,7 +15,7 @@ function runCmd(cmd, args = [], fn) {
     });
 }
 
-function upgrade({ reinstall, args }) {
+function upgrade({ reinstall, args, onInstalled }) {
     if(reinstall) {
         let modulePath = join(process.cwd(), MODULE_PATH);
         fs.existsSync(modulePath) && fs.removeSync(modulePath);
@@ -26,6 +26,7 @@ function upgrade({ reinstall, args }) {
     let npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
     runCmd(which.sync(npm), _.concat('install', args), () => {
         console.log(chalk.green('Successfully upgrade all packages.'));
+        onInstalled && onInstalled();
     });
 
 }

@@ -24,6 +24,7 @@ const $util = require('../service/util');
 const $pages = require('../service/pages');
 const $env = require('../service/env');
 const $initThemeRoot = require('../service/theme-root');
+const $upgrade = require('../service/upgrade');
 
 const MRI_ENV = 'dev';
 
@@ -80,13 +81,27 @@ if(_.isNil(envVar)) {
 
 log(`\n\n---=> 正在启动主题 => ${green(theme)}` );
 
-_shell.exec(`
-    _cross=./node_modules/.bin/cross-env
-    _umi=./node_modules/.bin/umi
-    echo 'umi ${MRI_ENV}'
-    $_umi -v
-    $_cross MRI_ENV=${MRI_ENV} ${envVar} $_umi dev
-`);
+if(!_program.IGNORE_PACKAGE) {
+    let { packages } = _fse.readJsonSync(_join(process.cwd(), './.mrirc')) || {};
+    let reinstall = _.isEqual(packages, true);
+    $upgrade({
+        reinstall   : reinstall,
+        args        : _.isEmpty(packages) ? [] : _.map(packages, (value, key) => key),
+        onInstalled : () => runShell()
+    })
+} else {
+    runShell();
+}
+
+function runShell() {
+    _shell.exec(`
+        _cross=./node_modules/.bin/cross-env
+        _umi=./node_modules/.bin/umi
+        echo 'umi ${MRI_ENV}'
+        $_umi -v
+        $_cross MRI_ENV=${MRI_ENV} ${envVar} $_umi dev
+    `);
+}
 
 
 

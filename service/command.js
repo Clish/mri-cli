@@ -28,7 +28,8 @@ module.exports = function command(env) {
         .option('-pp, --PUBLIC_PATH', '二级目录')
         .option('-bu, --BASE_URL', 'route目录')
         .option('-esl, --ESLINT', 'eslint 校验')
-        .option('-tsl, --TSLINT', 'tslint 校验');
+        .option('-tsl, --TSLINT', 'tslint 校验')
+        .option('-ip, --IGNORE_PACKAGE', '忽略安装包更新');
 
     if(env === 'dev') {
         _program
