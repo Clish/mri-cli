@@ -8,6 +8,31 @@ This is a plugin of MRI project.
 
 ## Change log
 
+#### V0.1.4
+- 增加`.mrirc`文件
+> ```json
+> // .mrirc file
+> {
+>  // 更新指定包
+>     "packages": {
+>         "lodash": "^4.17.10",
+>         "moment": "^2.22.2",
+>     }
+>  // 全部重新安装
+>  // "packages": true,
+>  // 不更新包
+>  // "packages": false,
+> }
+> ```
+
+- 增加`mri dev` 启动时检测更新包功能
+- 增加新建项目功能
+> ```
+> mri new name [key1:value1 key2:value2...]
+> ```
+> - `name`: 新建项目名称
+> - `[xOrigin:value1 primaryColor:value2, port:value3]`: 新建项目可选参数
+
 #### V0.1.3
 - 增加命令方式安装和升级依赖包
 ```
