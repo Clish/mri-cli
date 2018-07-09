@@ -10,7 +10,7 @@ This is a plugin of MRI project.
 
 #### V0.1.4
 - 增加`.mrirc`文件
-> ```json
+> ```
 > // .mrirc file
 > {
 >  // 更新指定包
