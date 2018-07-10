@@ -86,7 +86,7 @@ if(!_program.IGNORE_PACKAGE) {
     let reinstall = _.isEqual(packages, true);
     $upgrade({
         reinstall   : reinstall,
-        args        : _.isEmpty(packages) ? [] : _.map(packages, (value, key) => key),
+        args        : _.isEmpty(packages) ? null : _.map(packages, (value, key) => key),
         onInstalled : () => runShell()
     })
 } else {

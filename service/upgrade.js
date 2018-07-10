@@ -21,6 +21,11 @@ function upgrade({ reinstall, args, onInstalled }) {
         fs.existsSync(modulePath) && fs.removeSync(modulePath);
     }
 
+    if(_.isNull(args)) {
+        onInstalled && onInstalled();
+        return void 0;
+    }
+
     console.log(chalk.cyan('Begin to install packages...'));
 
     let npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
