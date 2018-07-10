@@ -5,7 +5,7 @@ const _        = require('lodash');
 const fse      = require('fs-extra');
 
 const FILE_PATH   = '../template/project';
-const WRITE_PATH  = './test/theme';
+const WRITE_PATH  = './src/theme';
 const DEF_OPTIONS = {
     xOrigin      : 'env.masterrt.mri',
     primaryColor : '#1890ff',
@@ -55,6 +55,8 @@ function newProject({ args = [] }) {
         let content = fs.readFileSync(join(filePath, name), { encoding: 'utf8' });
         fse.outputFileSync(join(process.cwd(), _.join(outPath, '/')), _.template(content)(tmpParams));
     });
+
+    console.log(chalk.green(`Successfully create the theme [${name}]...`));
 }
 
 module.exports = newProject;
