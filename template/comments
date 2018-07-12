@@ -1,8 +1,8 @@
 /**
  * <%=type%> of <%=className%>
  *
- * @author      <%=name%>
- * @email       <%=email%>
- * @create_time <%=time%>
- * @weather     <%=weather%>
+ * @author  <%=name%>
+ * @email   <%=email%>
+ * @createTime  <%=time%>
+ * @weather <%=weather%>
  */

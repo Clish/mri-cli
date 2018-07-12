@@ -1,9 +1,12 @@
+const _fse = require('fs-extra');
+const _ = require('lodash');
+const _path = require('path');
+const _fs = require('fs');
+const _moment = require('moment');
+const _chalk = require('chalk');
 
-const _fse   = require('fs-extra');
-const _      = require('lodash');
-const _path  = require('path');
-const _fs    = require('fs');
-const moment = require('moment');
+const {log, error, debug} = console;
+const {green, red, yellow, grey} = _chalk;
 
 module.exports = {
     ifnvl(src, target) {
@@ -27,14 +30,36 @@ module.exports = {
     },
 
     createComments(options) {
-        let obj = { time: moment().format('YYYY/MM/DD HH:mm:ss') };
-        let commentFile = _fs.readFileSync(_path.join(__dirname, '../template/comments'), { encoding: 'utf8' });
-        let gitConfig = _fs.readFileSync(_path.join(process.cwd(), '.git/config'), { encoding: 'utf8' });
-        _.forEach(['name', 'email'], str => {
+        let obj = {
+            time: _moment()
+                .format('YYYY/MM/DD HH:mm:ss')
+        };
+        let commentFile = _fs.readFileSync(_path.join(__dirname, '../template/comments'), {encoding: 'utf8'});
+        let gitConfig = _fs.readFileSync(_path.join(process.cwd(), '.git/config'), {encoding: 'utf8'});
+
+        _.forEach(['name', 'email'], (str) => {
             let regex = new RegExp(`${str}\\s*=\\s*(\\S.*)`);
-            obj[str] = gitConfig.match(regex)[1] || '';
+
+            let matcher = gitConfig.match(regex);
+
+            if(_.isNil(matcher) && str === 'name') {
+
+                log(red('git中未设置个人信息'));
+
+                log('根据下面命令配置信息');
+
+                log(green('git config user.name uname'));
+
+                log(green('git config user.email uemail'));
+
+                return void 0;
+            } else {
+                matcher = matcher || [];
+            }
+
+            obj[str] = matcher[1] || '';
         });
 
-        return _.template(commentFile)({ ...options, ...obj });
+        return _.template(commentFile)({...options, ...obj});
     }
 };

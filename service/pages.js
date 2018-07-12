@@ -57,6 +57,7 @@ const analysisRoutes = (theme, env) => {
         info = info.replace(/component?:(.*?)([,}])/g, 'component: "$1"$2');
         info = info.replace(/layout?:(.*?)([,}])/g, 'layout: "$1"$2');
         info = info.replace(/^.*?let.*?=(.*)?[;]export default.*$/g, '$1');
+        info = info.replace(/^.*?const.*?=(.*)?[;]export default.*$/g, '$1');
 
         log(`---=> 检测路由配置信息`);
 
@@ -64,7 +65,7 @@ const analysisRoutes = (theme, env) => {
             routes = eval(`(${info})`);
             return routes;
         } catch(e) {
-            error(`${red('@@@=>')} 不能正确读取路由信息 \n`, e);
+            error(`${red('@@@=>')} 不能正确读取路由信息 \n`, e, info);
             return void 0;
         }
 
