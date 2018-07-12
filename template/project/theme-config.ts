@@ -3,11 +3,10 @@
  * @author ...
  */
 
-import <%=upperName%>Layout from './layout/<%=name%>-layout';
+import {BaseLayout} from 'src/common/layouts/base-layout';
 import <%=upperName%>Const from 'src/common/const/<%=name%>.const';
-import EnvConst from 'src/theme/const-env.mri';
-import <%=upperName%>RoutesTs from './<%=name%>-routes.ts';
-import <%=upperName%>Services from './<%=name%>-services.ts';
+import <%=upperName%>Services from 'src/common/services/<%=name%>.services';
+import <%=upperName%>Routes from './<%=name%>-routes';
 
 class <%=upperName%>ThemeConfig {
     /**
@@ -27,7 +26,7 @@ class <%=upperName%>ThemeConfig {
      * base layout
      * 基本布局
      */
-    layout = <%=upperName%>Layout;
+    layout = BaseLayout;
 
     /**
      * routes config
@@ -39,7 +38,7 @@ class <%=upperName%>ThemeConfig {
      * providers
      */
     providers = {
-        <%=upperName%>Const: { ...<%=upperName%>Const, ...EnvConst },
+        <%=upperName%>Const,
         <%=upperName%>Services
     };
 }
