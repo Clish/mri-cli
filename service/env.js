@@ -68,7 +68,7 @@ module.exports = function env(theme, env) {
 
     let env_ = [];
     _.each(config, (value, key) => {
-        if(key !== 'theme') {
+        if(key !== 'theme' && value !== 'default') {
             env_.push(`${key}=${value}`);
         }
     });
