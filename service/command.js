@@ -17,6 +17,9 @@ const {green, red, yellow, grey} = _chalk;
 const _pk = require('../package.json');
 
 module.exports = function command(env) {
+
+
+
     _program
         .usage('${theme} [options]')
         .description('运行MRI的开发环境')

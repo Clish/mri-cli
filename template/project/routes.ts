@@ -23,8 +23,8 @@ const <%=upperName%>Routes = {
         component: IndexPage,
         // path!: route 可访问地址， 用于生成pages文件
         path: [
+            '/',
             '/index',
-            '/'
         ],
         // layout: 是否使用默认布局
         layout: NoneLayout,
