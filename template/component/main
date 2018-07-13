@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as mu from 'mzmu';
 import * as _ from 'lodash';
+import $theme from 'src/theme';
 import {MrIf, MrElse, MrFill, MrCol, MrAutoBind, MrReq, MrPanel} from 'masterrt';
 import {Button, Input, Icon} from 'antd';
 import {$pool, $intl} from 'src/services';
@@ -10,6 +11,16 @@ interface <%=className%>Props {}
 interface <%=className%>State {}
 
 export default class <%=className%> extends React.Component<<%=className%>Props, <%=className%>State> {
+
+    <%=className%>Const: any = $theme.getProviders('<%=className%>Const');
+    <%=className%>Services: any = $theme.getProviders('<%=className%>Services');
+
+    state: any = {
+
+    };
+
+    // constructor() {}
+
     render () {
         return (<div><%=className%> <%=type%></div>);
     }
