@@ -97,7 +97,7 @@ function runShell() {
     _shell.exec(`
         _cross=./node_modules/.bin/cross-env
         _umi=./node_modules/.bin/umi
-        echo 'umi ${MRI_ENV}'
+        echo 'umi ${MRI_ENV} ${envVar}'
         $_umi -v
         $_cross MRI_ENV=${MRI_ENV} ${envVar} $_umi dev
     `);
