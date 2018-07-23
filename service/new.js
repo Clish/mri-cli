@@ -72,7 +72,8 @@ function newProject({args = []}) {
     let tmpParams = _.assign(DEF_OPTIONS, {
         filePrefix: `${name}-`,
         upperName: upperName(name),
-        name
+        name,
+        upperAll: name.toUpperCase()
     }, getOptions(args));
 
     fileDisplay(basicPath, (filePath, name) => {
