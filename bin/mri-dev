@@ -16,6 +16,7 @@ const _join = require('path').join;
 const _ = require('lodash');
 const _chalk = require('chalk');
 const _shell = require('shelljs');
+const _compareVersions = require('compare-versions');
 const {log, error, debug} = console;
 const {green, red, yellow, grey} = _chalk;
 
@@ -40,18 +41,42 @@ if(!theme) {
 } else {}
 
 /**
- * // @todo 检测当前主题是否存在
  * 检测 src/theme/${theme} 是否存在
  */
-
 log(`---=> 检测当前主题是否存在`);
 
-/**
- * // @todo 检测配置文件
- * @type {string}
- */
+let themePath = _join(process.cwd(), `src/theme/${theme}`);
+if(!_exists(themePath)){
+    error(`${red('### ERRO =>')} 当前主题不存在 ${theme} 不存在`);
+    return void 0;
+}
 
-log(`---=> 检测当前主题配置文件是否完整`);
+/**
+ * 检测 .mrirc.js
+ */
+let mrircPath = _join(process.cwd(), `./.mrirc.js`);
+if(_exists(mrircPath)) {
+    log(`---=> 更新或安装包`);
+    //
+    //
+    // console.log(penddings);
+    //
+    // if(!_program.IGNORE_PACKAGE) {
+    //     let { packages } = _fse.readJsonSync(_join(process.cwd(), './.mrirc')) || {};
+    //     let reinstall = _.isEqual(packages, true);
+    //     $upgrade({
+    //         reinstall   : reinstall,
+    //         args        : _.isEmpty(packages) ? null : _.map(packages, (value, key) => key),
+    //         onInstalled : () => runShell()
+    //     })
+    // } else {
+    //     runShell();
+    // }
+
+    $upgrade(mrircPath);
+}
+
+return void 0;
 
 /**
  * 生成 pages 文件
@@ -81,27 +106,13 @@ if(_.isNil(envVar)) {
 
 log(`\n\n---=> 正在启动主题 => ${green(theme)}` );
 
-if(!_program.IGNORE_PACKAGE) {
-    let { packages } = _fse.readJsonSync(_join(process.cwd(), './.mrirc')) || {};
-    let reinstall = _.isEqual(packages, true);
-    $upgrade({
-        reinstall   : reinstall,
-        args        : _.isEmpty(packages) ? null : _.map(packages, (value, key) => key),
-        onInstalled : () => runShell()
-    })
-} else {
-    runShell();
-}
-
-function runShell() {
-    _shell.exec(`
-        _cross=./node_modules/.bin/cross-env
-        _umi=./node_modules/.bin/umi
-        echo 'umi ${MRI_ENV} ${envVar}'
-        $_umi -v
-        $_cross MRI_ENV=${MRI_ENV} ${envVar} $_umi dev
-    `);
-}
+_shell.exec(`
+    _cross=./node_modules/.bin/cross-env
+    _umi=./node_modules/.bin/umi
+    echo 'umi ${MRI_ENV} ${envVar}'
+    $_umi -v
+    $_cross MRI_ENV=${MRI_ENV} ${envVar} $_umi dev
+`);
 
 
 

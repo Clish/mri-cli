@@ -16,7 +16,7 @@ import {NoneLayout} from 'src/common/layouts/none-layout';
  * @todo auth, 作为权限访问标志
  * @todo model 该component是否使用dav reducer (自动绑定 model)
  */
-const <%= upperName %>Routes = {
+const <%=upperName%>Routes = {
 
 
     /**
