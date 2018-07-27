@@ -24,29 +24,29 @@ git commit -am "$_commit"
 
 # 若不手动设置版本号，则自动增长
 
-if [ "$_version" == "" ]; then
-    _version=`npm version patch`
-else
-    npm version $_version
-fi
-
-
-echo "::::: 推送到NPM $_ov -> $_version"
-
-echo ":::::: 推送到NPM"
-    npm publish
-
-if [ $? -eq 0 ]; then
-
-    echo ":::::::::::: Git Mark 此次修改信息"
-    git pull
-    git add .
-    git commit -am "$_ov -> $_version :: $_commit"
-    git pull
-    git push
-
-    echo "::::::::::::::: Git Tag"
-    git tag $_version
-    git push --tags
-fi
+#if [ "$_version" == "" ]; then
+#    _version=`npm version patch`
+#else
+#    npm version $_version
+#fi
+#
+#
+#echo "::::: 推送到NPM $_ov -> $_version"
+#
+#echo ":::::: 推送到NPM"
+#    npm publish
+#
+#if [ $? -eq 0 ]; then
+#
+#    echo ":::::::::::: Git Mark 此次修改信息"
+#    git pull
+#    git add .
+#    git commit -am "$_ov -> $_version :: $_commit"
+#    git pull
+#    git push
+#
+#    echo "::::::::::::::: Git Tag"
+#    git tag $_version
+#    git push --tags
+#fi
 
