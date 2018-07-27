@@ -14,7 +14,6 @@ const $util = require('../service/util');
 
 /**
  * mri dev $theme -u
- *
  * @type {string}
  */
 
@@ -66,41 +65,10 @@ const upgrade = function(mrircPath) {
             let pkgs = item.pkgs.join(' ');
             shell.exec(`
                 echo ${pkgs}
-                npm i ${pkgs} ${item.params}
+                #npm i ${pkgs} ${item.params}
             `);
         }
     });
 };
-
-
-// const MODULE_PATH = './node_modules';
-//
-// function runCmd(cmd, args = [], fn) {
-//     let runner = spawn(cmd, args, { stdio: "inherit" });
-//     runner.on('close', function (code) {
-//         fn && fn(code);
-//     });
-// }
-//
-// function upgrade({ reinstall, args, onInstalled }) {
-//     if(reinstall) {
-//         let modulePath = join(process.cwd(), MODULE_PATH);
-//         fs.existsSync(modulePath) && fs.removeSync(modulePath);
-//     }
-//
-//     if(_.isNull(args)) {
-//         onInstalled && onInstalled();
-//         return void 0;
-//     }
-//
-//     console.log(chalk.cyan('Begin to install packages...'));
-//
-//     let npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-//     runCmd(which.sync(npm), _.concat('install', args), () => {
-//         console.log(chalk.green('Successfully upgrade all packages.'));
-//         onInstalled && onInstalled();
-//     });
-//
-// }
 
 module.exports = upgrade;

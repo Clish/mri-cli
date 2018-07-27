@@ -73,5 +73,10 @@ module.exports = function env(theme, env) {
         }
     });
 
-    return `THEME=${theme} TS_CONFIG_PATHS_PLUGIN=1 ${env_.join(' ')}`;
+    let envSeries = `THEME=${theme} TS_CONFIG_PATHS_PLUGIN=1 ${env_.join(' ')}`;
+
+    return {
+        env: envSeries,
+        config
+    };
 };

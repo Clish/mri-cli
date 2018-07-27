@@ -57,26 +57,8 @@ if(!_exists(themePath)){
 let mrircPath = _join(process.cwd(), `./.mrirc.js`);
 if(_exists(mrircPath)) {
     log(`---=> 更新或安装包`);
-    //
-    //
-    // console.log(penddings);
-    //
-    // if(!_program.IGNORE_PACKAGE) {
-    //     let { packages } = _fse.readJsonSync(_join(process.cwd(), './.mrirc')) || {};
-    //     let reinstall = _.isEqual(packages, true);
-    //     $upgrade({
-    //         reinstall   : reinstall,
-    //         args        : _.isEmpty(packages) ? null : _.map(packages, (value, key) => key),
-    //         onInstalled : () => runShell()
-    //     })
-    // } else {
-    //     runShell();
-    // }
-
     $upgrade(mrircPath);
 }
-
-return void 0;
 
 /**
  * 生成 pages 文件
@@ -98,9 +80,17 @@ log(`\n\n---=> 读取环境配置信息`);
  * 获得环境变量
  * @type {*|string|string}
  */
-const envVar = $env(theme, MRI_ENV);
+let {env, config} = $env(theme, MRI_ENV);
 
-if(_.isNil(envVar)) {
+if(_program.FORCE) {
+    _shell.exec(`
+        lsof -i :${config.PORT}|awk '{print $2}'|grep -v PID|xargs kill -9
+    `);
+
+    env = env.replace('BABEL_CACHE=1', 'BABEL_CACHE=none');
+}
+
+if(_.isNil(env)) {
     return void 0;
 }
 
@@ -109,9 +99,9 @@ log(`\n\n---=> 正在启动主题 => ${green(theme)}` );
 _shell.exec(`
     _cross=./node_modules/.bin/cross-env
     _umi=./node_modules/.bin/umi
-    echo 'umi ${MRI_ENV} ${envVar}'
+    echo 'umi ${MRI_ENV} ${env}'
     $_umi -v
-    $_cross MRI_ENV=${MRI_ENV} ${envVar} $_umi dev
+    $_cross MRI_ENV=${MRI_ENV} ${env} $_umi dev
 `);
 
 
