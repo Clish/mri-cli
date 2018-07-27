@@ -24,12 +24,11 @@ git commit -am "$_commit"
 
 # 若不手动设置版本号，则自动增长
 
-#if [ "$_version" == "" ]; then
-#    _version=`npm version patch`
-#else
-#    npm version $_version
-#fi
-#
+if [ "$_version" == "" ]; then
+    _version=`npm version patch`
+else
+    npm version $_version
+fi
 #
 #echo "::::: 推送到NPM $_ov -> $_version"
 #
