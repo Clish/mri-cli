@@ -65,7 +65,7 @@ const upgrade = function(mrircPath) {
             let pkgs = item.pkgs.join(' ');
             shell.exec(`
                 echo ${pkgs}
-                #npm i ${pkgs} ${item.params}
+                npm i ${pkgs} ${item.params}
             `);
         }
     });

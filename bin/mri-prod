@@ -24,6 +24,7 @@ const $util = require('../service/util');
 const $pages = require('../service/pages');
 const $env = require('../service/env');
 const $initThemeRoot = require('../service/theme-root');
+const $upgrade = require('../service/upgrade');
 
 const MRI_ENV = 'prod';
 
@@ -33,26 +34,30 @@ $command(MRI_ENV);
 // 获得当前运行主题
 const theme = _program.args[0];
 
-
-
 if(!theme) {
     error(`${red('### ERRO =>')} theme 未输入`);
     return void 0;
 } else {}
 
 /**
- * // @todo 检测当前主题是否存在
  * 检测 src/theme/${theme} 是否存在
  */
-
 log(`---=> 检测当前主题是否存在`);
 
-/**
- * // @todo 检测配置文件
- * @type {string}
- */
+let themePath = _join(process.cwd(), `src/theme/${theme}`);
+if(!_exists(themePath)){
+    error(`${red('### ERRO =>')} 当前主题不存在 ${theme} 不存在`);
+    return void 0;
+}
 
-log(`---=> 检测当前主题配置文件是否完整`);
+/**
+ * 检测 .mrirc.js
+ */
+let mrircPath = _join(process.cwd(), `./.mrirc.js`);
+if(_exists(mrircPath)) {
+    log(`---=> 更新或安装包`);
+    $upgrade(mrircPath);
+}
 
 /**
  * 生成 pages 文件
@@ -68,20 +73,47 @@ if(!$pages(theme, MRI_ENV)) {
  */
 $initThemeRoot(theme, MRI_ENV);
 
-
 log(`\n\n---=> 读取环境配置信息`);
 
-let env = $env(theme, MRI_ENV);
+/**
+ * 获得环境变量
+ * @type {*|string|string}
+ */
+let {env, config} = $env(theme, MRI_ENV);
 
-log(`\n\n---=> 正在编译主题 => ${green(theme)}` );
+/**
+ * 是否强制启动MRI
+ *
+ * //-> 关闭端口
+ * //-> env: BABEL_CACHE=none
+ */
+if(_program.FORCE) {
+    _shell.exec(`
+        lsof -i :${config.PORT}|awk '{print $2}'|grep -v PID|xargs kill -9
+    `);
+
+    env = env.replace('BABEL_CACHE=1', 'BABEL_CACHE=none');
+}
+
+if(_.isNil(env)) {
+    return void 0;
+}
+
+log(`\n\n---=> 正在启动主题 => ${green(theme)}` );
 
 _shell.exec(`
     _cross=./node_modules/.bin/cross-env
     _umi=./node_modules/.bin/umi
-    echo 'umi ${env}' 
-    $_umi -v 
-    $_cross MRI_ENV=${MRI_ENV} ${env} $_umi build
+    echo 'umi ${MRI_ENV} ${env}'
+    $_umi -v
+    $_cross MRI_ENV=${MRI_ENV} ${env} $_umi dev
 `);
+
+
+
+
+
+
 
 
 
