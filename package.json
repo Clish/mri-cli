@@ -1,6 +1,6 @@
 {
     "name": "mri-cli",
-    "version": "0.2.12",
+    "version": "0.2.12-b1",
     "description": "",
     "main": "index.js",
     "scripts": {
