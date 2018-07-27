@@ -19,6 +19,7 @@ if [ -n ]; then
     fi
 fi
 
+
 git add .
 git commit -am "$_commit"
 
@@ -29,23 +30,22 @@ if [ "$_version" == "" ]; then
 else
     npm version $_version
 fi
-#
-#echo "::::: 推送到NPM $_ov -> $_version"
-#
-#echo ":::::: 推送到NPM"
-#    npm publish
-#
-#if [ $? -eq 0 ]; then
-#
-#    echo ":::::::::::: Git Mark 此次修改信息"
-#    git pull
-#    git add .
-#    git commit -am "$_ov -> $_version :: $_commit"
-#    git pull
-#    git push
-#
-#    echo "::::::::::::::: Git Tag"
-#    git tag $_version
-#    git push --tags
-#fi
+
+echo "::::: 推送到NPM $_ov -> $_version"
+
+echo ":::::: 推送到NPM"
+    npm publish
+
+if [ $? -eq 0 ]; then
+
+    echo ":::::::::::: Git Mark 此次修改信息"
+    git pull
+    git add .
+    git commit -am "$_ov -> $_version :: $_commit"
+    git pull
+    git push
+
+    echo "::::::::::::::: Git Tag"
+    git push --tags -m '$_ov -> $_version :: $_commit'
+fi
 
