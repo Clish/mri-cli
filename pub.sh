@@ -26,7 +26,7 @@ git commit -am "$_commit"
 # 若不手动设置版本号，则自动增长
 
 if [ "$_version" == "" ]; then
-    _version=`npm version patch`
+    _version=`npm version patch --no-git-tag-version`
 else
     npm version $_version
 fi
@@ -46,6 +46,7 @@ if [ $? -eq 0 ]; then
     git push
 
     echo "::::::::::::::: Git Tag"
-    git push --tags -m '$_ov -> $_version :: $_commit'
+    git tag $_version -m '$_ov -> $_version :: $_commit'
+    git push --tags
 fi
 
