@@ -12,9 +12,6 @@ interface <%=className%>State {}
 
 export default class <%=className%> extends React.Component<<%=className%>Props, <%=className%>State> {
 
-    <%=className%>Const: any = $theme.getProviders('<%=className%>Const');
-    <%=className%>Services: any = $theme.getProviders('<%=className%>Services');
-
     state: any = {
 
     };

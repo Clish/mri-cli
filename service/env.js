@@ -15,7 +15,7 @@ const _program = require('commander');
 const {log, error, debug} = console;
 const {green, red, yellow, grey} = _chalk;
 
-module.exports = function env(theme, env) {
+module.exports = function env(theme, mri_env) {
 
     let path = `./src/theme/${theme}/${theme}-umi.js`;
 
@@ -41,7 +41,7 @@ module.exports = function env(theme, env) {
         mri = info.mri || {};
         let envConfig = _.pick(mri, ['test', 'prod']);
         mri = _.omit(mri, ['test', 'prod']);
-        mri = Object.assign(mri, envConfig[env] || {});
+        mri = Object.assign(mri, envConfig[mri_env] || {});
     }
 
     let {PORT, HARD_SOURCE, BROWSER, BABEL_CACHE, PUBLIC_PATH, BASE_URL, TSLINT, ESLINT} = _program;
@@ -61,7 +61,7 @@ module.exports = function env(theme, env) {
 
     // log(`\n\n---=> 读取环境变量`);
 
-    log(`${('::: 运行环境 => ')} ${env} (不可更改)`);
+    log(`${('::: 运行环境 => ')} ${mri_env} (不可更改)`);
     log(`${('::: 主题 => ')} ${config.theme}`);
 
     log(config);
@@ -73,5 +73,10 @@ module.exports = function env(theme, env) {
         }
     });
 
-    return `THEME=${theme} TS_CONFIG_PATHS_PLUGIN=1 ${env_.join(' ')}`;
+    let env = `THEME=${theme} TS_CONFIG_PATHS_PLUGIN=1 ${env_.join(' ')}`;
+
+    return {
+        env,
+        config
+    };
 };

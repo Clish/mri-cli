@@ -37,18 +37,20 @@ function fileDisplay(dirPath, onFile) {
     });
 }
 
+// todo 创建文件的时候，路径判断
 function addCommonFile(theme, tmpParams) {
 
     let templateUri = join(__dirname, '../template');
     let srcUri = join(process.cwd(), './src');
     let commonPath = [
         '/common/const/{theme.}const.ts',
-        '/common/services/{theme.}services.ts'
+        '/common/services/{theme/}{theme.}services.ts',
+        '/common/services/{theme/}index.ts'
     ];
 
     _.forEach(commonPath, (path) => {
-        let templatePath = join(templateUri, path.replace(/{theme\.}/g, ''));
-        let srcPath = join(srcUri, path.replace(/{theme\.}/g, `${theme}.`));
+        let templatePath = join(templateUri, path.replace(/{theme\.}|{theme\/}/g, ''));
+        let srcPath = join(srcUri, path.replace(/{theme\.}/g, `${theme}.`).replace(/{theme\/}/g, `${theme}/`));
 
         // 判断文件是否存在
         if(!fs.existsSync(srcPath)) {
@@ -72,7 +74,8 @@ function newProject({args = []}) {
     let tmpParams = _.assign(DEF_OPTIONS, {
         filePrefix: `${name}-`,
         upperName: upperName(name),
-        name
+        name,
+        upperAll: name.toUpperCase()
     }, getOptions(args));
 
     fileDisplay(basicPath, (filePath, name) => {

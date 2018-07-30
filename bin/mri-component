@@ -19,6 +19,7 @@ const DEF_OUT_PATH = {
     component: './src/components',
     widget: './src/widgets'
 };
+
 const FILES = [
     {name: 'index.ts', temp: '../template/component/index'},
     {name: '<%=fileName%>.less', temp: '../template/component/styles'},
@@ -28,6 +29,8 @@ const FILES = [
 program
     .usage('componentName [options] targetPath')
     .option('-w, --widget', 'create component as widget ')
+    // 添加 -t --theme，use use 处理
+    .option('-t, --theme', 'create component as widget ')
     .parse(process.argv);
 
 const {args, widget: isWidget} = program;
@@ -53,7 +56,6 @@ wrapWeather(weather => {
     let [className] = args;
 
     className = isWidget ? `${className}Widget` : className;
-
 
     let tmpParams = {
         fileName: args[0],

@@ -7,16 +7,18 @@
 
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import { MrServices } from 'masterrt';
+import {MrServices} from 'masterrt';
 import * as mu from 'mzmu';
 import router from 'umi/router';
-import { $utils } from 'src/services';
-import { BaseService } from 'src/common/services/base.services';
+import {$utils} from 'src/services';
+import {IBaseServices} from 'src/common/services/base';
 
-class <%=upperName%>Services extends BaseService {
+class I<%=upperName%>Services extends IBaseServices {
     constructor() {
         super();
     }
 }
 
-export default new <%=upperName%>Services();
+export {I<%=upperName%>Services};
+
+export default new I<%=upperName%>Services();
