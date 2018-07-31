@@ -27,7 +27,7 @@ module.exports = function env(theme, mri_env) {
         BROWSER: 'none',
         PUBLIC_PATH: void 0,
         BASE_URL: void 0,
-        TSLINT: 'none',
+        TSLINT: 'default',
         ESLINT: 'none',
         MRI_DEVICE: 'pc'
     };

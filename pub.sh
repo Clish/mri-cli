@@ -28,7 +28,7 @@ git commit -am "$_commit"
 if [ "$_version" == "" ]; then
     _version=`npm version patch --no-git-tag-version`
 else
-    npm version $_version
+    npm version $_version --no-git-tag-version
 fi
 
 echo "::::: 推送到NPM $_ov -> $_version"

@@ -16,7 +16,6 @@ const _join = require('path').join;
 const _ = require('lodash');
 const _chalk = require('chalk');
 const _shell = require('shelljs');
-const _compareVersions = require('compare-versions');
 const {log, error, debug} = console;
 const {green, red, yellow, grey} = _chalk;
 

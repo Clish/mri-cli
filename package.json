@@ -1,6 +1,6 @@
 {
     "name": "mri-cli",
-    "version": "0.2.12-b1",
+    "version": "0.2.12-b2",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -12,8 +12,8 @@
     "author": "clish wang",
     "license": "MIT",
     "dependencies": {
+        "@types/node": "^10.5.4",
         "axios": "^0.18.0",
-        "babel-runtime": "^6.26.0",
         "chalk": "^2.4.1",
         "cheerio": "^1.0.0-rc.2",
         "commander": "^2.15.1",
@@ -24,17 +24,25 @@
         "moment": "^2.22.2",
         "shelljs": "^0.8.2",
         "simple-uppercamelcase": "^1.0.0",
+        "typescript": "^2.9.2",
         "which": "^1.3.1"
     },
     "devDependencies": {
-        "babel": "^6.23.0",
-        "babel-core": "^6.26.3",
-        "babel-plugin-add-module-exports": "^0.2.1",
-        "babel-plugin-transform-eval": "^6.22.0",
-        "babel-preset-env": "^1.7.0",
-        "babel-preset-es2015": "^6.24.1",
-        "babel-preset-react": "^6.24.1",
-        "babel-preset-stage-1": "^6.24.1",
-        "babel-register": "^6.24.1"
+        "@babel/core": "^7.0.0-beta.55",
+        "@babel/parser": "^7.0.0-beta.55",
+        "@babel/polyfill": "^7.0.0-beta.55",
+        "@babel/preset-env": "^7.0.0-beta.55",
+        "@babel/preset-react": "^7.0.0-beta.55",
+        "@babel/preset-stage-0": "^7.0.0-beta.55",
+        "@babel/preset-typescript": "^7.0.0-beta.55",
+        "@babel/register": "^7.0.0-beta.55",
+        "babel-plugin-module-resolver": "^3.1.1",
+        "babel-preset-umi": "^0.3.1",
+        "broccoli-typescript-compiler": "^3.0.1",
+        "eval": "^0.1.2",
+        "install": "^0.12.1",
+        "npm": "^6.2.0",
+        "typescript-compiler": "^1.4.1-2",
+        "typescript-parser": "^2.5.0"
     }
 }

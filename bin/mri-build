@@ -106,7 +106,7 @@ _shell.exec(`
     _umi=./node_modules/.bin/umi
     echo 'umi ${MRI_ENV} ${env}'
     $_umi -v
-    $_cross MRI_ENV=${MRI_ENV} ${env} $_umi dev
+    $_cross MRI_ENV=${MRI_ENV} ${env} $_umi build
 `);
 
 
