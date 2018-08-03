@@ -25,9 +25,8 @@
         "shelljs": "^0.8.2",
         "simple-uppercamelcase": "^1.0.0",
         "typescript": "^2.9.2",
-        "which": "^1.3.1"
-    },
-    "devDependencies": {
+        "which": "^1.3.1",
+        
         "@babel/core": "^7.0.0-beta.55",
         "@babel/parser": "^7.0.0-beta.55",
         "@babel/polyfill": "^7.0.0-beta.55",
