@@ -4,6 +4,8 @@ const _path = require('path');
 const _fs = require('fs');
 const _moment = require('moment');
 const _chalk = require('chalk');
+const _spawn = require('cross-spawn');
+const _which = require('which');
 
 const {log, error, debug} = console;
 const {green, red, yellow, grey} = _chalk;
@@ -41,16 +43,22 @@ module.exports = {
         return condition ? truefn(condition) : falsefn();
     },
 
+    runCmd(cmd, args, fn) {
+        let runner = _spawn(cmd, args, { stdio: "inherit" });
+            runner.on('close', (code) => {
+                fn && fn(code);
+            });
+    },
+
+    npmCmd(args, fn) {
+        let npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+        console.log(green(`npm ${args.join(' ')}`));
+        this.runCmd(_which.sync(npm), args, fn);
+    },
+
     loadjs(path) {
 
-        console.debug('oooooOooo', path);
-
-        // console.dir(_ts);
-
         try {
-
-            // console.debug(  );
-
 
             let {code, map, ast} = babel.transformFileSync(path, {
 
@@ -115,8 +123,6 @@ module.exports = {
                     require.resolve('@babel/preset-react'),
                 ]
             });
-
-            console.debug(eval(code));
 
            //  let codeB = _fs.readFileSync(path, 'utf8');
            //
