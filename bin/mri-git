@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+
+'use strict';
+
+// mri git [feature|release|hotfix] [start|finish] branchName
+
+const program    = require('commander');
+const newProject = require('../service/git');
+
+program
+    .usage('name [feature|release|hotfix] [start|finish] branchName')
+    .parse(process.argv);
+
+newProject(program);
