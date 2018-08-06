@@ -98,8 +98,10 @@ log(`\n\n---=> 正在启动主题 => ${green(theme)}` );
 _shell.exec(`
     _cross=./node_modules/.bin/cross-env
     _umi=./node_modules/.bin/umi
-    echo 'umi ${MRI_ENV} ${env}'
-    $_umi -v
+    echo umi version  \`$_umi -v\`
+    echo develop env ${MRI_ENV}
+    echo umi environment variable ${env}
+    
     $_cross MRI_ENV=${MRI_ENV} ${env} $_umi dev
 `);
 

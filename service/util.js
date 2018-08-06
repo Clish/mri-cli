@@ -12,13 +12,13 @@ const {green, red, yellow, grey} = _chalk;
 
 const babel = require('@babel/core');
 
-const _ts = require('typescript');
-
-const _eval = require('eval');
-
-const babelParser = require("@babel/parser");
-
-require("@babel/polyfill");
+// const _ts = require('typescript');
+//
+// const _eval = require('eval');
+//
+// const babelParser = require("@babel/parser");
+//
+// require("@babel/polyfill");
 
 // require("@babel/register")({
 //     extensions: [".ts", ".tsx", ".jsx", ".js"],
