@@ -2,12 +2,10 @@
     "babelrc": false,
 
     "plugins": [
-        "add-module-exports"
     ],
 
     "presets": [
-        "es2015",
-        "react",
-        "stage-1"
+        "@babel/preset-env",
+        "@babel/preset-stage-0"
     ]
 }

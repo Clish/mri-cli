@@ -4,11 +4,25 @@ const _path = require('path');
 const _fs = require('fs');
 const _moment = require('moment');
 const _chalk = require('chalk');
+const _spawn = require('cross-spawn');
+const _which = require('which');
 
 const {log, error, debug} = console;
 const {green, red, yellow, grey} = _chalk;
 
-const babel = require('babel-core');
+const babel = require('@babel/core');
+
+const _ts = require('typescript');
+
+const _eval = require('eval');
+
+const babelParser = require("@babel/parser");
+
+require("@babel/polyfill");
+
+// require("@babel/register")({
+//     extensions: [".ts", ".tsx", ".jsx", ".js"],
+// });
 
 
 // const fs = require('fs');
@@ -29,22 +43,188 @@ module.exports = {
         return condition ? truefn(condition) : falsefn();
     },
 
+    runCmd(cmd, args, fn) {
+        let runner = _spawn(cmd, args, { stdio: "inherit" });
+            runner.on('close', (code) => {
+                fn && fn(code);
+            });
+    },
+
+    npmCmd(args, fn) {
+        let npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+        console.log(green(`npm ${args.join(' ')}`));
+        this.runCmd(_which.sync(npm), args, fn);
+    },
+
     loadjs(path) {
+
         try {
+
             let {code, map, ast} = babel.transformFileSync(path, {
+
+                babelrc: false,
+
                 plugins: [
+                    require.resolve('@babel/plugin-transform-typescript'),
+                    require.resolve('@babel/plugin-syntax-typescript'),
+                    '@babel/plugin-syntax-dynamic-import',
+                    '@babel/plugin-proposal-object-rest-spread',
+                    '@babel/plugin-proposal-optional-catch-binding',
+                    '@babel/plugin-proposal-async-generator-functions',
+                    ['@babel/plugin-proposal-decorators', { legacy: true }],
+                    ['@babel/plugin-proposal-class-properties', { loose: true }],
+                    '@babel/plugin-proposal-export-namespace',
+                    '@babel/plugin-proposal-export-default',
+                    '@babel/plugin-proposal-export-namespace-from',
+                    '@babel/plugin-proposal-export-default-from',
+                    '@babel/plugin-proposal-nullish-coalescing-operator',
+                    '@babel/plugin-proposal-optional-chaining',
+                    '@babel/plugin-proposal-do-expressions',
+                    '@babel/plugin-proposal-function-bind',
+                    '@babel/plugin-transform-modules-commonjs',
                     'add-module-exports',
+                    [
+                        "module-resolver",
+                        {
+                            "extensions": [
+                                ".js",
+                                ".jsx",
+                                ".ts",
+                                ".tsx"
+                            ],
+                            "root": [
+                               './src',
+                            ]
+                        }
+                    ],
                 ],
                 presets: [
-                    'es2015'
+                    require.resolve('@babel/preset-typescript'),
+                    [require.resolve('@babel/preset-env'), {
+                        exclude: [
+                            'transform-typeof-symbol',
+                            'transform-unicode-regex',
+                            'transform-sticky-regex',
+                            'transform-object-super',
+                            'transform-new-target',
+                            'transform-modules-umd',
+                            'transform-modules-systemjs',
+                            'transform-modules-amd',
+                            'transform-literals',
+                            'transform-duplicate-keys',
+                        ],
+                        "modules": "commonjs",
+                        "useBuiltIns": "usage",
+                        "targets": {
+                            "node": "current"
+                        }
+                    }],
+
+                    require.resolve('@babel/preset-react'),
                 ]
             });
+
+           //  let codeB = _fs.readFileSync(path, 'utf8');
+           //
+           //  codeB = codeB.replace('src/theme/const-env.mri', '/Users/Mizi/git/mri/src/theme/const-env.mri.ts');
+           //
+           // let compilerOptions = {
+           //      noEmitOnError: true,
+           //      noImplicitAny: true,
+           //      target: _ts.ScriptTarget.ES5,
+           //      module: _ts.ModuleKind.CommonJS,
+           //      sourceMap: true,
+           //      allowSyntheticDefaultImports: true,
+           //      isolatedModules: true,
+           //      allowJs: true
+           //  };
+
+
+            // let cc = _ts.transpile(codeB, {
+            //     compilerOptions: {
+            //         noEmitOnError: true,
+            //         noImplicitAny: true,
+            //         target: _ts.ScriptTarget.ES5,
+            //         module: _ts.ModuleKind.CommonJS,
+            //         sourceMap: true,
+            //         allowSyntheticDefaultImports: true,
+            //         isolatedModules: true,
+            //         allowJs: true
+            //
+            //     }
+            // });
+            //
+            // let dd = _ts.transform(codeB, {
+            //     compilerOptions: {
+            //         noEmitOnError: true,
+            //         noImplicitAny: true,
+            //         target: _ts.ScriptTarget.ES5,
+            //         module: _ts.ModuleKind.CommonJS,
+            //         sourceMap: true,
+            //         allowSyntheticDefaultImports: true,
+            //         isolatedModules: true,
+            //         allowJs: true
+            //
+            //     }
+            // });
+            //
+            // console.log(dd);
+            //
+            // codeB = cc;
+
+            // console.log(codeB);
+
+            // console.log('\n\n\n\n\n\n\n\n', cc);
+
+            // console.debug('----', eval(codeB));
+
+
+
+
+
+            // let {TypescriptParser} = require('typescript-parser');
+            //
+            // // console.debug(TypescriptParser);
+            //
+            //
+            // const parser = new TypescriptParser();
+            //
+            // // either:
+            // const parsed = parser.parseFile(path);
+            //
+            // console.debug('-------', parsed);
+            //
+            // parsed.then((a, b) => {
+            //     console.log(a, b);
+            // })
+
+
+
+            // let aa = babelParser.parse(code, {
+            //     plugins: [
+            //         "typescript",
+            //     ]
+            // });
+            //
+            // console.log('ooOooOoo', aa);
+
+            // code = code.replace('src/theme/const-env.mri', '/Users/Mizi/git/mri/src/theme/const-env.mri.ts');
+
+            // console.log( (code), '\n\n\n\n', _path.join(process.cwd(), './src'));
+
+            // console.log( eval(code) );
 
             return eval(code);
 
         } catch(e) {
+
+            console.log('\n\n------------\n\n');
+
+            console.log(e);
+
             log(red`
-                请安装相应包 babel-preset-es2015, add-module-exports
+                请安装相应包 babel-preset-typescript, babel-preset-es2015, add-module-exports
+                npm i babel-preset-typescript@latest --save-dev
                 npm i babel-preset-es2015@latest --save-dev
                 npm i babel-plugin-add-module-exports@latest --save-dev
             `);

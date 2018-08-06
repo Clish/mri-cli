@@ -1,8 +1,7 @@
 const fs = require('fs-extra');
 const {join} = require('path');
 const chalk = require('chalk');
-const spawn = require('cross-spawn');
-const which = require('which');
+
 const _ = require('lodash');
 const shell = require('shelljs');
 const $util = require('../service/util');
@@ -47,7 +46,7 @@ const getPendingPackages = function(mrircPath) {
 
     saves = getWaitPkgs(saves);
     devs = getWaitPkgs(devs);
-    globals = getWaitPkgs(globals, join(__dirname, 'package.json'));
+    globals = getWaitPkgs(globals, join(__dirname, '../package.json'));
 
     return [
         {pkgs: saves, params: '--save'},
@@ -57,15 +56,14 @@ const getPendingPackages = function(mrircPath) {
 };
 
 const upgrade = function(mrircPath) {
-
     let penddings = getPendingPackages(mrircPath);
-
     _.each(penddings, (item) => {
         if(item.pkgs.length > 0) {
             let pkgs = item.pkgs.join(' ');
+            // $util.npmCmd(['i', pkgs, item.params]);
             shell.exec(`
-                echo ${pkgs}
-                npm i ${pkgs} ${item.params}
+                echo ready install ${pkgs}
+                ${item.params === '-g' ? 'sudo' : ''} npm i ${pkgs} ${item.params}
             `);
         }
     });

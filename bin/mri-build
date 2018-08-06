@@ -89,7 +89,7 @@ let {env, config} = $env(theme, MRI_ENV);
  */
 if(_program.FORCE) {
     _shell.exec(`
-        lsof -i :${config.PORT}|awk '{print $2}'|grep -v PID|xargs kill -9
+        lsof -i :${config.PORT}|grep node|awk '{print $2}'|grep -v PID|xargs kill -9
     `);
 
     env = env.replace('BABEL_CACHE=1', 'BABEL_CACHE=none');
@@ -106,7 +106,7 @@ _shell.exec(`
     _umi=./node_modules/.bin/umi
     echo 'umi ${MRI_ENV} ${env}'
     $_umi -v
-    $_cross MRI_ENV=${MRI_ENV} ${env} $_umi dev
+    $_cross MRI_ENV=${MRI_ENV} ${env} $_umi build
 `);
 
 
