@@ -24,12 +24,18 @@ module.exports = function env(theme, mri_env) {
         PORT: 6000,
         HARD_SOURCE: 1,
         BABEL_CACHE: 1,
-        BROWSER: 'none',
+        BROWSER: void 0,
         PUBLIC_PATH: void 0,
         BASE_URL: void 0,
         TSLINT: 'none',
         ESLINT: 'none',
         MRI_DEVICE: 'pc'
+    };
+
+    let defNoSet = {
+        BROWSER: 1,
+        PUBLIC_PATH: '',
+        BASE_URL: '',
     };
 
     let mri;
@@ -68,7 +74,12 @@ module.exports = function env(theme, mri_env) {
 
     let env_ = [];
     _.each(config, (value, key) => {
-        if(key !== 'theme' && value !== 'default') {
+
+        if(defNoSet[key] === value) {
+            value = void 0;
+        }
+
+        if(key !== 'theme' && value !== void 0) {
             env_.push(`${key}=${value}`);
         }
     });
