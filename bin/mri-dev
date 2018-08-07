@@ -24,9 +24,28 @@ const $util = require('../service/util');
 const $pages = require('../service/pages');
 const $env = require('../service/env');
 const $initThemeRoot = require('../service/theme-root');
+const $root = require('../service/root');
 const $upgrade = require('../service/upgrade');
 
 const MRI_ENV = 'dev';
+const cwd = process.cwd();
+
+// 所有cli命令均要在 项目的根目录下运行
+if(!$root.judgeRoot(cwd)) {
+    log('\n');
+    log(red`当前路径${cwd}`);
+    log(red`不是mri的根目录，请切换到根目录后重新执行命令\n`);
+    let root = $root.getRoot();
+    root && log(`cd ${$root.getRoot()} \n\n`);
+    return void 0;
+}
+
+// 自动更新develop代码, 并checkout .mrirc.js
+log(`---=> auto git fetch`);
+_shell.exec(`
+    git fetch
+    git checkout develop -- ${cwd}/.mrirc.js
+`);
 
 // 设置 command 信息
 $command(MRI_ENV);
