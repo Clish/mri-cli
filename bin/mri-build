@@ -25,6 +25,7 @@ const $pages = require('../service/pages');
 const $env = require('../service/env');
 const $initThemeRoot = require('../service/theme-root');
 const $upgrade = require('../service/upgrade');
+const $root = require('../service/root');
 
 const MRI_ENV = 'test';
 

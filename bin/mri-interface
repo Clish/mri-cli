@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+
+'use strict';
+
+// mri interface
+
+const _program = require('commander');
+const $interface = require('../service/interface');
+
+_program
+    .usage('[options] [packageNames]')
+    .parse(process.argv);
+
+
+/**
+ * dev only
+ * 自动生成const的接口文件
+ */
+console.log(`\n\n--=> 自动生成const的接口文件`);
+$interface.init();
+

@@ -25,10 +25,12 @@ const $pages = require('../service/pages');
 const $env = require('../service/env');
 const $initThemeRoot = require('../service/theme-root');
 const $upgrade = require('../service/upgrade');
+const $root = require('../service/root');
 
 const MRI_ENV = 'prod';
 
 const cwd = process.cwd();
+
 
 // 所有cli命令均要在 项目的根目录下运行
 if(!$root.judgeRoot(cwd)) {
@@ -127,16 +129,3 @@ _shell.exec(`
     $_umi -v
     $_cross MRI_ENV=${MRI_ENV} ${env} $_umi build
 `);
-
-
-
-
-
-
-
-
-
-
-
-
-

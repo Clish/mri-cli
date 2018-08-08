@@ -16,6 +16,7 @@ const _join = require('path').join;
 const _ = require('lodash');
 const _chalk = require('chalk');
 const _shell = require('shelljs');
+const _spawn = require('cross-spawn');
 const {log, error, debug} = console;
 const {green, red, yellow, grey} = _chalk;
 
@@ -25,6 +26,7 @@ const $pages = require('../service/pages');
 const $env = require('../service/env');
 const $initThemeRoot = require('../service/theme-root');
 const $root = require('../service/root');
+const $interface = require('../service/interface');
 const $upgrade = require('../service/upgrade');
 
 const MRI_ENV = 'dev';
@@ -112,6 +114,10 @@ if(_.isNil(env)) {
     return void 0;
 }
 
+
+_spawn('mri', ['interface'], { stdio: "inherit" });
+
+
 log(`\n\n---=> 正在启动主题 => ${green(theme)}` );
 
 _shell.exec(`
@@ -120,7 +126,7 @@ _shell.exec(`
     echo umi version  \`$_umi -v\`
     echo develop env ${MRI_ENV}
     echo umi environment variable ${env}
-    
+
     $_cross MRI_ENV=${MRI_ENV} ${env} $_umi dev
 `);
 
