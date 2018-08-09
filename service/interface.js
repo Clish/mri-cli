@@ -39,14 +39,17 @@ class $interface {
         ];
     }
 
-    /**
-     * 遍历相应的文件夹，生成相应的declaration
-     * @param cb
-     */
-    createDeclaration(cb) {
+    upperName(str) {
+        return _.flow([_.camelCase, _.upperFirst])(str);
+    }
+
+    createIndex(cb, path) {
+        let constPath = path || this.constPath();
+        let indexPath = _join(constPath, './index.ts');
+
+        _shell.rm('-rf', indexPath);
 
         _fs.readdir(this.constPath(), (error, files) => {
-
             if(error) {
                 return void 0;
             }
@@ -58,19 +61,64 @@ class $interface {
                     return stat.isFile();
                 });
 
-                if(files.length) {
-                    const tscs = _.map(files, (file) => {
-                        return this.tsc(_join(this.constPath(), file)).join(' ');
-                    });
+                files = _.map(files, (file) => {
+                    let relativeFile = file.replace(/\.(ts|tsx)$/gi, '');
+                    let upperCase = this.upperName(relativeFile);
+                    return `export {default as ${upperCase}} from './${relativeFile}';`
+                });
 
-                    _shell.exec(`
-                        ${tscs.join('\n')}
-                    `);
+                // 生成index.ts文件
+                _fs.writeFileSync(indexPath, files.join('\n'), {encoding: 'utf-8'});
 
-                    cb && cb();
-                }
+                cb && cb(indexPath)
             }
+
         });
+
+    }
+
+    /**
+     * 遍历相应的文件夹，生成相应的declaration
+     * @param cb
+     */
+    createDeclaration(cb) {
+
+        // 编译index文件，加快编译速度
+        this.createIndex((indexPath) => {
+            _shell.exec(`
+                ${this.tsc(indexPath).join(' ')}
+            `);
+
+             cb && cb();
+        });
+
+        // 旧的方法，编译每个ts文件
+        // _fs.readdir(this.constPath(), (error, files) => {
+        //
+        //     if(error) {
+        //         return void 0;
+        //     }
+        //
+        //     if(files.length) {
+        //         files = _.filter(files, (name) => {
+        //             const filePath = _join(this.constPath(), name);
+        //             const stat = _fs.statSync(filePath);
+        //             return stat.isFile();
+        //         });
+        //
+        //         if(files.length) {
+        //             const tscs = _.map(files, (file) => {
+        //                 return this.tsc(_join(this.constPath(), file)).join(' ');
+        //             });
+        //
+        //             _shell.exec(`
+        //                 ${tscs.join('\n')}
+        //             `);
+        //
+        //             cb && cb();
+        //         }
+        //     }
+        // });
     }
 
     /**
@@ -98,7 +146,7 @@ class $interface {
      */
     d2i() {
         const groupDir = this.interfaceDir();
-        let o = _fs.readdir(groupDir, (error, files) => {
+        _fs.readdir(groupDir, (error, files) => {
             if(error) {
                 return void 0;
             }
@@ -114,8 +162,6 @@ class $interface {
                 });
             }
         });
-
-        console.log(o);
     }
 
     /**

@@ -121,7 +121,7 @@ if(_.isNil(env)) {
  */
 _spawn('mri', ['interface', `${_program['INTERFACE'] ? '-i' : ''}`], { stdio: "inherit" });
 
-// return void 0;
+return void 0;
 
 
 log(`\n\n---=> 正在启动主题 => ${green(theme)}` );
