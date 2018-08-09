@@ -116,9 +116,12 @@ if(_.isNil(env)) {
     return void 0;
 }
 
+/**
+ * 异步执行 mri interface
+ */
+_spawn('mri', ['interface', `${_program['INTERFACE'] ? '-i' : ''}`], { stdio: "inherit" });
 
-
-_spawn('mri', ['interface'], { stdio: "inherit" });
+// return void 0;
 
 
 log(`\n\n---=> 正在启动主题 => ${green(theme)}` );

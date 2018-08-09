@@ -17,11 +17,11 @@ class $interface {
     }
 
     outDir() {
-        return _join(this.constPath(), './i.mri');
+        return _join(this.constPath(), './ts-mri');
     }
 
-    groupDir() {
-        return _join(this.constPath(), './ii.mri');
+    interfaceDir() {
+        return _join(this.constPath(), './interface-mri');
     }
 
     tsc(file) {
@@ -77,7 +77,7 @@ class $interface {
      * 集合 const.d.ts
      */
     groupDts(cb) {
-        const groupDir = this.groupDir();
+        const groupDir = this.interfaceDir();
         const outDir = this.outDir();
         _shell.exec(`
             mkdir ${groupDir}
@@ -97,15 +97,15 @@ class $interface {
      * 将 declaration 改为 interface
      */
     d2i() {
-        const groupDir = this.groupDir();
-        _fs.readdir(groupDir, (error, files) => {
+        const groupDir = this.interfaceDir();
+        let o = _fs.readdir(groupDir, (error, files) => {
             if(error) {
                 return void 0;
             }
 
             if(files.length){
                 _.each(files, (file) => {
-                    let filePath = _join(this.groupDir(), file);
+                    let filePath = _join(this.interfaceDir(), file);
                     let info = String(_fs.readFileSync(filePath, 'utf-8'));
                     info = info.replace(/declare const\s(.*?):/gi, 'interface I$1');
                     info = info.replace(/export.*?;/gi, '');
@@ -114,19 +114,30 @@ class $interface {
                 });
             }
         });
+
+        console.log(o);
     }
 
     /**
      * 修改d.ts 文件
      * 转成 interface
+     * @param isForce 默认当检测到有interface所在的文件夹存在，则不再生成interface
      */
+    init(isForce) {
+        const interfaceDir = this.interfaceDir();
+        let isExist = _fs.existsSync(interfaceDir);
+        let isRun = isForce || !isExist;
 
-    init() {
-        this.createDeclaration(() => {
-            this.groupDts(() => {
-                this.d2i();
-            })
-        });
+        if(isRun) {
+
+            isExist && _shell.rm('-rf', interfaceDir);
+
+            this.createDeclaration(() => {
+                this.groupDts(() => {
+                    this.d2i();
+                })
+            });
+        }
     }
 
 }
