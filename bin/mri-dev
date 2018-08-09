@@ -77,7 +77,9 @@ if(!_exists(themePath)){
 let mrircPath = _join(process.cwd(), `./.mrirc.js`);
 if(_exists(mrircPath)) {
     log(`---=> 更新或安装包`);
-    $upgrade(mrircPath);
+    if(!_program['NO_INSTALL']) {
+        $upgrade(mrircPath);
+    }
 }
 
 /**
@@ -113,6 +115,7 @@ if(_program.FORCE) {
 if(_.isNil(env)) {
     return void 0;
 }
+
 
 
 _spawn('mri', ['interface'], { stdio: "inherit" });
