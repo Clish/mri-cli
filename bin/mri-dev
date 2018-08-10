@@ -104,25 +104,25 @@ log(`\n\n---=> 读取环境配置信息`);
  */
 let {env, config} = $env(theme, MRI_ENV);
 
+if(_.isNil(env)) {
+    return void 0;
+}
+
 if(_program.FORCE) {
     _shell.exec(`
         lsof -i :${config.PORT}|grep node|awk '{print $2}'|grep -v PID|xargs kill -9
     `);
 
     env = env.replace('BABEL_CACHE=1', 'BABEL_CACHE=none');
+    env = env.replace('HARD_SOURCE=1', 'HARD_SOURCE=none');
 }
 
-if(_.isNil(env)) {
-    return void 0;
-}
+
 
 /**
  * 异步执行 mri interface
  */
 _spawn('mri', ['interface', `${_program['INTERFACE'] ? '-i' : ''}`], { stdio: "inherit" });
-
-return void 0;
-
 
 log(`\n\n---=> 正在启动主题 => ${green(theme)}` );
 

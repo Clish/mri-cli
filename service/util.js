@@ -56,6 +56,14 @@ module.exports = {
         this.runCmd(_which.sync(npm), args, fn);
     },
 
+    pascalNaming(str) {
+        return _.flow([_.camelCase, _.upperFirst])(str);
+    },
+
+    camelNaming(str) {
+        return _.flow([_.camelCase])(str);
+    },
+
     loadjs(path) {
 
         try {
