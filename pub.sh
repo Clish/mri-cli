@@ -34,7 +34,7 @@ fi
 echo "::::: 推送到NPM $_ov -> $_version"
 
 echo ":::::: 推送到NPM"
-    npm publish
+    npm publish --allow-same-version
 
 if [ $? -eq 0 ]; then
 
