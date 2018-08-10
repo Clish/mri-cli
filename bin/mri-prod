@@ -42,11 +42,11 @@ if(!$root.judgeRoot(cwd)) {
     return void 0;
 }
 
-// 自动更新develop代码, 并checkout .mrirc.js
+// 自动更新test代码, 并checkout .mrirc.js
 log(`---=> auto git fetch`);
 _shell.exec(`
     git fetch
-    git checkout develop -- ${cwd}/.mrirc.js
+    git checkout test -- ${cwd}/.mrirc.js
 `);
 
 // 设置 command 信息
