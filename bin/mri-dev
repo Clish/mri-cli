@@ -46,7 +46,7 @@ if(!$root.judgeRoot(cwd)) {
 log(`---=> auto git fetch`);
 _shell.exec(`
     git fetch
-    git pull origin test:test
+    git pull origin common
     git checkout test -- ${cwd}/.mrirc.js
 `);
 
@@ -117,8 +117,6 @@ if(_program.FORCE) {
     env = env.replace('BABEL_CACHE=1', 'BABEL_CACHE=none');
     env = env.replace('HARD_SOURCE=1', 'HARD_SOURCE=none');
 }
-
-
 
 /**
  * 异步执行 mri interface
