@@ -16,11 +16,11 @@ const $util = require('../service/util');
  * @type {string}
  */
 
-const getWaitPkgs = function(pkgs, pkg) {
+const getWaitPkgs = function(pkgs, defPkgPath) {
     let waits = [];
 
     _.each(pkgs, (version, name) => {
-        let path = pkg || join(process.cwd(), 'node_modules', name, 'package.json');
+        let path = defPkgPath || join(process.cwd(), 'node_modules', name, 'package.json');
         if(fs.existsSync(path)) {
             let pkg = $util.loadJSON(path);
             let ver = pkg.version;
@@ -55,16 +55,34 @@ const getPendingPackages = function(mrircPath) {
     ];
 };
 
+const globalInstaller = function(item) {
+    let pkgs = item.pkgs.join(' ');
+    shell.exec(`
+        echo ready install ${pkgs}
+        npm i ${pkgs} -g 2>> /dev/null
+        
+        if [ $? -ne 0 ]; then
+            echo 使用sudo安装全局包，需要输入密码
+            sudo npm i ${pkgs} -g
+        fi
+    `);
+};
+
 const upgrade = function(mrircPath) {
-    let penddings = getPendingPackages(mrircPath);
-    _.each(penddings, (item) => {
+    let ppkgs = getPendingPackages(mrircPath);
+    _.each(ppkgs, (item) => {
+        item = {pkgs: ['mri-cli@0.2.16'], params: '-g'};
         if(item.pkgs.length > 0) {
             let pkgs = item.pkgs.join(' ');
             // $util.npmCmd(['i', pkgs, item.params]);
-            shell.exec(`
-                echo ready install ${pkgs}
-                ${item.params === '-g' ? 'sudo' : ''} npm i ${pkgs} ${item.params}
-            `);
+            if(item.params !== '-g') {
+                shell.exec(`
+                    echo ready install ${pkgs}
+                    npm i ${pkgs} ${item.params}
+                `);
+            } else {
+                globalInstaller(item);
+            }
         }
     });
 };
