@@ -11,7 +11,7 @@ import {MrServices} from 'masterrt';
 import * as mu from 'mzmu';
 import router from 'umi/router';
 import {$utils} from 'src/services';
-import {IBaseServices} from 'src/common/services/base';
+import {IBaseServices} from 'src/common/services';
 
 class I<%=upperName%>Services extends IBaseServices {
     constructor() {

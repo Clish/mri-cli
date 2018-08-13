@@ -4,13 +4,24 @@
 
 // mri new name [key1:value1 key2:value2...]
 
-const program    = require('commander');
-const newProject = require('../service/new');
+const _program    = require('commander');
+const _spawn = require('cross-spawn');
+const $newProject = require('../service/new');
 
-program
+_program
     .usage('name [key1:value1 key2:value2...]')
     .parse(process.argv);
 
-newProject(program);
+$newProject(_program);
+
+/**
+ * 异步执行 mri interface
+ */
+const runner = _spawn('mri', ['index'], { stdio: "inherit" });
+runner.on('close', () => {
+    _spawn('mri', ['interface', '-i'], { stdio: "inherit" });
+});
+
+
 
 

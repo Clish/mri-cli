@@ -71,7 +71,6 @@ const globalInstaller = function(item) {
 const upgrade = function(mrircPath) {
     let ppkgs = getPendingPackages(mrircPath);
     _.each(ppkgs, (item) => {
-        item = {pkgs: ['mri-cli@0.2.16'], params: '-g'};
         if(item.pkgs.length > 0) {
             let pkgs = item.pkgs.join(' ');
             // $util.npmCmd(['i', pkgs, item.params]);

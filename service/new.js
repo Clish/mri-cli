@@ -44,8 +44,7 @@ function addCommonFile(theme, tmpParams) {
     let srcUri = join(process.cwd(), './src');
     let commonPath = [
         '/common/const/{theme.}const.ts',
-        '/common/services/{theme/}{theme.}services.ts',
-        '/common/services/{theme/}index.ts'
+        '/common/services/{theme.}services.ts'
     ];
 
     _.forEach(commonPath, (path) => {
