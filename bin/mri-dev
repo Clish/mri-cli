@@ -46,6 +46,7 @@ if(!$root.judgeRoot(cwd)) {
 log(`---=> auto git fetch`);
 _shell.exec(`
     git fetch
+    git pull origin test:test
     git checkout test -- ${cwd}/.mrirc.js
 `);
 
