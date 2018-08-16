@@ -24,8 +24,8 @@ const getWaitPkgs = function(pkgs, defPkgPath) {
         if(fs.existsSync(path)) {
             let pkg = $util.loadJSON(path);
             let ver = pkg.version;
-            version = $util.getVersion(_.trim(version));
-            ver = $util.getVersion(_.trim(ver));
+            version = _.trim(version);
+            ver = _.trim(ver);
 
             // 只要本地版本与mri提供版本不一样
             // 本地包就必须重装

@@ -244,10 +244,6 @@ module.exports = {
         return require(path);
     },
 
-    getVersion(version) {
-        return version.replace(/^.*?([0-9.\-b]*)$/g, '$1');
-    },
-
     /**
      * 批量创建文件
      * @param arr
