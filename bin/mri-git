@@ -9,6 +9,7 @@ const newProject = require('../service/git');
 
 program
     .usage('name [feature|release|hotfix] [start|finish] branchName')
+    .option('-d, --DELETE', 'Do not delete branch')
     .parse(process.argv);
 
 newProject(program);
