@@ -47,6 +47,7 @@ log(`---=> auto git fetch`);
 _shell.exec(`
     git fetch -u origin common:common
     git checkout common -- ${cwd}/.mrirc.js
+    git add .mrirc.js && git commit -am 'sync common/.mrirc.js'
 `);
 
 // 设置 command 信息

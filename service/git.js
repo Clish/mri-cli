@@ -124,4 +124,90 @@ const git = function(program) {
                     mri git update merge branchName
 **/
 
+/**
+ * $ mri git release ${theme}
+ *
+ * 创建新的release
+ *
+ * R1. 若当前项目上有文件未提交到本地仓库
+ *    - 报错，提醒提交
+ *    - 或 使用 mri git release -m 'xxx' 提交到本地仓库，再创建release
+ *    - 或 使用 mri git release -m 'xxx' --push 提交到本地仓库并推送到远程，再创建release
+ *
+ * 2. 创建release
+ *    - release 只能基于 master
+ *    - 方法一:
+ *      * 先切换到master分支，git pull 获取最新代码
+ *      * 再创建分支
+ *    - 方法二:
+ *      * git fetch 获取最新代码
+ *      * git checkout -b 新分支名 master
+ *
+ * 3. release 名称
+*     - rel/${theme}/${version}
+ *    - version 从每个 theme下面的${theme}-umi.js 中获取 （若无 默认1.0.0）
+ *    - 创建release后将 version 写回 ${theme}-umi.js, 避免同时存在多条 release
+ *    - 执行命令 mri git release ${theme} 若 theme 不存在
+ *      * 方案一: 提醒该 theme 不存在，确认是否创建, 用户选择是 -> 先创建分支, 版本默认 0.0.1；再创建 theme
+ *      * 方案二: 提醒该 theme 不存在；若要创建新的theme, 使用 mri git release ${theme} -- force -> 先创建分支, 版本默认 0.0.1；再创建 theme
+ *    - 创建release 成功后，推送到远程，并切换至分支；
+ *
+ * 4. 因为release 分支不可删，所以没有删除命令
+ */
+
+/**
+ * $ mri git feature
+ *
+ * 创建新的feature
+ *
+ * 1. feature 不能在 master, test, common 三个分支中创建
+ * 2. feature 读取当前所在的 release名称，生成新的分支名 feature/${theme}/${version}-beta.x
+ *    - beta 也可以从${theme}.umi.js中读取
+ *    - theme 从分支名解析而出
+ * 3. feature 不推送远程
+ * 4. 若当前代码未提交，逻辑同 R1
+ *
+ * $ mri git feature merge ${releaseBranchName?}
+ *
+ * release merge feature
+ *
+ * 0. 若当前代码未提交，逻辑同 R1
+ * 1. release 选填，不填可根据当前 branch-name 分析出它所属 release
+ * 2. merge 结束后，默认不删除 feature 分支
+ *    - 若删除该分支使用 mri git feature merge --delete
+*  3. merge 过程，先把 release merge 到 feature; merge 成功后 再切到 release分支，再把 feature merge 回 release
+ *    - 多个feature 开发，因为在同一theme, 所以产生冲突的几率非常的大
+ */
+
+/**
+ * $ mri git hotfix ${branchName}
+ *
+ * 创建hotfix
+ *
+ * 1. hotfix 只能基于master(同 release)
+ * 2. hotfix 分支名 hotfix/${theme}/${version}.rc.x;
+ *    - 创建hotfix， branchName 手写
+*  3. hotfix 推送远程，用于 pr merge master
+ * 4. 若当前代码未提交，逻辑同 R1
+ */
+
+/**
+ * $ mri git merge test ${branchName?}
+ *
+ * 1. 只适用 release/hotfix 分支; 其他分支报错退出
+ * 2. 若当前代码未提交，逻辑同 R1
+ * 3. 若 branchName 为空，则默认选中当前分支
+ * 4. 切到 test 分支，merge release/hotfix 分支
+ * 5. 操作结束 返回 release/hotfix 分支，避免在test进行操作
+ */
+
+/**
+ * $ mri git ampp -m 'xxxxx'
+ *
+ * 快速提交代码
+ *
+ * 1. 一组代码的合集
+ *    - git add . && git commit -am 'xxxxx' && git pull && git push
+ */
+
 module.exports = git;
