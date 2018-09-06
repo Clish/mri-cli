@@ -132,110 +132,21 @@ module.exports = {
                 ]
             });
 
-           //  let codeB = _fs.readFileSync(path, 'utf8');
-           //
-           //  codeB = codeB.replace('src/theme/const-env.mri', '/Users/Mizi/git/mri/src/theme/const-env.mri.ts');
-           //
-           // let compilerOptions = {
-           //      noEmitOnError: true,
-           //      noImplicitAny: true,
-           //      target: _ts.ScriptTarget.ES5,
-           //      module: _ts.ModuleKind.CommonJS,
-           //      sourceMap: true,
-           //      allowSyntheticDefaultImports: true,
-           //      isolatedModules: true,
-           //      allowJs: true
-           //  };
-
-
-            // let cc = _ts.transpile(codeB, {
-            //     compilerOptions: {
-            //         noEmitOnError: true,
-            //         noImplicitAny: true,
-            //         target: _ts.ScriptTarget.ES5,
-            //         module: _ts.ModuleKind.CommonJS,
-            //         sourceMap: true,
-            //         allowSyntheticDefaultImports: true,
-            //         isolatedModules: true,
-            //         allowJs: true
-            //
-            //     }
-            // });
-            //
-            // let dd = _ts.transform(codeB, {
-            //     compilerOptions: {
-            //         noEmitOnError: true,
-            //         noImplicitAny: true,
-            //         target: _ts.ScriptTarget.ES5,
-            //         module: _ts.ModuleKind.CommonJS,
-            //         sourceMap: true,
-            //         allowSyntheticDefaultImports: true,
-            //         isolatedModules: true,
-            //         allowJs: true
-            //
-            //     }
-            // });
-            //
-            // console.log(dd);
-            //
-            // codeB = cc;
-
-            // console.log(codeB);
-
-            // console.log('\n\n\n\n\n\n\n\n', cc);
-
-            // console.debug('----', eval(codeB));
-
-
-
-
-
-            // let {TypescriptParser} = require('typescript-parser');
-            //
-            // // console.debug(TypescriptParser);
-            //
-            //
-            // const parser = new TypescriptParser();
-            //
-            // // either:
-            // const parsed = parser.parseFile(path);
-            //
-            // console.debug('-------', parsed);
-            //
-            // parsed.then((a, b) => {
-            //     console.log(a, b);
-            // })
-
-
-
-            // let aa = babelParser.parse(code, {
-            //     plugins: [
-            //         "typescript",
-            //     ]
-            // });
-            //
-            // console.log('ooOooOoo', aa);
-
-            // code = code.replace('src/theme/const-env.mri', '/Users/Mizi/git/mri/src/theme/const-env.mri.ts');
-
-            // console.log( (code), '\n\n\n\n', _path.join(process.cwd(), './src'));
-
-            // console.log( eval(code) );
-
             return eval(code);
 
         } catch(e) {
 
             console.log('\n\n------------\n\n');
+            console.log(`${path} load fail`);
 
             console.log(e);
 
-            log(red`
-                请安装相应包 babel-preset-typescript, babel-preset-es2015, add-module-exports
-                npm i babel-preset-typescript@latest --save-dev
-                npm i babel-preset-es2015@latest --save-dev
-                npm i babel-plugin-add-module-exports@latest --save-dev
-            `);
+            // log(red`
+            //     请安装相应包 babel-preset-typescript, babel-preset-es2015, add-module-exports
+            //     npm i babel-preset-typescript@latest --save-dev
+            //     npm i babel-preset-es2015@latest --save-dev
+            //     npm i babel-plugin-add-module-exports@latest --save-dev
+            // `);
         }
         return void 0;
     },

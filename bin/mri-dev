@@ -45,8 +45,8 @@ if(!$root.judgeRoot(cwd)) {
 // 自动更新test代码, 并checkout .mrirc.js
 log(`---=> auto git fetch`);
 _shell.exec(`
-    git fetch -u origin common:common
-    git checkout common -- ${cwd}/.mrirc.js
+    git fetch -u origin mri-common:mri-common
+    git checkout common -- .mrirc.js
     git add .mrirc.js && git commit -am 'sync common/.mrirc.js'
 `);
 
