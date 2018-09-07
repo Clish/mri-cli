@@ -2,25 +2,16 @@
 
 'use strict';
 
-// mri new name [key1:value1 key2:value2...]
-
 const _program    = require('commander');
-const _spawn = require('cross-spawn');
-const $newProject = require('../service/new');
 
 _program
     .usage('name [key1:value1 key2:value2...]')
     .parse(process.argv);
 
-$newProject(_program);
 
-/**
- * 异步执行 mri interface
- */
-const runner = _spawn('mri', ['index'], { stdio: "inherit" });
-runner.on('close', () => {
-    _spawn('mri', ['interface', '-i'], { stdio: "inherit" });
-});
+console.log(`\n该命令已改名，请使用 mri theme\n`);
+
+
 
 
 
