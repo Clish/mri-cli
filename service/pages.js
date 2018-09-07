@@ -15,11 +15,31 @@ const {green, red, yellow, grey} = _chalk;
 const PAGES_PATH = './src/pages';
 const DEF_INDEX = 'index';
 
-let writeFile = (path, name) => {
-    // todo 改成 ejs
-    _fse.outputFileSync(path, `
-import $theme from 'src/theme';
+let writeFile = (path, name, route) => {
 
+    let {title, guard = []} = route;
+
+    title = title ? `Title: ${title}` : '';
+
+    if(typeof guard === 'string') {
+        guard = [guard]
+    }
+
+    if(name === 'index') {
+        guard.unshift('src/theme/route-guard.tsx');
+    }
+
+    guard = _.map(guard, (path) => `- ${path}`);
+
+    // todo 改成 ejs
+    _fse.outputFileSync(path, `/**
+ * ${title}
+ * ${guard.length > 0 ? 'Routes:' : ''}
+ *  ${guard[0] || ''}
+ *  ${guard[1] || ''}
+ *  ${guard[2] || ''}
+ */
+import $theme from 'src/theme';
 const module = $theme.getModule('${name}');
 const component = module.component;
 export default component;
@@ -50,7 +70,7 @@ const analysisRoutes = (theme, env) => {
 
         // 移除代码中的备注
         info = info.replace(/("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n))|(\/\*(\n|.)*?\*\/)/g, function(word) { // 去除注释后的文本
-            return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word;
+            return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? '' : word;
         });
 
         info = info.replace(/\n/g, '');
@@ -90,7 +110,8 @@ const writePages = (routes) => {
 
     // 创建 / 写入文件
 
-    _.forEach(routes, ({path = []}, name) => {
+    _.forEach(routes, (route, name) => {
+        let {path = []} = route;
         path = _.uniq(path.map(item => _.trim(_.replace(item, '/' + DEF_INDEX, ''), '/')));
         _.forEach(path, str => {
             if(!str) {
@@ -98,7 +119,7 @@ const writePages = (routes) => {
             }
             let filePath = _util.createDir(str.split('/'), PAGES_PATH);
 
-            writeFile(_path.join(filePath, `${DEF_INDEX}.ts`), name);
+            writeFile(_path.join(filePath, `${DEF_INDEX}.ts`), name, route);
         });
     });
 
