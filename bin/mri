@@ -12,6 +12,7 @@ const pk      = require('../package.json');
 program
     .usage('<command> [options]')
     .version(pk.version)
+
     .on('--help', echoHelp)
     .parse(process.argv);
 

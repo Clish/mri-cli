@@ -46,8 +46,7 @@ if(!$root.judgeRoot(cwd)) {
 log(`---=> auto git fetch`);
 _shell.exec(`
     git fetch -u origin mri-common:mri-common
-    git checkout common -- .mrirc.js
-    git add .mrirc.js && git commit -am 'sync common/.mrirc.js'
+    git checkout mri-common -- .mrirc.js
 `);
 
 // 设置 command 信息
@@ -121,17 +120,16 @@ if(_program.FORCE) {
 /**
  * 异步执行 mri interface
  */
-_spawn('mri', ['interface', `${_program['INTERFACE'] ? '-i' : ''}`], { stdio: "inherit" });
+// _spawn('mri', ['interface', `${_program['INTERFACE'] ? '-i' : ''}`], { stdio: "inherit" });
 
 log(`\n\n---=> 正在启动主题 => ${green(theme)}` );
 
 _shell.exec(`
     _cross=./node_modules/.bin/cross-env
     _umi=./node_modules/.bin/umi
-    echo umi version  \`$_umi -v\`
+    # echo umi version  \`$_umi -v\`
     echo develop env ${MRI_ENV}
     echo umi environment variable ${env}
-
     $_cross MRI_ENV=${MRI_ENV} ${env} $_umi dev
 `);
 

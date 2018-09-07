@@ -17,6 +17,8 @@ const {green, red, yellow, grey} = _chalk;
 
 module.exports = function env(theme, mri_env) {
 
+    console.log(theme);
+
     let path = `./src/theme/${theme}/${theme}-umi.js`;
 
     // 默认配置

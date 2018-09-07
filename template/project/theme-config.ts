@@ -7,6 +7,8 @@ import {BaseLayout} from 'src/common/layouts/base-layout';
 import <%=upperName%>Const from 'src/common/const/<%=name%>.const';
 import <%=upperName%>Services from 'src/common/services/<%=name%>.services';
 import <%=upperName%>Routes from './<%=name%>-routes';
+import EnvConst from 'src/theme/const-env.mri';
+
 
 
 class <%=upperName%>ThemeConfig {
@@ -39,7 +41,7 @@ class <%=upperName%>ThemeConfig {
      * providers
      */
     providers = {
-        <%=upperName%>Const,
+        <%=upperName%>Const: {...<%=upperName%>Const, ...EnvConst},
         <%=upperName%>Services
     }
 }

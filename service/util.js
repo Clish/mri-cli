@@ -6,28 +6,9 @@ const _moment = require('moment');
 const _chalk = require('chalk');
 const _spawn = require('cross-spawn');
 const _which = require('which');
-
 const {log, error, debug} = console;
 const {green, red, yellow, grey} = _chalk;
-
 const babel = require('@babel/core');
-
-// const _ts = require('typescript');
-//
-// const _eval = require('eval');
-//
-// const babelParser = require("@babel/parser");
-//
-// require("@babel/polyfill");
-
-// require("@babel/register")({
-//     extensions: [".ts", ".tsx", ".jsx", ".js"],
-// });
-
-
-// const fs = require('fs');
-// const babelConfig = JSON.parse(fs.readFileSync('/Users/Mizi/git/mri-cli/.babelrc'));
-// require('babel-register')(babelConfig);
 
 module.exports = {
     ifnvl(src, target) {
@@ -44,10 +25,10 @@ module.exports = {
     },
 
     runCmd(cmd, args, fn) {
-        let runner = _spawn(cmd, args, { stdio: "inherit" });
-            runner.on('close', (code) => {
-                fn && fn(code);
-            });
+        let runner = _spawn(cmd, args, {stdio: 'inherit'});
+        runner.on('close', (code) => {
+            fn && fn(code);
+        });
     },
 
     npmCmd(args, fn) {
@@ -65,91 +46,113 @@ module.exports = {
     },
 
     loadjs(path) {
-
+        // 支持es6语法
         try {
-
             let {code, map, ast} = babel.transformFileSync(path, {
-
                 babelrc: false,
-
-                plugins: [
-                    require.resolve('@babel/plugin-transform-typescript'),
-                    require.resolve('@babel/plugin-syntax-typescript'),
-                    '@babel/plugin-syntax-dynamic-import',
-                    '@babel/plugin-proposal-object-rest-spread',
-                    '@babel/plugin-proposal-optional-catch-binding',
-                    '@babel/plugin-proposal-async-generator-functions',
-                    ['@babel/plugin-proposal-decorators', { legacy: true }],
-                    ['@babel/plugin-proposal-class-properties', { loose: true }],
-                    '@babel/plugin-proposal-export-namespace',
-                    '@babel/plugin-proposal-export-default',
-                    '@babel/plugin-proposal-export-namespace-from',
-                    '@babel/plugin-proposal-export-default-from',
-                    '@babel/plugin-proposal-nullish-coalescing-operator',
-                    '@babel/plugin-proposal-optional-chaining',
-                    '@babel/plugin-proposal-do-expressions',
-                    '@babel/plugin-proposal-function-bind',
-                    '@babel/plugin-transform-modules-commonjs',
-                    'add-module-exports',
-                    [
-                        "module-resolver",
-                        {
-                            "extensions": [
-                                ".js",
-                                ".jsx",
-                                ".ts",
-                                ".tsx"
-                            ],
-                            "root": [
-                               './src',
-                            ]
-                        }
-                    ],
-                ],
                 presets: [
-                    require.resolve('@babel/preset-typescript'),
-                    [require.resolve('@babel/preset-env'), {
-                        exclude: [
-                            'transform-typeof-symbol',
-                            'transform-unicode-regex',
-                            'transform-sticky-regex',
-                            'transform-object-super',
-                            'transform-new-target',
-                            'transform-modules-umd',
-                            'transform-modules-systemjs',
-                            'transform-modules-amd',
-                            'transform-literals',
-                            'transform-duplicate-keys',
-                        ],
-                        "modules": "commonjs",
-                        "useBuiltIns": "usage",
-                        "targets": {
-                            "node": "current"
-                        }
-                    }],
-
-                    require.resolve('@babel/preset-react'),
+                    ['@babel/preset-env'],
+                    ['@babel/preset-react']
                 ]
             });
 
             return eval(code);
 
         } catch(e) {
-
             console.log('\n\n------------\n\n');
             console.log(`${path} load fail`);
-
             console.log(e);
-
-            // log(red`
-            //     请安装相应包 babel-preset-typescript, babel-preset-es2015, add-module-exports
-            //     npm i babel-preset-typescript@latest --save-dev
-            //     npm i babel-preset-es2015@latest --save-dev
-            //     npm i babel-plugin-add-module-exports@latest --save-dev
-            // `);
         }
+
         return void 0;
     },
+
+    // loadts(path) {
+    //
+    //     try {
+    //
+    //         let {code, map, ast} = babel.transformFileSync(path, {
+    //
+    //             babelrc: false,
+    //
+    //             plugins: [
+    //                 require.resolve('@babel/plugin-transform-typescript'),
+    //                 require.resolve('@babel/plugin-syntax-typescript'),
+    //                 '@babel/plugin-syntax-dynamic-import',
+    //                 '@babel/plugin-proposal-object-rest-spread',
+    //                 '@babel/plugin-proposal-optional-catch-binding',
+    //                 '@babel/plugin-proposal-async-generator-functions',
+    //                 ['@babel/plugin-proposal-decorators', { legacy: true }],
+    //                 ['@babel/plugin-proposal-class-properties', { loose: true }],
+    //                 '@babel/plugin-proposal-export-namespace',
+    //                 '@babel/plugin-proposal-export-default',
+    //                 '@babel/plugin-proposal-export-namespace-from',
+    //                 '@babel/plugin-proposal-export-default-from',
+    //                 '@babel/plugin-proposal-nullish-coalescing-operator',
+    //                 '@babel/plugin-proposal-optional-chaining',
+    //                 '@babel/plugin-proposal-do-expressions',
+    //                 '@babel/plugin-proposal-function-bind',
+    //                 '@babel/plugin-transform-modules-commonjs',
+    //                 'add-module-exports',
+    //                 [
+    //                     "module-resolver",
+    //                     {
+    //                         "extensions": [
+    //                             ".js",
+    //                             ".jsx",
+    //                             ".ts",
+    //                             ".tsx"
+    //                         ],
+    //                         "root": [
+    //                            './src',
+    //                         ]
+    //                     }
+    //                 ],
+    //             ],
+    //             presets: [
+    //                 require.resolve('@babel/preset-typescript'),
+    //                 [require.resolve('@babel/preset-env'), {
+    //                     exclude: [
+    //                         'transform-typeof-symbol',
+    //                         'transform-unicode-regex',
+    //                         'transform-sticky-regex',
+    //                         'transform-object-super',
+    //                         'transform-new-target',
+    //                         'transform-modules-umd',
+    //                         'transform-modules-systemjs',
+    //                         'transform-modules-amd',
+    //                         'transform-literals',
+    //                         'transform-duplicate-keys',
+    //                     ],
+    //                     "modules": "commonjs",
+    //                     "useBuiltIns": "usage",
+    //                     "targets": {
+    //                         "node": "current"
+    //                     }
+    //                 }],
+    //
+    //                 require.resolve('@babel/preset-react'),
+    //             ]
+    //         });
+    //
+    //         return eval(code);
+    //
+    //     } catch(e) {
+    //
+    //         console.log('\n\n------------\n\n');
+    //         console.log(`${path} load fail`);
+    //
+    //         console.log(e);
+    //
+    //         // log(red`
+    //         //     请安装相应包 babel-preset-typescript, babel-preset-es2015, add-module-exports
+    //         //     npm i babel-preset-typescript@latest --save-dev
+    //         //     npm i babel-preset-es2015@latest --save-dev
+    //         //     npm i babel-plugin-add-module-exports@latest --save-dev
+    //         // `);
+    //     }
+    //     return void 0;
+    // },
 
     loadJSON(path) {
         return require(path);

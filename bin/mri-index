@@ -19,11 +19,11 @@ const $root = require('../service/root');
 
 _program
     .usage('index [options]')
-    .option('-c, --consts', '只生成const index文件')
-    .option('-s, --services', '只生成services index文件')
-    .option('-l, --layouts', '只生成layouts index文件')
-    .option('-C, --components', '只生成component index文件')
-    .option('-W, --widgets', '只生成widgets index文件')
+    .option('--const', '只生成const index文件')
+    .option('--services', '只生成services index文件')
+    .option('--layouts', '只生成layouts index文件')
+    .option('--components', '只生成component index文件')
+    .option('--widgets', '只生成widgets index文件')
     .parse(process.argv);
 
 /**
@@ -35,8 +35,8 @@ let {consts, services, components, widgets, layouts} = _program;
 const rootPath = $root.getRoot();
 const constsPath = _join(rootPath, '/src/common/const');
 const servicesPath = _join(rootPath, '/src/common/services');
-const componentsPath = _join(rootPath, '/src/widgets');
-const widgetsPath = _join(rootPath, '/src/components');
+const widgetsPath = _join(rootPath, '/src/widgets');
+const componentsPath = _join(rootPath, '/src/components');
 const layoutsPath = _join(rootPath, '/common/layouts');
 
 // 默认全部生成
@@ -54,17 +54,5 @@ if(services) {
     $index.createIndex(servicesPath, (relativeFile, pascalName) => {
         return `export {default as ${pascalName}} from './${relativeFile}';\nexport {I${pascalName}} from './${relativeFile}';`
     });
-}
-
-if(components) {
-
-}
-
-if(components) {
-
-}
-
-if(components) {
-
 }
 

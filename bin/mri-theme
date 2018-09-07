@@ -1,0 +1,81 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const _program    = require('commander');
+const _spawn = require('cross-spawn');
+const _shell = require('shelljs');
+const _path = require('path');
+const _exists = require('fs').existsSync;
+const _chalk = require('chalk');
+
+const $newProject = require('../service/mri-theme');
+const $root = require('../service/root');
+
+const helper = () => {
+    console.log('\n', '');
+};
+
+_program
+    .usage('<name> [options]')
+    .description('创建管理 mri theme')
+    .option('--start', '创建好同时启动该theme')
+    .option('--remove', '删除该theme')
+    .on('--help', helper)
+    .parse(process.argv);
+
+let theme = _program.args[0];
+let {remove} = _program;
+
+if(!theme) {
+    _program.help();
+    return void 0;
+}
+
+let root = $root.getRoot();
+let themePath = _path.join(root, `./src/theme/${theme}`);
+let isTheme = _exists(themePath);
+
+/**
+ * 删除 theme
+ */
+if(remove) {
+    if(!isTheme) {
+        console.log(_chalk.red(`\n错误::: 要删除的主题${theme}不存在 \n`));
+        console.log(`可以使用下面命令新建主题\n\nmri theme ${theme}`);
+        return void 0;
+    }
+
+    _shell.cd(`${root}`);
+    _shell.exec(`
+        rm -rf ${themePath}
+        
+        echo ${theme} 删除成功
+        echo
+        echo common/const/${theme}-const.ts
+        echo common/services/${theme}-services.ts
+        echo 以上关联的公用文件，暂不删除
+        echo 若有需要，请手动删除
+    `);
+
+    return void 0;
+}
+
+if(isTheme) {
+    console.log(_chalk.red(`\n错误::: 主题${theme}已存在 \n`));
+    return void 0;
+}
+
+$newProject(_program, root);
+
+/**
+ * 异步执行 mri interface
+ */
+const runner = _spawn('mri', ['index'], { stdio: "inherit" });
+runner.on('close', () => {
+    _spawn('mri', ['interface', '-i'], { stdio: "inherit" });
+});
+
+
+
+

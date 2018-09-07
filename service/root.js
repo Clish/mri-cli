@@ -7,18 +7,17 @@ const _shell = require('shelljs');
 const judges = {
     'node_modules': 1,
     'package.json': 1,
-    '.git': 1,
+    '.mrirc.js': 1,
 };
 
 class $root {
-
     judgeRoot(path) {
         let status = false;
         let files = _fs.readdirSync(path);
+
         if(files && files.length > 0) {
             let matchTime = 0;
             _.each(files, (name) => {
-
                 if(judges[name]) {
                     matchTime ++;
                 }
@@ -46,7 +45,6 @@ class $root {
             return path;
         }
     }
-
 
     inRoot(command) {
         let path = this.getRoot();
