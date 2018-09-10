@@ -13,13 +13,14 @@ const $newProject = require('../service/mri-theme');
 const $root = require('../service/root');
 
 const helper = () => {
-    console.log('\n', '');
+    console.log('\n', 'THEMES');
+    $root.getThemes();
+    console.log('\n');
 };
 
 _program
     .usage('<name> [options]')
     .description('创建管理 mri theme')
-    .option('--start', '创建好同时启动该theme')
     .option('--remove', '删除该theme')
     .on('--help', helper)
     .parse(process.argv);
@@ -67,6 +68,13 @@ if(isTheme) {
 }
 
 $newProject(_program, root);
+
+console.log(`\n
+    theme ${theme} 创建成功！
+    
+    使用下面命令启动主题
+    mri dev ${theme}
+`);
 
 /**
  * 异步执行 mri interface

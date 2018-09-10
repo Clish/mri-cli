@@ -19,7 +19,7 @@ let writeFile = (path, name, route) => {
 
     let {title, guard = []} = route;
 
-    title = title ? `Title: ${title}` : '';
+    title = title ? `title: ${title}` : '';
 
     if(typeof guard === 'string') {
         guard = [guard]
