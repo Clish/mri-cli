@@ -6,6 +6,8 @@ const $root = require('../service/root');
 const $util = require('../service/util');
 const _chalk = require('chalk');
 const _shell = require('shelljs');
+const _relative = require('relative');
+
 
 class $index {
 
@@ -42,6 +44,19 @@ class $index {
             }
 
         });
+    }
+
+    createSVGIndex(svgs, indexPath, tempFn) {
+        _shell.rm('-rf', indexPath);
+
+        let temp = _.map(svgs, (file) => {
+            let relativeFile = _relative(indexPath, file.filedir);
+            let pascalName = $util.pascalNaming(file.filename);
+            return tempFn(relativeFile, pascalName)
+        });
+
+        // 生成index.ts文件
+        _fs.writeFileSync(indexPath, temp.join('\n'), {encoding: 'utf-8'});
 
     }
 

@@ -56,12 +56,12 @@ class $root {
             let fsStats = _fs.statSync(filePath);
 
             if(fsStats.isDirectory()) {
-                console.log(`   - ${filename}`);
-                themes.push(themes);
+                !theme && console.log(`   - ${filename}`);
+                themes.push(filename);
             }
         });
 
-        return themes;
+        return theme ? _.find(themes, (v) => v === theme) : themes;
     }
 
     inRoot(command) {

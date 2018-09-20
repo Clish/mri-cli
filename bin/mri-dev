@@ -56,7 +56,9 @@ $command(MRI_ENV);
 const theme = _program.args[0];
 
 if(!theme) {
-    error(`${red('### ERRO =>')} theme 未输入`);
+    error(red`\n 当前主题theme未输入`);
+    log(`\n THEMES`);
+    $root.getThemes();
     return void 0;
 } else {}
 

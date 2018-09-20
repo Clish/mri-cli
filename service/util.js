@@ -6,8 +6,8 @@ const _moment = require('moment');
 const _chalk = require('chalk');
 const _spawn = require('cross-spawn');
 const _which = require('which');
-const {log, error, debug} = console;
-const {green, red, yellow, grey} = _chalk;
+const { log, error, debug } = console;
+const { green, red, yellow, grey } = _chalk;
 const babel = require('@babel/core');
 
 module.exports = {
@@ -18,14 +18,14 @@ module.exports = {
     run(condition, truefn, falsefn) {
         truefn = truefn || (() => void 0);
         falsefn = falsefn || (() => void 0);
-        if(typeof condition === 'function') {
+        if (typeof condition === 'function') {
             condition = condition();
         }
         return condition ? truefn(condition) : falsefn();
     },
 
     runCmd(cmd, args, fn) {
-        let runner = _spawn(cmd, args, {stdio: 'inherit'});
+        let runner = _spawn(cmd, args, { stdio: 'inherit' });
         runner.on('close', (code) => {
             fn && fn(code);
         });
@@ -48,23 +48,43 @@ module.exports = {
     loadjs(path) {
         // 支持es6语法
         try {
-            let {code, map, ast} = babel.transformFileSync(path, {
+            let { code, map, ast } = babel.transformFileSync(path, {
                 babelrc: false,
-                presets: [
-                    ['@babel/preset-env'],
-                    ['@babel/preset-react']
-                ]
+                presets: [['@babel/preset-env'], ['@babel/preset-react']],
             });
 
             return eval(code);
-
-        } catch(e) {
+        } catch (e) {
             console.log('\n\n------------\n\n');
             console.log(`${path} load fail`);
             console.log(e);
         }
 
         return void 0;
+    },
+
+    getFiles(filePath) {
+        let files_ = [];
+        let files = _fs.readdirSync(filePath);
+        files.forEach((filename) => {
+            let filedir = _path.join(filePath, filename);
+            let stats = _fs.statSync(filedir);
+            if (stats.isFile()) {
+                // 读取文件内容
+                // var content = fs.readFileSync(filedir, 'utf-8');
+                files_.push({
+                    filedir,
+                    filePath,
+                    filename,
+                });
+            }
+            if (stats.isDirectory()) {
+                let files__ = this.getFiles(filedir);
+                files_ = files_.concat(files__);
+            }
+        });
+
+        return files_;
     },
 
     // loadts(path) {
@@ -167,7 +187,7 @@ module.exports = {
     createDir(arr, path) {
         _.forEach(arr, (dir) => {
             path = _path.join(path, './' + dir);
-            if(!_fs.existsSync(path)) {
+            if (!_fs.existsSync(path)) {
                 _fse.mkdirsSync(path);
             }
         });
@@ -176,19 +196,19 @@ module.exports = {
 
     createComments(options) {
         let obj = {
-            time: _moment()
-                .format('YYYY/MM/DD HH:mm:ss')
+            time: _moment().format('YYYY/MM/DD HH:mm:ss'),
         };
-        let commentFile = _fs.readFileSync(_path.join(__dirname, '../template/comments'), {encoding: 'utf8'});
-        let gitConfig = _fs.readFileSync(_path.join(process.cwd(), '.git/config'), {encoding: 'utf8'});
+        let commentFile = _fs.readFileSync(_path.join(__dirname, '../template/comments'), { encoding: 'utf8' });
+        let gitConfig = _fs.readFileSync(_path.join(process.cwd(), '.git/config'), {
+            encoding: 'utf8',
+        });
 
         _.forEach(['name', 'email'], (str) => {
             let regex = new RegExp(`${str}\\s*=\\s*(\\S.*)`);
 
             let matcher = gitConfig.match(regex);
 
-            if(_.isNil(matcher) && str === 'name') {
-
+            if (_.isNil(matcher) && str === 'name') {
                 log(red('git中未设置个人信息'));
 
                 log('根据下面命令配置信息');
@@ -205,6 +225,6 @@ module.exports = {
             obj[str] = matcher[1] || '';
         });
 
-        return _.template(commentFile)({...options, ...obj});
-    }
+        return _.template(commentFile)({ ...options, ...obj });
+    },
 };

@@ -4,12 +4,36 @@
 
 // mri git [feature|release|hotfix] [start|finish] branchName
 
-const program    = require('commander');
-const newProject = require('../service/git');
+const _program = require('commander');
+const _path = require('path');
+const _exists = require('fs').existsSync;
+const _spawn = require('cross-spawn');
+const _chalk = require('chalk');
+const $git = require('../service/git');
 
-program
-    .usage('name [feature|release|hotfix] [start|finish] branchName')
-    .option('-d, --DELETE', 'Do not delete branch')
+_program
+    .usage('<feature|release|hotfix> theme [option]')
     .parse(process.argv);
 
-newProject(program);
+const args = process.argv.slice(3);
+let subCmd = _program.args[0];
+
+if(!subCmd) {
+    _program.help();
+} else {
+    const bin = executable(subCmd);
+    !bin ? _program.help() : wrap(_spawn(bin, args, {stdio: 'inherit'}));
+}
+
+function wrap(sp) {
+    sp.on('close', function(code) {
+        process.exit(code);
+    });
+}
+
+function executable(subCmd) {
+    let file = _path.join(__dirname, 'mri-git-' + subCmd);
+    if(_exists(file)) {
+        return file;
+    }
+}

@@ -25,22 +25,23 @@ module.exports = function initThemeRoot(theme, env) {
      */
 
     let paths = [
-        '../template/theme/index.ts.ejs',
-        '../template/theme/config.mri.ts.ejs',
-        '../template/theme/route-guard.mri.ts.ejs',
-        '../template/theme/const-env.mri.ts.ejs',
-        '../template/theme/dva.mri.ts.ejs',
+        '../template/root/.theme.ejs',
+        '../template/root/src/theme/index.ts.ejs',
+        '../template/root/src/theme/config.mri.ts.ejs',
+        '../template/root/src/theme/route-guard.mri.ts.ejs',
+        '../template/root/src/theme/const-env.mri.ts.ejs',
+        '../template/root/src/theme/dva.mri.ts.ejs',
     ];
 
     _.each(paths, (path) => {
-        let path_ = path.replace(/(\.ejs)$/, '').replace('../template', 'src');
+        let path_ = path.replace(/(\.ejs)$/, '').replace('../template/root', '.');
 
         let temp = String(_fs.readFileSync(_path.join(__dirname, path), 'utf-8'));
         let path__ = _path.join(process.cwd(), path_);
         temp = _ejs.render(temp, {theme, env});
         _fse.outputFileSync(path__, temp);
 
-        log(green('::: theme root 文件生成 =>'), path_);
+        log(green('::: theme root 文件生成 =>'), path__);
     });
 
     log('---=> theme root 文件写入完成');
