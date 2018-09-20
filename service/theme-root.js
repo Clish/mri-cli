@@ -25,16 +25,16 @@ module.exports = function initThemeRoot(theme, env) {
      */
 
     let paths = [
-        '../template/root/.theme.ejs',
-        '../template/root/src/theme/index.ts.ejs',
-        '../template/root/src/theme/config.mri.ts.ejs',
-        '../template/root/src/theme/route-guard.mri.ts.ejs',
-        '../template/root/src/theme/const-env.mri.ts.ejs',
-        '../template/root/src/theme/dva.mri.ts.ejs',
+        '../template/approot/.theme.ejs',
+        '../template/approot/src/theme/index.ts.ejs',
+        '../template/approot/src/theme/config.mri.ts.ejs',
+        '../template/approot/src/theme/route-guard.mri.ts.ejs',
+        '../template/approot/src/theme/const-env.mri.ts.ejs',
+        '../template/approot/src/theme/dva.mri.ts.ejs',
     ];
 
     _.each(paths, (path) => {
-        let path_ = path.replace(/(\.ejs)$/, '').replace('../template/root', '.');
+        let path_ = path.replace(/(\.ejs)$/, '').replace('../template/approot', '.');
 
         let temp = String(_fs.readFileSync(_path.join(__dirname, path), 'utf-8'));
         let path__ = _path.join(process.cwd(), path_);
