@@ -24,20 +24,18 @@ module.exports = function env(theme, mri_env) {
     // 默认配置
     let def = {
         PORT: 6000,
-        HARD_SOURCE: 1,
+        // HARD_SOURCE: 1,
         BABEL_CACHE: 1,
         BROWSER: void 0,
-        PUBLIC_PATH: void 0,
-        BASE_URL: void 0,
-        TSLINT: 'none',
-        ESLINT: 'none',
+        // PUBLIC_PATH: void 0,
+        // BASE_URL: void 0,
+        // TSLINT: 'none',
+        // ESLINT: 'none',
         MRI_DEVICE: 'pc'
     };
 
     let defNoSet = {
         BROWSER: 1,
-        PUBLIC_PATH: '',
-        BASE_URL: '',
     };
 
     let mri;
@@ -52,9 +50,9 @@ module.exports = function env(theme, mri_env) {
         mri = Object.assign(mri, envConfig[mri_env] || {});
     }
 
-    let {PORT, HARD_SOURCE, BROWSER, BABEL_CACHE, PUBLIC_PATH, BASE_URL, TSLINT, ESLINT} = _program;
+    let {PORT, BROWSER, BABEL_CACHE} = _program;
 
-    let self = {PORT, HARD_SOURCE, BROWSER, BABEL_CACHE, PUBLIC_PATH, BASE_URL, TSLINT, ESLINT};
+    let self = {PORT, BROWSER, BABEL_CACHE};
 
     self = _.omitBy(self, _.isNil);
     def = _.omitBy(def, _.isNil);

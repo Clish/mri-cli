@@ -28,7 +28,7 @@ module.exports = function command(env) {
         .version(_pk.version);
     if(env === 'dev') {
         _program
-            .option('-f, --FORCE', '强制启动（关闭其他node端口）')
+            .option('-f, --force', '强制启动（关闭其他node端口）')
             .option('-p, --PORT [port]', 'server port')
             .option('-b, --BROWSER', '是否默认打开浏览器');
     }

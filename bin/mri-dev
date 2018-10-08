@@ -17,8 +17,8 @@ const _ = require('lodash');
 const _chalk = require('chalk');
 const _shell = require('shelljs');
 const _spawn = require('cross-spawn');
-const {log, error, debug} = console;
-const {green, red, yellow, grey} = _chalk;
+const { log, error, debug } = console;
+const { green, red, yellow, grey } = _chalk;
 
 const $command = require('../service/command');
 const $util = require('../service/util');
@@ -33,7 +33,7 @@ const MRI_ENV = 'dev';
 const cwd = process.cwd();
 
 // 所有cli命令均要在 项目的根目录下运行
-if(!$root.judgeRoot(cwd)) {
+if (!$root.judgeRoot(cwd)) {
     log('\n');
     log(red`当前路径${cwd}`);
     log(red`不是mri的根目录，请切换到根目录后重新执行命令\n`);
@@ -47,6 +47,7 @@ log(`---=> auto git fetch`);
 _shell.exec(`
     git fetch -u origin mri-common:mri-common
     git checkout mri-common -- .mrirc.js
+    git checkout mri-common -- .umirc.js
 `);
 
 // 设置 command 信息
@@ -55,12 +56,13 @@ $command(MRI_ENV);
 // 获得当前运行主题
 const theme = _program.args[0];
 
-if(!theme) {
+if (!theme) {
     error(red`\n 当前主题theme未输入`);
     log(`\n THEMES`);
     $root.getThemes();
     return void 0;
-} else {}
+} else {
+}
 
 /**
  * 检测 src/theme/${theme} 是否存在
@@ -68,7 +70,7 @@ if(!theme) {
 log(`---=> 检测当前主题是否存在`);
 
 let themePath = _join(process.cwd(), `src/theme/${theme}`);
-if(!_exists(themePath)){
+if (!_exists(themePath)) {
     error(`${red('### ERRO =>')} 当前主题不存在 ${theme} 不存在`);
     return void 0;
 }
@@ -77,9 +79,9 @@ if(!_exists(themePath)){
  * 检测 .mrirc.js
  */
 let mrircPath = _join(process.cwd(), `./.mrirc.js`);
-if(_exists(mrircPath)) {
+if (_exists(mrircPath)) {
     log(`---=> 更新或安装包`);
-    if(!_program['NO_INSTALL']) {
+    if (!_program['NO_INSTALL']) {
         $upgrade(mrircPath);
     }
 }
@@ -88,7 +90,7 @@ if(_exists(mrircPath)) {
  * 生成 pages 文件
  */
 
-if(!$pages(theme, MRI_ENV)) {
+if (!$pages(theme, MRI_ENV)) {
     error(red(`@@@=> 路由文件写入失败`));
     return void 0;
 }
@@ -104,19 +106,19 @@ log(`\n\n---=> 读取环境配置信息`);
  * 获得环境变量
  * @type {*|string|string}
  */
-let {env, config} = $env(theme, MRI_ENV);
+let { env, config } = $env(theme, MRI_ENV);
 
-if(_.isNil(env)) {
+if (_.isNil(env)) {
     return void 0;
 }
 
-if(_program.FORCE) {
+if (_program.force) {
     _shell.exec(`
+        rm -rf node_modules/.cache
         lsof -i :${config.PORT}|grep node|awk '{print $2}'|grep -v PID|xargs kill -9
     `);
 
     env = env.replace('BABEL_CACHE=1', 'BABEL_CACHE=none');
-    env = env.replace('HARD_SOURCE=1', 'HARD_SOURCE=none');
 }
 
 /**
@@ -124,20 +126,12 @@ if(_program.FORCE) {
  */
 // _spawn('mri', ['interface', `${_program['INTERFACE'] ? '-i' : ''}`], { stdio: "inherit" });
 
-log(`\n\n---=> 正在启动主题 => ${green(theme)}` );
+log(`\n\n---=> 正在启动主题 => ${green(theme)}`);
 
 _shell.exec(`
     _cross=./node_modules/.bin/cross-env
     _umi=./node_modules/.bin/umi
-    # echo umi version  \`$_umi -v\`
     echo develop env ${MRI_ENV}
-    echo umi environment variable ${env}
+    echo "umi environment variable ::=> ${env}"
     $_cross MRI_ENV=${MRI_ENV} ${env} $_umi dev
 `);
-
-
-
-
-
-
-
