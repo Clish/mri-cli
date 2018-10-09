@@ -46,8 +46,12 @@ if (!$root.judgeRoot(cwd)) {
 log(`---=> auto git fetch`);
 _shell.exec(`
     git fetch -u origin mri-common:mri-common
-    git checkout mri-common -- .mrirc.js
+    git checkout mri-common -- .mrirc
     git checkout mri-common -- .umirc.js
+    rm -rf .mrirc.js
+    mv .mrirc .mrirc.js
+    git rm --cache .mrirc > /dev/null
+    rm -rf .mrirc
 `);
 
 // 设置 command 信息

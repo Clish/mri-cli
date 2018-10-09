@@ -6,8 +6,7 @@ const _shell = require('shelljs');
 
 const judges = {
     'node_modules': 1,
-    'package.json': 1,
-    '.mrirc.js': 1
+    'package.json': 1
 };
 
 class $root {
