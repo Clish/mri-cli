@@ -130,7 +130,7 @@ if(start) {
         echo "* 并推送至远程 remote"     
         echo "**************************************"
         echo ""
-        echo release 必须由 mastegit checkout $_master
+        echo 注意:: release 是由 Master 分支创建  
         
         git checkout $_master
         git pull origin $_master

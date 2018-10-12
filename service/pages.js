@@ -16,34 +16,17 @@ const PAGES_PATH = './src/pages';
 const DEF_INDEX = 'index';
 
 let writeFile = (path, name, route) => {
-
-    let {title, guard = []} = route;
-
+    let {title} = route;
     title = title ? `title: ${title}` : '';
-
-    if(typeof guard === 'string') {
-        guard = [guard]
-    }
-
-    if(name === 'index') {
-        guard.unshift('src/theme/route-guard.tsx');
-    }
-
-    guard = _.map(guard, (path) => `- ${path}`);
-
     // todo 改成 ejs
-    _fse.outputFileSync(path, `/**
+    _fse.outputFileSync(path, `
+/**
  * ${title}
- * ${guard.length > 0 ? 'Routes:' : ''}
- *  ${guard[0] || ''}
- *  ${guard[1] || ''}
- *  ${guard[2] || ''}
  */
 import $theme from 'src/theme';
 const module = $theme.getModule('${name}');
 const component = module.component;
 export default component;
-
     `);
 
     log(`${green('::: pages 文件生成 => ')} ${path}`);
