@@ -44,8 +44,13 @@ if(!$root.judgeRoot(cwd)) {
 // 自动更新test代码, 并checkout .mrirc.js
 log(`---=> auto git fetch`);
 _shell.exec(`
-    git fetch
-    git checkout test -- ${cwd}/.mrirc.js
+    git fetch -u origin mri-common:mri-common
+    git checkout mri-common -- .mrirc
+    git checkout mri-common -- .umirc.js
+    rm -rf .mrirc.js
+    mv .mrirc .mrirc.js
+    git rm --cache .mrirc > /dev/null
+    rm -rf .mrirc
 `);
 
 // 设置 command 信息
