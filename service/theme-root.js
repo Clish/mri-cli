@@ -31,6 +31,7 @@ module.exports = function initThemeRoot(theme, env) {
         '../template/approot/src/theme/route-guard.mri.ts.ejs',
         '../template/approot/src/theme/const-env.mri.ts.ejs',
         '../template/approot/src/theme/dva.mri.ts.ejs',
+        '../template/approot/src/theme/reference.mri.ts.ejs',
     ];
 
     _.each(paths, (path) => {

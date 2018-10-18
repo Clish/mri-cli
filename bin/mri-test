@@ -1,0 +1,25 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const _program = require('commander');
+const _path = require('path');
+const _join = _path.join;
+const _ = require('lodash');
+const $template = require('../service/template');
+const $root = require('../service/root');
+
+_program.usage('test [options]').parse(process.argv);
+
+let themes = $root.getThemes(null);
+
+// 批量生成 theme 的文件
+// _.each(themes, (theme) => {
+//     $template.create(
+//         {
+//             theme,
+//         },
+//         '../template/project/theme/{theme}-preload.ts.ejs',
+//         `src/theme/${theme}/${theme}-preload.ts`,
+//     );
+// });
