@@ -7,88 +7,9 @@
 
 'use strict';
 
-const _program = require('commander');
-const _fse = require('fs-extra');
-const _exists = require('fs').existsSync;
-const _readFileSync = require('fs').readFileSync;
-const _createReadStream = require('fs').createReadStream;
-const _join = require('path').join;
-const _ = require('lodash');
-const _chalk = require('chalk');
-const _shell = require('shelljs');
-const _spawn = require('cross-spawn');
-const { log, error, debug } = console;
-const { green, red, yellow, grey } = _chalk;
-
-const $command = require('../service/command');
-const $util = require('../service/util');
-const $pages = require('../service/pages');
-const $env = require('../service/env');
-const $initThemeRoot = require('../service/theme-root');
-const $root = require('../service/root');
-const $interface = require('../service/interface');
-const $upgrade = require('../service/upgrade');
-const $Bus = require('../service/bus');
+const $_project = require('../process/project');
 
 const MRI_ENV = 'dev';
-const cwd = process.cwd();
 
-/**
- * 配置command
- */
-$command(MRI_ENV);
+$_project(MRI_ENV);
 
-/**
- * 所有的命令均要在在根目录上运行
- */
-
-const root = $Bus.inRoot();
-
-/**
- * 主题（项目）校验
- */
-const theme = _program.args[0];
-
-$Bus.theme(theme);
-
-/**
- * fetch 代码
- * 更新 .mrirc.js 文件
- */
-$Bus.fetch();
-
-/**
- * 判断是否要升级系统
- */
-$Bus.mriUpdate();
-
-/**
- * 校验是否要安装包
- */
-$Bus.install();
-
-/**
- * 生成umi约定式路由文件
- * src/pages
- */
-$Bus.pages(theme, MRI_ENV);
-
-/**
- * 生成mri关联的手机
- */
-$Bus.mrifile(theme, MRI_ENV);
-
-/**
- * 获得环境变量
- */
-let env = $Bus.env(theme, MRI_ENV);
-
-log(`\n\n---=> 正在启动主题 => ${green(theme)}`);
-
-_shell.exec(`
-    _cross=./node_modules/.bin/cross-env
-    _umi=./node_modules/.bin/umi
-    echo develop env ${MRI_ENV}
-    echo "umi environment variable ::=> ${env}"
-    $_cross MRI_ENV=${MRI_ENV} ${env} $_umi dev
-`);
