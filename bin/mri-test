@@ -8,6 +8,8 @@ const _join = _path.join;
 const _ = require('lodash');
 const $template = require('../service/template');
 const $root = require('../service/root');
+const $MriVersion = require('../service/mri-version');
+const $Bus = require('../service/bus');
 
 _program.usage('test [options]').parse(process.argv);
 
@@ -23,3 +25,8 @@ let themes = $root.getThemes(null);
 //         `src/theme/${theme}/${theme}-preload.ts`,
 //     );
 // });
+
+$Bus.mriUpdate();
+
+
+

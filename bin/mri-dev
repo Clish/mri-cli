@@ -28,107 +28,60 @@ const $initThemeRoot = require('../service/theme-root');
 const $root = require('../service/root');
 const $interface = require('../service/interface');
 const $upgrade = require('../service/upgrade');
+const $Bus = require('../service/bus');
 
 const MRI_ENV = 'dev';
 const cwd = process.cwd();
 
-// 所有cli命令均要在 项目的根目录下运行
-if (!$root.judgeRoot(cwd)) {
-    log('\n');
-    log(red`当前路径${cwd}`);
-    log(red`不是mri的根目录，请切换到根目录后重新执行命令\n`);
-    let root = $root.getRoot();
-    root && log(`cd ${$root.getRoot()} \n\n`);
-    return void 0;
-}
-
-// 自动更新test代码, 并checkout .mrirc.js
-log(`---=> auto git fetch`);
-_shell.exec(`
-    git fetch -u origin mri-common:mri-common
-    git checkout mri-common -- .mrirc
-    git checkout mri-common -- .umirc.js
-    rm -rf .mrirc.js
-    mv .mrirc .mrirc.js
-    git rm --cache .mrirc > /dev/null
-    rm -rf .mrirc
-`);
-
-// 设置 command 信息
+/**
+ * 配置command
+ */
 $command(MRI_ENV);
 
-// 获得当前运行主题
+/**
+ * 所有的命令均要在在根目录上运行
+ */
+
+const root = $Bus.inRoot();
+
+/**
+ * 主题（项目）校验
+ */
 const theme = _program.args[0];
 
-if (!theme) {
-    error(red`\n 当前主题theme未输入`);
-    log(`\n THEMES`);
-    $root.getThemes();
-    return void 0;
-} else {
-}
+$Bus.theme(theme);
 
 /**
- * 检测 src/theme/${theme} 是否存在
+ * fetch 代码
+ * 更新 .mrirc.js 文件
  */
-log(`---=> 检测当前主题是否存在`);
-
-let themePath = _join(process.cwd(), `src/theme/${theme}`);
-if (!_exists(themePath)) {
-    error(`${red('### ERRO =>')} 当前主题不存在 ${theme} 不存在`);
-    return void 0;
-}
+$Bus.fetch();
 
 /**
- * 检测 .mrirc.js
+ * 判断是否要升级系统
  */
-let mrircPath = _join(process.cwd(), `./.mrirc.js`);
-if (_exists(mrircPath)) {
-    log(`---=> 更新或安装包`);
-    if (!_program['NO_INSTALL']) {
-        $upgrade(mrircPath);
-    }
-}
+$Bus.mriUpdate();
 
 /**
- * 生成 pages 文件
+ * 校验是否要安装包
  */
-
-if (!$pages(theme, MRI_ENV)) {
-    error(red(`@@@=> 路由文件写入失败`));
-    return void 0;
-}
+$Bus.install();
 
 /**
- * 写入 src/theme/index.ts
+ * 生成umi约定式路由文件
+ * src/pages
  */
-$initThemeRoot(theme, MRI_ENV);
+$Bus.pages(theme, MRI_ENV);
 
-log(`\n\n---=> 读取环境配置信息`);
+/**
+ * 生成mri关联的手机
+ */
+$Bus.mrifile(theme, MRI_ENV);
 
 /**
  * 获得环境变量
- * @type {*|string|string}
  */
-let { env, config } = $env(theme, MRI_ENV);
-
-if (_.isNil(env)) {
-    return void 0;
-}
-
-if (_program.force) {
-    _shell.exec(`
-        rm -rf node_modules/.cache
-        lsof -i :${config.PORT}|grep node|awk '{print $2}'|grep -v PID|xargs kill -9
-    `);
-
-    env = env.replace('BABEL_CACHE=1', 'BABEL_CACHE=none');
-}
-
-/**
- * 异步执行 mri interface
- */
-// _spawn('mri', ['interface', `${_program['INTERFACE'] ? '-i' : ''}`], { stdio: "inherit" });
+let env = $Bus.env(theme, MRI_ENV);
 
 log(`\n\n---=> 正在启动主题 => ${green(theme)}`);
 

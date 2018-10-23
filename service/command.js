@@ -23,7 +23,7 @@ module.exports = function command(env) {
         .description('运行MRI的开发环境')
         .description('更多的环境变量\n  参考 https://umijs.org/guide/env-variables.html\n  在src/theme/${theme}/${theme}-config.js 中进行配置')
         .option('-c, --BABEL_CACHE', '是否使用BabelCache模式')
-        .option('-n, --NO_INSTALL', '忽略安装包更新')
+        .option('-n, --not-install', '忽略安装包更新')
         .option('-i, --INTERFACE', '生成const interface文件')
         .version(_pk.version);
     if(env === 'dev') {

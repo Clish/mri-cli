@@ -17,6 +17,6 @@ _program
  * dev only
  * 自动生成const的接口文件
  */
-console.log(`\n\n--=> 自动生成const的接口文件`);
+console.log(`---=> 自动生成const的接口文件`);
 $interface.init(_program['INTERFACE']);
 
