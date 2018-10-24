@@ -8,10 +8,10 @@ const _spawn = require('cross-spawn');
 
 const $MriVersion = require('./mri-version');
 const $root = require('./root');
-const $upgrade = require('./upgrade');
 const $pages = require('./pages');
 const $initThemeRoot = require('./theme-root');
-const $env = require('../service/env');
+const $env = require('./env');
+const $Upgrade = require('./upgrade');
 
 class Bus {
     /**
@@ -130,7 +130,7 @@ class Bus {
             return void 0;
         }
 
-        $upgrade(rcPath);
+        $Upgrade.install(rcPath);
     }
 
     /**

@@ -1,6 +1,6 @@
 {
     "name": "mri-cli",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -37,7 +37,7 @@
         "broccoli-typescript-compiler": "^3.0.1",
         "chalk": "^2.4.1",
         "cheerio": "^1.0.0-rc.2",
-        "commander": "^2.15.1",
+        "commander": "^2.19.0",
         "compare-versions": "^3.4.0",
         "cross-spawn": "^6.0.5",
         "ejs": "^2.6.1",

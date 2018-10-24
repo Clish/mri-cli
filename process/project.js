@@ -76,6 +76,6 @@ module.exports = (MRIEnv) => {
         _umi=./node_modules/.bin/umi
         echo develop env ${MRIEnv}
         echo "umi environment variable ::=> ${env}"
-        $_cross MRI_ENV=${MRIEnv} ${env} $_umi ${start}
+        $_cross MRI_ENV=${MRIEnv} ${env} $_umi ${start} 
     `);
 };
