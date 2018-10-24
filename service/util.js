@@ -37,6 +37,27 @@ module.exports = {
         this.runCmd(_which.sync(npm), args, fn);
     },
 
+    /**
+     * type = async, sync
+     */
+    mri(command, type) {
+        _which('mri', (error) => {
+            if (error) {
+                if(type === 'async') {
+                    _spawn('/home/master/node_modules/node/bin/mri', command, { stdio: "inherit" });
+                } else {
+                    _shell.exec(`/home/master/node_modules/node/bin/mri ${command}`);
+                }
+            } else {
+                if(type === 'async') {
+                    _spawn('mri', command, { stdio: "inherit" });
+                } else {
+                    _shell.exec(`mri ${command}`);
+                }
+            }
+        });
+    },
+
     pascalNaming(str) {
         return _.flow([_.camelCase, _.upperFirst])(str);
     },

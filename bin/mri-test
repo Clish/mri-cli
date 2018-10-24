@@ -10,10 +10,13 @@ const $template = require('../service/template');
 const $root = require('../service/root');
 const $MriVersion = require('../service/mri-version');
 const $Bus = require('../service/bus');
+const _which = require('which');
+const _shell = require('shelljs');
+const _spawn = require('cross-spawn');
 
 _program.usage('test [options]').parse(process.argv);
 
-let themes = $root.getThemes(null);
+// let themes = $root.getThemes(null);
 
 // 批量生成 theme 的文件
 // _.each(themes, (theme) => {
@@ -26,7 +29,27 @@ let themes = $root.getThemes(null);
 //     );
 // });
 
-$Bus.mriUpdate();
+// $Bus.mriUpdate();
+
+_which('node', (er) => {
+    if(er) {
+        _shell.echo('asas')
+    } else {
+        _shell.echo('mri asas')
+    }
+});
+
+var resolved = _which.sync('node', (er) => {
+    if(er) {
+        _shell.echo('asas 1111')
+    } else {
+        _shell.echo('mri asas 222')
+    }
+});
+
+console.log( __dirname );
+
+_spawn('/Users/Mizi/git/mri-cli/bin/mri', ['interface', '-i'], { stdio: "inherit" });
 
 
 
