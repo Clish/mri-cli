@@ -25,6 +25,7 @@ module.exports = function command(env) {
         .option('-c, --BABEL_CACHE', '是否使用BabelCache模式')
         .option('-n, --not-install', '忽略安装包更新')
         .option('-i, --INTERFACE', '生成const interface文件')
+        .option('-d, --debug', '生成const interface文件')
         .version(_pk.version);
     if(env === 'dev') {
         _program
