@@ -25,8 +25,11 @@ class $interface {
     }
 
     tsc(file) {
+
+        let tsc = _join($root.getRoot(), './node_modules/.bin/tsc');
+
         return [
-            'tsc',
+            tsc,
             '--baseUrl',
             this.rootPath(),
             '--declaration',
