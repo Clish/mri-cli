@@ -30,7 +30,7 @@ const helper = () => {
  */
 
 _program
-    .usage('release <theme> [options]')
+    .usage('gr <theme> [options]')
     .option('--force', '强力开启')
     .option('--start', '创建release')
     .option('--ver [version]', '当前版本号')
