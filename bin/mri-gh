@@ -2,20 +2,10 @@
 
 'use strict';
 
-// @todo reply
-// echo -n "Print file? [y/n]: "
-// read
-// if [ "$REPLY" = "y" ]; then
-// lpr $TEMP_FILE
-// fi
-
-
 const _program = require('commander');
-const _shell = require('shelljs');
-const _ = require('lodash');
-const _chalk = require('chalk');
 
 const $_gitRelease = require('../process/git-release');
+const $root = require('../service/root');
 
 const helper = () => {
     console.log('\n', 'THEMES');
@@ -37,7 +27,7 @@ _program
     .on('--help', helper)
     .parse(process.argv);
 
-$_gitRelease('release');
+$_gitRelease('hotfix', helper);
 
 
 

@@ -3,30 +3,20 @@ const _shell = require('shelljs');
 const _ = require('lodash');
 const _chalk = require('chalk');
 
-const $git = require('../service/git');
 const $root = require('../service/root');
 
-module.exports = (type = 'release') => {
-    let [theme, forceVersion = ''] = _.trim(_program.args[0] || '').split('::');
-    let { force, start, ver } = _program;
-
-    /**
-     * 校正参数
-     *
-     * 如果使用快捷命令，
-     * 则默认启动项目，并设定版本
-     */
-    if (forceVersion) {
-        start = true;
-        ver = forceVersion;
-    }
+module.exports = (type = 'release', helper) => {
+    let [theme, version] = _.trim(_program.args[0] || '').split('::');
+    let { force } = _program;
 
     /**
      * 输入主题主题为空
      */
     if (!theme) {
-        console.error(`\n 请输入所要开${type}的theme名称`);
-        helper();
+        console.error(_chalk.red(`\n   请输入所要创建的${type}的theme::version\n`));
+        console.log(`   mri git ${type} theme::version`);
+        helper && helper();
+        process.exit(0);
         return void 0;
     }
 
@@ -38,6 +28,10 @@ module.exports = (type = 'release') => {
         console.error(`\n 输入的主题 -> ${theme}  不存在`);
         console.log(' 若确定仍需创建，请输入下列命令强力创建');
         console.warn(`\n mri git ${type} ${theme}::0.0.1 --force\n`);
+
+
+
+        process.exit(0);
         return void 0;
     }
 
@@ -45,44 +39,61 @@ module.exports = (type = 'release') => {
      * 没有启动项目, 提示当前theme已创建branch记录供参考
      */
 
-    if (!start) {
+    if (!version) {
+        console.error(_chalk.red`\n  版本信息不存在\n`);
         _shell.exec(`
-        echo 下面列出本地和remote关于theme已创建的${type}信息
-        echo 可根据下列信息，创建版本
-        git branch -a | grep "release/${theme}"
-        if [ $? -ne 0 ]; then
-            echo ''
-            echo '- 未查询到相关版本信息'
-            echo ''
-        fi 
-    `);
+            echo 下面列出本地和remote关于theme已创建的${type}信息
+            echo 可根据下列信息，创建版本
+            git branch -a | grep "release/${theme}"
+            if [ $? -ne 0 ]; then
+                echo ''
+                echo '- 未查询到相关版本信息'
+                echo ''
+            fi 
+        `);
 
+        process.exit(0);
         return void 0;
     }
 
     /**
+     * hotfix 的版本号格式为 ${release-version}-rc.{hotfix-version}
+     */
+    if(type === 'hotfix') {
+        if(!/-rc\.+\d{1,}$/.test(version)){
+            console.error(_chalk.red(`\n    没有hotfix的版本号`));
+            console.error(_chalk.white(`\n    如 mri git hotfix ${theme}::${version}-rc.1\n`));
+
+            _shell.exec(`
+                _branch=hotfix/${theme}/v${version}
+                echo "\* 下列为该 $_branch 的${type}信息"
+                echo ""
+                git branch -a | grep $_branch || echo '- 未查询到相关版本信息'
+                echo ""
+            `);
+
+            process.exit(0);
+            return void 0;
+        }
+    }
+
+
+    /**
      * 查看当前分支是否有文件没有提交
      */
-
     let status = _shell.exec(`git status | grep 'nothing to commit'`);
     if (!status.stdout) {
         console.error(_chalk.red`\n 当前分支有文件尚未提交stash或commit\n`);
         _shell.exec('git status');
+        process.exit(0);
         return void 0;
     }
 
     /**
      * 创建release
      */
-
-    if (start) {
-        if (!ver) {
-            console.error(_chalk.red(`\n 请输入当前${type}的版本号\n`));
-            return void 0;
-        }
-
-        _shell.exec(`
-        _branch=${type}/${theme}/v${ver}
+    _shell.exec(`
+        _branch=${type}/${theme}/v${version}
         _master=master
         
         echo ""
@@ -101,13 +112,11 @@ module.exports = (type = 'release') => {
             git push origin $_branch
             git branch --set-upstream-to=origin/$_branch $_branch
         else
-            echo ------------
-            echo 该分支已创建
-            echo ------------
-            git checkout $_branch
+            echo ------------------
+            echo "该分支(版本)已创建"
+            echo ------------------
         fi
     `);
 
-        return void 0;
-    }
+    process.exit(0);
 };

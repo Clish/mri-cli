@@ -20,7 +20,7 @@ const helper = () => {
  * ----------------
  */
 _program
-    .usage('hotfix <theme> [options]')
+    .usage('hotfix <theme>')
     .option('--force', '强力开启')
     .option('--start', '创建hotfix')
     .option('--ver [version]', '当前版本号')
