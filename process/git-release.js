@@ -6,7 +6,7 @@ const _chalk = require('chalk');
 const $git = require('../service/git');
 const $root = require('../service/root');
 
-module.exports = () => {
+module.exports = (type = 'release') => {
     let [theme, forceVersion = ''] = _.trim(_program.args[0] || '').split('::');
     let { force, start, ver } = _program;
 
@@ -25,7 +25,7 @@ module.exports = () => {
      * 输入主题主题为空
      */
     if (!theme) {
-        console.error('\n 请输入所要开release的theme名称');
+        console.error(`\n 请输入所要开${type}的theme名称`);
         helper();
         return void 0;
     }
@@ -37,7 +37,7 @@ module.exports = () => {
     if (!force && !$root.getThemes(null, theme)) {
         console.error(`\n 输入的主题 -> ${theme}  不存在`);
         console.log(' 若确定仍需创建，请输入下列命令强力创建');
-        console.warn('\n mri git release ${name} --force\n');
+        console.warn(`\n mri git ${type} ${name} --force\n`);
 
         return void 0;
     }
@@ -48,7 +48,7 @@ module.exports = () => {
 
     if (!start) {
         _shell.exec(`
-        echo 下面列出本地和remote关于theme已创建的release信息
+        echo 下面列出本地和remote关于theme已创建的${type}信息
         echo 可根据下列信息，创建版本
         git branch -a | grep "release/${theme}"
         if [ $? -ne 0 ]; then
@@ -78,12 +78,12 @@ module.exports = () => {
 
     if (start) {
         if (!ver) {
-            console.error(_chalk.red`\n 请输入当前release的版本号\n`);
+            console.error(_chalk.red(`\n 请输入当前${type}的版本号\n`));
             return void 0;
         }
 
         _shell.exec(`
-        _branch=release/${theme}/v${ver}
+        _branch=${type}/${theme}/v${ver}
         _master=master
         
         echo ""
@@ -92,7 +92,7 @@ module.exports = () => {
         echo "* 并推送至远程 remote"     
         echo "**************************************"
         echo ""
-        echo 注意:: release 是由 Master 分支创建  
+        echo 注意:: ${type} 是由 Master 分支创建  
         
         git checkout $_master
         git pull origin $_master

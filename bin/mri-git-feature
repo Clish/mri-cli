@@ -23,20 +23,19 @@ const helper = () => {
  */
 
 _program
-    .usage('feature [ver]')
-    .option('--start', '创建release')
+    .usage('feature [name::version]')
+    .option('--start', '创建feature')
     .option('--force', '强力模式，无需在release下创建feature')
     .option('--remote', '是否推送到远程')
     .on('--help', helper)
     .parse(process.argv);
 
-let [feature, forceBranch] = _.trim(_program.args[0] || '').split('::');
-let {start, remote, force} = _program;
+let [name, version] = _.trim(_program.args[0] || '').split('::');
+let { start, remote, force } = _program;
 
-/**
- * 校正参数
- */
-if(!_.isNil(forceBranch)){
+name = name || 'beta';
+
+if (version) {
     start = true;
 }
 
@@ -46,11 +45,6 @@ if(!_.isNil(forceBranch)){
 
 let branchGrep = `git branch | grep "*" | grep "release" | cut -c 3-`;
 
-// 强力模式获得当前branch
-if(force) {
-    branchGrep = `git branch | grep "*" | cut -c 3-`;
-}
-
 /**
  * 查看当前的branch,
  * feature 只能在release下创建
@@ -59,15 +53,16 @@ if(force) {
 let branch = _shell.exec(branchGrep).stdout;
 branch = branch.replace(/\n/g, '');
 
-if(!branch) {
+if (!branch) {
     console.error(_chalk.red(`\n feature只能在release分支下创建，当前分支不是release分支\n`));
+    process.exit(0);
     return void 0;
 }
 
 /**
  * 查看该branch的feature的创建情况
  */
-if(!start) {
+if (!start) {
     _shell.exec(`
         _branch=${branch}
         
@@ -82,20 +77,11 @@ if(!start) {
     return void 0;
 }
 
-if(!feature) {
-    console.error(_chalk.red(`\n 请输入预创建的分支名\n`));
-    console.log(`feature分支名建议以 beat.n 命名，如 beat.1`);
-}
-
 /**
  * 创建分支信息
  */
-if(start) {
-    forceBranch = forceBranch || branch;
-    let featureBranch = forceBranch.replace('release', 'feature') + '-' + feature;
-    if(featureBranch.indexOf('feature') < 0) {
-        featureBranch = 'feature/' + featureBranch;
-    }
+if (start) {
+    let featureBranch = `${branch.replace('release', 'feature')}-${name}.${version}`;
 
     _shell.exec(`
          _feature=${featureBranch}

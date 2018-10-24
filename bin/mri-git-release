@@ -37,7 +37,7 @@ _program
     .on('--help', helper)
     .parse(process.argv);
 
-$_gitRelease();
+$_gitRelease('release');
 
 
 
