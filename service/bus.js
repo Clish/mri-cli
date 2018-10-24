@@ -11,6 +11,7 @@ const $root = require('./root');
 const $pages = require('./pages');
 const $initThemeRoot = require('./theme-root');
 const $env = require('./env');
+const $util = require('./util');
 const $Upgrade = require('./upgrade');
 
 class Bus {
@@ -104,7 +105,9 @@ class Bus {
                 `);
 
                 if (update.code !== 0) {
-                    _shell.exec('mri index');
+
+                    $util.mri('index');
+
                     _shell.exit(1);
 
                     console.log(_chalk.red`
@@ -147,8 +150,8 @@ class Bus {
      * 生成MRI系统需要的相关文件
      */
     mrifile(theme, env) {
-        _spawn('mri', ['interface', `-i`], { stdio: "inherit" });
-        _shell.exec(`mri index`);
+        $util.mri(['interface', '-i'], 'async');
+        $util.mri(['index'], 'async');
         $initThemeRoot(theme, env);
     }
 
