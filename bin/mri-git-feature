@@ -64,13 +64,14 @@ if (!branch) {
  */
 if (!start) {
     _shell.exec(`
-        _branch=${branch}
+        _branch=${branch.replace(/^release/, 'feature')}
         
         echo ""
-        echo "请使用 mri git feature [featureName] --start 创建release"
+        echo "请使用 mri git feature [name::version] 创建release"
+        echo "name 可忽略"
         echo ""
         
-        echo "下列为该 $_branch 的feature信息"
+        echo "下列为该 ${branch} 的feature信息"
         git branch -a | grep $_branch || echo '- 未查询到相关版本信息'
     `);
 

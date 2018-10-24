@@ -37,8 +37,7 @@ module.exports = (type = 'release') => {
     if (!force && !$root.getThemes(null, theme)) {
         console.error(`\n 输入的主题 -> ${theme}  不存在`);
         console.log(' 若确定仍需创建，请输入下列命令强力创建');
-        console.warn(`\n mri git ${type} ${name} --force\n`);
-
+        console.warn(`\n mri git ${type} ${theme}::0.0.1 --force\n`);
         return void 0;
     }
 
