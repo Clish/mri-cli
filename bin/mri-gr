@@ -10,24 +10,13 @@ const $root = require('../service/root');
 const helper = () => {
     console.log('\n', 'THEMES');
     $root.getThemes();
+    console.log('\n');
 };
 
-/**
- * ----------------
- * 主程序
- * ----------------
- */
 _program
-    .usage('release <theme::version> [options]')
+    .usage('gr <theme> [options]')
     .option('--force', '强力开启')
     .on('--help', helper)
     .parse(process.argv);
 
 $_gitRelease('release', helper);
-
-
-
-
-
-
-

@@ -2,14 +2,25 @@
 
 'use strict';
 
+// @todo reply
+// echo -n "Print file? [y/n]: "
+// read
+// if [ "$REPLY" = "y" ]; then
+// lpr $TEMP_FILE
+// fi
+
+
 const _program = require('commander');
+const _shell = require('shelljs');
+const _ = require('lodash');
+const _chalk = require('chalk');
 
 const $_gitRelease = require('../process/git-release');
-const $root = require('../service/root');
 
 const helper = () => {
     console.log('\n', 'THEMES');
     $root.getThemes();
+    console.log('\n');
 };
 
 /**
@@ -17,13 +28,16 @@ const helper = () => {
  * 主程序
  * ----------------
  */
+
 _program
-    .usage('release <theme::version> [options]')
+    .usage('gr <theme> [options]')
     .option('--force', '强力开启')
+    .option('--start', '创建release')
+    .option('--ver [version]', '当前版本号')
     .on('--help', helper)
     .parse(process.argv);
 
-$_gitRelease('release', helper);
+$_gitRelease('release');
 
 
 

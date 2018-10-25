@@ -47,6 +47,13 @@ class $root {
 
     getThemes(path, theme) {
         let themePath = _path.join(this.getRoot(path), './src/theme');
+
+        if(!_fs.existsSync(themePath)) {
+
+            return void 0;
+        }
+
+
         let files = _fs.readdirSync(themePath);
         let themes = [];
 

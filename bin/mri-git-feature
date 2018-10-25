@@ -23,31 +23,20 @@ const helper = () => {
  */
 
 _program
-    .usage('feature [ver]')
-    .option('--start', '创建release')
+    .usage('feature [name::version]')
+    .option('--start', '创建feature')
     .option('--force', '强力模式，无需在release下创建feature')
-    .option('--finish', '关闭release(只删除本地分支)')
     .option('--remote', '是否推送到远程')
     .on('--help', helper)
     .parse(process.argv);
 
-let [feature, forceBranch] = _.trim(_program.args[0] || '').split('::');
-let {start, finish, remote, force} = _program;
+let [name, version] = _.trim(_program.args[0] || '').split('::');
+let { start, remote, force } = _program;
 
+name = name || 'beta';
 
-if(start && finish && test) {
-    console.error(_chalk.red(`\n --start, --finish, --test 不可以同时使用\n`));
-}
-
-/**
- * 校正参数
- */
-if(!_.isNil(forceBranch)){
+if (version) {
     start = true;
-}
-
-if(finish) {
-    force = true;
 }
 
 /**
@@ -55,11 +44,6 @@ if(finish) {
  */
 
 let branchGrep = `git branch | grep "*" | grep "release" | cut -c 3-`;
-
-// 强力模式获得当前branch
-if(force) {
-    branchGrep = `git branch | grep "*" | cut -c 3-`;
-}
 
 /**
  * 查看当前的branch,
@@ -69,59 +53,36 @@ if(force) {
 let branch = _shell.exec(branchGrep).stdout;
 branch = branch.replace(/\n/g, '');
 
-if(!branch) {
+if (!branch) {
     console.error(_chalk.red(`\n feature只能在release分支下创建，当前分支不是release分支\n`));
+    process.exit(0);
     return void 0;
 }
 
 /**
  * 查看该branch的feature的创建情况
  */
-if(!start && !finish) {
+if (!start) {
     _shell.exec(`
-        _branch=${branch}
+        _branch=${branch.replace(/^release/, 'feature')}
         
         echo ""
-        echo "请使用 mri git feature [featureName] --start 创建release"
+        echo "请使用 mri git feature [name::version] 创建release"
+        echo "name 可忽略"
         echo ""
         
-        echo "下列为该 $_branch 的feature信息"
+        echo "下列为该 ${branch} 的feature信息"
         git branch -a | grep $_branch || echo '- 未查询到相关版本信息'
     `);
 
     return void 0;
 }
 
-if(finish) {
-    if(branch.indexOf('feature') > -1) {
-
-        let release = forceBranch || branch.replace(/^feature\//, 'release/').replace(/^(.*?)-.*/g, '$1');
-
-        _shell.exec(`
-            _release=${release}
-            git checkout $_release || git checkout master
-            git branch -D ${branch}
-        `)
-    } else {
-        console.error(_chalk.red(`\n 该分支不是feature分支\n`));
-    }
-    return void 0;
-}
-
-if(!feature) {
-    console.error(_chalk.red(`\n 请输入预创建的分支名\n`));
-    console.log(`feature分支名建议以 beat.n 命名，如 beat.1`);
-}
-
 /**
  * 创建分支信息
  */
-if(start) {
-    forceBranch = forceBranch || branch;
-    let featureBranch = forceBranch.replace('release', 'feature') + '-' + feature;
-    if(featureBranch.indexOf('feature') < 0) {
-        featureBranch = 'feature/' + featureBranch;
-    }
+if (start) {
+    let featureBranch = `${branch.replace('release', 'feature')}-${name}.${version}`;
 
     _shell.exec(`
          _feature=${featureBranch}
@@ -138,32 +99,6 @@ if(start) {
             echo ------------
             git checkout $_feature
         fi
-    `);
-
-    return void 0;
-}
-
-if(test) {
-    _shell.exec(`
-        _branch=\`git branch | grep "*" | grep "feature"\`
-        if [ "$_branch" == "" ]; then
-            echo ''
-            echo '- 当前所在分支不是feature, 请确认'
-            echo ''
-            echo Branch
-            git branch
-        else
-            git checkout test
-            git pull origin test
-            git merge $_branch
-            if [ $? -ne 0 ]; then
-                echo 有冲突，请先解决冲突，再提交test
-                echo "$1" 1>&2
-                exit 1
-            else
-                git add . && git commit -am '$_branch' && git pull && git push
-            fi
-        fi 
     `);
 
     return void 0;
