@@ -89,6 +89,46 @@ module.exports = (type = 'release', helper) => {
     }
 
     /**
+     * 判断该版本是否存在
+     */
+    let branch = `${type}/${theme}/v${version}`;
+
+    if(branch) {
+        let status = _shell.exec(`git tag -l '${theme}.*' | grep -q '[._]v${version}'`);
+        if (!status.code) {
+            console.error(_chalk.red(`\n- 该版本TAGS已存在\n`));
+            _shell.exec(`
+                echo - git tag
+                echo ""
+                git tag -l '${theme}[._]v${version}'
+                echo "-----"
+                git tag -l '${theme}[._]v*'
+                echo ""
+            `);
+            process.exit(0);
+            return void 0;
+        }
+
+        status = _shell.exec(`git branch | grep -q '${branch}'`);
+
+        if (!status.code) {
+            console.error(_chalk.red(`\n- 需要创建[${branch}]已存在\n`));
+            _shell.exec(`
+                echo - git branch
+                echo ""
+                git branch -a --list '*${branch}'
+                echo "-----"
+                git branch -a --list '*${type}/${theme}*'
+                echo ""
+            `);
+            process.exit(0);
+            return void 0;
+        }
+    }
+
+
+
+    /**
      * 创建release
      */
     _shell.exec(`

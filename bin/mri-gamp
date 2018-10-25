@@ -1,0 +1,47 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const _program = require('commander');
+const _shell = require('shelljs');
+
+_program
+    .usage('gamp <message>')
+    .option('-n --no-push', '当前版本号')
+    .parse(process.argv);
+
+let message = _program.args[0] || '';
+
+_shell.exec(`
+    echo - git pull
+    git pull
+    if [ $? -ne 0 ]; then
+        exit 0
+    fi 
+    
+    echo - git status
+    
+    git status
+    
+    git status | grep -q 'nothing to commit' && exit 0 
+    
+    echo - git add . 
+    
+    git add . 
+    
+    echo - git commit
+    
+    git commit -am '${message}'
+    
+    echo - git push
+    
+    git push
+
+`);
+
+
+
+
+
+
+
