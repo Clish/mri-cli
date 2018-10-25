@@ -29,27 +29,27 @@ if (!message) {
 }
 
 _shell.exec(`
-    echo - git pull
+    echo "- git pull"
     git pull
     if [ $? -ne 0 ]; then
         exit 0
     fi 
     
-    echo - git status
+    echo "- git status"
     git status
     
     git status | grep -q 'nothing to commit' && ${forceCommand}
     
-    echo - git add . 
+    echo "- git add ." 
     
     git add . 
     
-    echo - git commit
+    echo "- git commit"
     
     git commit -am '${message}'
     
     ${!_program['notPush'] &&`
-        echo - git push
-        git push
+        echo '- git push'
+        git branch | grep '*' | cut -c 3- | xargs git push origin
     `}
 `);
