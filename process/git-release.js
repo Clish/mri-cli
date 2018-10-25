@@ -29,8 +29,6 @@ module.exports = (type = 'release', helper) => {
         console.log(' 若确定仍需创建，请输入下列命令强力创建');
         console.warn(`\n mri git ${type} ${theme}::0.0.1 --force\n`);
 
-
-
         process.exit(0);
         return void 0;
     }
@@ -81,9 +79,10 @@ module.exports = (type = 'release', helper) => {
     /**
      * 查看当前分支是否有文件没有提交
      */
-    let status = _shell.exec(`git status | grep 'nothing to commit'`);
-    if (!status.stdout) {
+    let status = _shell.exec(`git status | grep 'nothing to commit' 1>/dev/null 2>&1`);
+    if (status.code) {
         console.error(_chalk.red`\n 当前分支有文件尚未提交stash或commit\n`);
+        console.log(_chalk.white`- run::git status\n`);
         _shell.exec('git status');
         process.exit(0);
         return void 0;

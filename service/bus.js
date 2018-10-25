@@ -100,6 +100,7 @@ class Bus {
 
                 let update = _shell.exec(`
                     git add . && git commit -am 'ready update MRI@${updateVersion}'
+                    git fetch -u origin ${updateBranch}:${updateBranch}
                     echo '升级当前MRI版本 -> ${updateBranch}'
                     git merge ${updateBranch}
                 `);
