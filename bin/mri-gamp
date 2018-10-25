@@ -4,13 +4,29 @@
 
 const _program = require('commander');
 const _shell = require('shelljs');
+const _chalk = require('chalk');
 
 _program
-    .usage('gamp <message>')
-    .option('-n --no-push', '当前版本号')
+    .usage('gamp <message> [options]')
+    .option('-n, --not-push', '不支持 git push')
+    .option('-f, --force', '强制执行 git push')
+    .on('--help', () => {
+        console.log('没有新的文件文件变化，不push文件');
+    })
     .parse(process.argv);
 
-let message = _program.args[0] || '';
+let message = _program.args[0];
+let force = _program['force'];
+
+let forceCommand = 'exit 0';
+if (force) {
+    forceCommand = 'echo force';
+}
+if (!message) {
+    console.error(_chalk.red`- git commit message 不能为空`);
+    console.log(`\n     mri gamp 'message'\n`);
+    process.exit(0);
+}
 
 _shell.exec(`
     echo - git pull
@@ -20,10 +36,9 @@ _shell.exec(`
     fi 
     
     echo - git status
-    
     git status
     
-    git status | grep -q 'nothing to commit' && exit 0 
+    git status | grep -q 'nothing to commit' && ${forceCommand}
     
     echo - git add . 
     
@@ -33,15 +48,8 @@ _shell.exec(`
     
     git commit -am '${message}'
     
-    echo - git push
-    
-    git push
-
+    ${!_program['notPush'] &&`
+        echo - git push
+        git push
+    `}
 `);
-
-
-
-
-
-
-
