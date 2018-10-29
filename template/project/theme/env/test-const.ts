@@ -3,16 +3,16 @@
  * 根据不同环境，值有所不同
  */
 
-const envConst =  {
+const EnvConst =  {
 
-    'ENV': 'prod',
+    'ENV': 'test',
 
     // 是否打开debug模式
-    'DEBUG': false,
+    'DEBUG': true,
 
     // 当前开发环境的 origin
     'X-ORIGIN': '<%=xOrigin%>'
 
 };
 
-export default envConst;
+export default EnvConst;

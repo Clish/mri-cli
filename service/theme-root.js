@@ -26,12 +26,12 @@ module.exports = function initThemeRoot(theme, env) {
 
     let paths = [
         '../template/approot/.theme.ejs',
-        '../template/approot/src/theme/index.ts.ejs',
         '../template/approot/src/theme/config.mri.ts.ejs',
         '../template/approot/src/theme/route-guard.mri.ts.ejs',
         '../template/approot/src/theme/const-env.mri.ts.ejs',
         '../template/approot/src/theme/dva.mri.ts.ejs',
-        '../template/approot/src/theme/reference.mri.ts.ejs',
+        '../template/approot/src/theme/preload.mri.ts.ejs',
+        '../template/approot/src/theme/preset.mri.ts.ejs',
     ];
 
     _.each(paths, (path) => {
