@@ -60,7 +60,7 @@ module.exports = (type = 'release', helper) => {
     if(type === 'hotfix') {
         if(!/-rc\.+\d{1,}$/.test(version)){
             console.error(_chalk.red(`\n    没有hotfix的版本号`));
-            console.error(_chalk.white(`\n    如 mri git hotfix ${theme}::${version}-rc.1\n`));
+            console.error(_chalk.white(`\n    如 mri git hotfix ${theme}::${version}-hotfix.1\n`));
 
             _shell.exec(`
                 _branch=hotfix/${theme}/v${version}

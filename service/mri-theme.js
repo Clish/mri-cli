@@ -4,7 +4,7 @@ const _chalk = require('chalk');
 const _ = require('lodash');
 const _fse = require('fs-extra');
 
-const FILE_PATH = '../template/project';
+const FILE_PATH = '../template/project/theme';
 const WRITE_PATH = './src/theme';
 
 const DEF_OPTIONS = {
@@ -80,6 +80,8 @@ function newProject({args = []}, root) {
     fileDisplay(basicPath, (filePath, name) => {
         let outPath = [WRITE_PATH, tmpParams.name, _.replace(filePath, basicPath, ''), tmpParams.filePrefix + name];
         outPath = _join(root, _.join(outPath, '/'));
+        outPath = outPath.replace(/\{theme\}-/gi, '');
+        outPath = outPath.replace(/\.ejs/gi, '');
         let content = _fs.readFileSync(_join(filePath, name), {encoding: 'utf8'});
         _fse.outputFileSync(outPath, _.template(content)(tmpParams));
         console.log(_chalk.green(`---=> ${outPath}`));
