@@ -46,6 +46,8 @@ class Bus {
     fetch() {
         console.log(_chalk.green`:::-=> 正在获取MRI配置文件`);
         _shell.exec(`
+            # 更新远程分支目录
+            git remote update origin --prune
             git fetch -u origin mri-common:mri-common
             git checkout mri-common -- .mrirc.js
             git rm --cache  .mrirc.js > /dev/null
