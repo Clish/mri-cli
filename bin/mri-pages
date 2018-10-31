@@ -17,12 +17,10 @@ program
     .usage('[options]')
     .parse(process.argv);
 
-/**
- * todo mri dev | build | prod 启动项目的时候，重新生成页面pages
- * todo 获取当前所在的theme
- * @type {string}
- */
-
-
 const theme = program.args[0];
+
+
+
+
+
 

@@ -108,8 +108,9 @@ class Bus {
                 `);
 
                 if (update.code !== 0) {
-
-                    $util.mri('index');
+                    _shell.exec(`
+                        ${$util.mri()} index
+                    `);
 
                     _shell.exit(1);
 
@@ -153,8 +154,8 @@ class Bus {
      * 生成MRI系统需要的相关文件
      */
     mrifile(theme, env) {
-        $util.mri(['interface', '-i'], 'async');
-        $util.mri(['index'], 'async');
+        _spawn($util.mri(), ['interface', '-i']);
+        _spawn($util.mri(), ['index']);
         $initThemeRoot(theme, env);
     }
 

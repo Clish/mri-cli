@@ -39,7 +39,7 @@ module.exports = () => {
 
     if (svgs) {
         $index.createSVGIndex($util.getFiles(svgsPath), svgsIndexPath, (relativeFile, pascalName) => {
-            return `// @ts-ignore\nexport {default as ${pascalName}} from '${relativeFile}';`;
+            return `import { ReactComponent as ${pascalName} } from '${relativeFile}';\nexport {${pascalName}};\n`;
         });
     }
 };

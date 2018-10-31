@@ -24,7 +24,6 @@ class $template {
     create(params = {}, templatePath, targetPath) {
         templatePath = _path.join(__dirname, templatePath);
         targetPath = _path.join(root, targetPath);
-
         let template = _fs.readFileSync(templatePath, 'utf-8');
         let compile = _ejs.render(template, params);
         _fse.outputFileSync(targetPath, compile);
