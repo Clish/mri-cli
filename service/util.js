@@ -6,9 +6,11 @@ const _moment = require('moment');
 const _chalk = require('chalk');
 const _spawn = require('cross-spawn');
 const _which = require('which');
+const _shell = require('shelljs');
+const _babel = require('@babel/core');
+const _program = require('commander');
 const { log, error, debug } = console;
 const { green, red, yellow, grey } = _chalk;
-const babel = require('@babel/core');
 
 module.exports = {
     ifnvl(src, target) {
@@ -40,22 +42,30 @@ module.exports = {
     /**
      * type = async, sync
      */
-    mri(command, type) {
-        _which('mri', (error) => {
-            if (error) {
-                if(type === 'async') {
-                    _spawn('/home/master/node_modules/node/bin/mri', command, { stdio: "inherit" });
-                } else {
-                    _shell.exec(`/home/master/node_modules/node/bin/mri ${command}`);
-                }
-            } else {
-                if(type === 'async') {
-                    _spawn('mri', command, { stdio: "inherit" });
-                } else {
-                    _shell.exec(`mri ${command}`);
-                }
-            }
-        });
+    mri() {
+        const mri = _program['mri'];
+        return typeof mri === 'string' ? mri : mri ? '/home/master/node_modules/node/bin/mri' : 'mri';
+
+        // console.debug(command, type, _shell.which('mri || '));
+        // _which('mricccc', (error) => {
+        //     console.debug('ooOoooOOooOoooo');
+        //     if (error) {
+        //         if(type === 'async') {
+        //             _spawn('/home/master/node_modules/node/bin/mri', command, { stdio: "inherit" });
+        //         } else {
+        //             _shell.exec(`/home/master/node_modules/node/bin/mri ${command}`);
+        //         }
+        //     } else {
+        //         if(type === 'async') {
+        //             _spawn('mri', command, { stdio: "inherit" });
+        //         } else {
+        //             _shell.exec(`
+        //                 echo mri ${command}
+        //                 mri ${command}
+        //             `);
+        //         }
+        //     }
+        // });
     },
 
     pascalNaming(str) {
@@ -69,7 +79,7 @@ module.exports = {
     loadjs(path) {
         // 支持es6语法
         try {
-            let { code, map, ast } = babel.transformFileSync(path, {
+            let { code, map, ast } = _babel.transformFileSync(path, {
                 babelrc: false,
                 presets: [['@babel/preset-env'], ['@babel/preset-react']],
             });

@@ -14,8 +14,12 @@ const _which = require('which');
 const _shell = require('shelljs');
 const _spawn = require('cross-spawn');
 
-_program.usage('test [options]').parse(process.argv);
+_program
+    .usage('test [options]')
+    .option('-m, --mri [mri]', 'mri所在路径（no ln)')
+    .parse(process.argv);
 
+console.debug(_program);
 
 // 批量生成 theme 的文件
 // let themes = $root.getThemes(null);
@@ -50,6 +54,3 @@ _program.usage('test [options]').parse(process.argv);
 // console.log( __dirname );
 //
 // _spawn('/Users/Mizi/git/mri-cli/bin/mri', ['interface', '-i'], { stdio: "inherit" });
-
-
-

@@ -26,6 +26,7 @@ module.exports = function command(env) {
         .option('-n, --not-install', '忽略安装包更新')
         .option('-i, --INTERFACE', '生成const interface文件')
         .option('-d, --debug', '生成const interface文件')
+        .option('-m, --mri [mri]', 'mri所在路径（no ln)')
         .version(_pk.version);
     if(env === 'dev') {
         _program

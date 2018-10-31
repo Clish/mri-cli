@@ -41,6 +41,12 @@ const <%=upperName%>Routes = {
      *
      *      //-> src 该模块来源, 配置可继承样式以及相关信息
      *      src?: <theme::module> string?::string
+     *
+     *      //-> title 页面title
+     *      title?: string
+     *
+     *      //-> redirect 页面跳转 <Redirect to='${redirect}' />
+     *      redirect?: string
      * }
      */
 
