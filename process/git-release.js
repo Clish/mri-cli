@@ -94,7 +94,7 @@ module.exports = (type = 'release', helper) => {
             return void 0;
         }
     } else {
-        if (z) {
+        if (+z) {
             $log.error(
                 `\noOo 当前输入的release版本为 ${version}`,
                 `不符合x.y.z的release命名规则, release version z 为 0, y 自增长`,
