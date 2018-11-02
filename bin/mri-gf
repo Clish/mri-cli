@@ -15,7 +15,7 @@ const _shell = require('shelljs');
 const _ = require('lodash');
 const _chalk = require('chalk');
 
-const $_gitRelease = require('../process/git-release');
+const $_gitFeature = require('../process/git-feature');
 
 const helper = () => {
     console.log('\n', 'THEMES');
@@ -37,7 +37,7 @@ _program
     .on('--help', helper)
     .parse(process.argv);
 
-$_gitRelease('release');
+$_gitFeature();
 
 
 

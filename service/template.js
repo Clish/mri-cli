@@ -22,11 +22,15 @@ class $template {
      * @param targetPath
      */
     create(params = {}, templatePath, targetPath) {
-        templatePath = _path.join(__dirname, templatePath);
         targetPath = _path.join(root, targetPath);
+        let render = this.render(params, templatePath);
+        _fse.outputFileSync(targetPath, render);
+    }
+
+    render(params = {}, templatePath) {
+        templatePath = _path.join(__dirname, templatePath);
         let template = _fs.readFileSync(templatePath, 'utf-8');
-        let compile = _ejs.render(template, params);
-        _fse.outputFileSync(targetPath, compile);
+        return _ejs.render(template, params);
     }
 }
 

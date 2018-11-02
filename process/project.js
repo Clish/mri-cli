@@ -24,17 +24,20 @@ module.exports = (MRIEnv) => {
      */
     $command(MRIEnv);
 
+    const theme = _program.args[0];
+
     /**
      * 所有的命令均要在在根目录上运行
      */
-
-    const root = $Bus.inRoot();
+    $Bus.inRoot();
 
     /**
      * 主题（项目）校验
+     * - 判断 theme 是否存在
+     * - 判断 version 是否存在
+     *  |- {tag}_{version}
+     *  |- release/theme/v{version} 是否创建
      */
-    const theme = _program.args[0];
-
     $Bus.theme(theme);
 
     /**
