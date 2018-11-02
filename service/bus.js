@@ -13,6 +13,7 @@ const $initThemeRoot = require('./theme-root');
 const $env = require('./env');
 const $util = require('./util');
 const $Upgrade = require('./upgrade');
+const $log = require('./log');
 
 class Bus {
     /**
@@ -46,8 +47,6 @@ class Bus {
     fetch() {
         console.log(_chalk.green`:::-=> 正在获取MRI配置文件`);
         _shell.exec(`
-            # 更新远程分支目录
-            git remote update origin --prune
             git fetch -u origin mri-common:mri-common
             git checkout mri-common -- .mrirc.js
             git rm --cache  .mrirc.js > /dev/null
@@ -55,9 +54,11 @@ class Bus {
     }
 
     /**
-     * theme是否存在
-     * - 是否输入
-     * - 是否存在
+     * 主题（项目）校验
+     * - 判断 theme 是否存在
+     * - 判断 version 是否存在
+     *  |- {tag}_{version}
+     *  |- release/theme/v{version} 是否创建
      */
     theme(theme) {
         console.log(_chalk.green`:::-=> 正在检测theme`);
@@ -96,12 +97,16 @@ class Bus {
 
         console.log(_chalk.green`:::-=> 正在检测是否升级MRI版本`);
 
-        $MriVersion.init((isUpdate, updateVersion) => {
+        $MriVersion.init((isUpdate, updateVersion, currentVersion) => {
             if (isUpdate) {
+
+                $log.template({updateVersion, currentVersion}, '');
+
                 let updateBranch = `release/mri/v${updateVersion}`;
 
                 let update = _shell.exec(`
                     git add . && git commit -am 'ready update MRI@${updateVersion}'
+                    
                     git fetch -u origin ${updateBranch}:${updateBranch}
                     echo '升级当前MRI版本 -> ${updateBranch}'
                     git merge --no-ff ${updateBranch}
@@ -114,13 +119,21 @@ class Bus {
 
                     _shell.exit(1);
 
-                    console.log(_chalk.red`
-                        升级到MRI@${updateVersion}失败
-                        -----------------------------
-                        请手动解决冲突
-                    `);
+                    $log.debug(
+                        `oOo 升级到MRI@${updateVersion}失败`,
+                        `    -----------------------------`,
+                        `    请手动解决冲突`
+                    );
 
                     process.exit(0);
+                } else {
+                    _shell.exec(`
+                        git tag -l | xargs git tag -d 2>/dev/null
+                        git remote update origin --prune 2>/dev/null
+                        git fetch -u origin mri-common:mri-common 2>/dev/null
+                        git checkout mri-common -- .mrirc.js 2>/dev/null
+                        git rm --cache  .mrirc.js 2>/dev/null
+                    `);
                 }
             }
         });

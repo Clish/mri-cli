@@ -8,7 +8,7 @@ const $_gitRelease = require('../process/git-release');
 const $root = require('../service/root');
 
 const helper = () => {
-    console.log('\n', 'THEMES');
+    console.log('\n----------\n', 'THEMES');
     $root.getThemes();
     console.log('\n');
 };

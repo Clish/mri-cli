@@ -33,7 +33,7 @@ class MriVersion {
     init(fn) {
         let currentVersion = this.getCurrentVersion();
         let targetVersion = this.getTargetVersion();
-        let isUpdate = this.compareVersion(targetVersion, currentVersion);
+        let isUpdate = targetVersion && this.compareVersion(targetVersion, currentVersion);
         fn(isUpdate, targetVersion, currentVersion);
         return isUpdate;
     }
