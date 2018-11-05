@@ -118,6 +118,14 @@ module.exports = {
         return files_;
     },
 
+    /**
+     * 获取当前分支名称
+     */
+    getBranch() {
+        let stdio = _shell.exec(`git branch | grep '*' | cut -c 3-`, { silent: true });
+        return stdio.stdout.replace('\n', '');
+    },
+
     // loadts(path) {
     //
     //     try {

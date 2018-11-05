@@ -133,6 +133,7 @@ class Bus {
                         git fetch -u origin mri-common:mri-common 2>/dev/null
                         git checkout mri-common -- .mrirc.js 2>/dev/null
                         git rm --cache  .mrirc.js 2>/dev/null
+                        npm version ${updateVersion}
                     `);
                 }
             }
