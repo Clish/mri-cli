@@ -99,14 +99,12 @@ class Bus {
 
         $MriVersion.init((isUpdate, updateVersion, currentVersion) => {
             if (isUpdate) {
-
-                $log.template({updateVersion, currentVersion}, '');
+                $log.template({ updateVersion, currentVersion }, '../template/others/update-version.ejs');
 
                 let updateBranch = `release/mri/v${updateVersion}`;
 
                 let update = _shell.exec(`
                     git add . && git commit -am 'ready update MRI@${updateVersion}'
-                    
                     git fetch -u origin ${updateBranch}:${updateBranch}
                     echo '升级当前MRI版本 -> ${updateBranch}'
                     git merge --no-ff ${updateBranch}
@@ -119,22 +117,21 @@ class Bus {
 
                     _shell.exit(1);
 
-                    $log.debug(
-                        `oOo 升级到MRI@${updateVersion}失败`,
-                        `    -----------------------------`,
-                        `    请手动解决冲突`
-                    );
+                    $log.debug(`oOo 升级到MRI@${updateVersion}失败`, `    -----------------------------`, `    请手动解决冲突`);
 
                     process.exit(0);
                 } else {
-                    _shell.exec(`
+                    _shell.exec(
+                        `
                         git tag -l | xargs git tag -d 2>/dev/null
                         git remote update origin --prune 2>/dev/null
                         git fetch -u origin mri-common:mri-common 2>/dev/null
                         git checkout mri-common -- .mrirc.js 2>/dev/null
                         git rm --cache  .mrirc.js 2>/dev/null
-                        npm version ${updateVersion}
-                    `);
+                        npm version ${updateVersion} 
+                    `,
+                        { silent: true },
+                    );
                 }
             }
         });

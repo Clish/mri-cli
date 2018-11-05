@@ -5,10 +5,11 @@ const _ = require('lodash');
 const _chalk = require('chalk');
 const _path = require('path');
 const _ejs = require('ejs');
+const _shell = require('shelljs');
 const _upperCamelCase = require('simple-uppercamelcase');
 const _program = require('commander');
-const {log, error, debug} = console;
-const {green, red, yellow, grey} = _chalk;
+const { log, error, debug } = console;
+const { green, red, yellow, grey } = _chalk;
 
 /**
  * 该页用来创建 src/theme root 文件
@@ -39,8 +40,14 @@ module.exports = function initThemeRoot(theme, env) {
 
         let temp = String(_fs.readFileSync(_path.join(__dirname, path), 'utf-8'));
         let path__ = _path.join(process.cwd(), path_);
-        temp = _ejs.render(temp, {theme, env});
+        temp = _ejs.render(temp, { theme, env });
         _fse.outputFileSync(path__, temp);
+
+        _shell.exec(`
+            git rm -r --cache ${path__} 2>/dev/null
+        `,
+            { silent: true },
+        );
 
         log(green('::: theme root 文件生成 =>'), path__);
     });

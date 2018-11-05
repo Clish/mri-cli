@@ -38,6 +38,7 @@ module.exports = () => {
     }
 
     if (svgs) {
+
         $index.createSVGIndex($util.getFiles(svgsPath), svgsIndexPath, (relativeFile, pascalName) => {
             return `import { ReactComponent as ${pascalName} } from '${relativeFile}';\nexport {${pascalName}};\n`;
         });

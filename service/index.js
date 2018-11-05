@@ -8,9 +8,7 @@ const _chalk = require('chalk');
 const _shell = require('shelljs');
 const _relative = require('relative');
 
-
 class $index {
-
     /**
      * 创建 index 文件
      * @param path
@@ -22,11 +20,11 @@ class $index {
         _shell.rm('-rf', indexPath);
 
         _fs.readdir(path, (error, files) => {
-            if(error) {
+            if (error) {
                 return void 0;
             }
 
-            if(files.length) {
+            if (files.length) {
                 files = _.filter(files, (name) => {
                     const filePath = _join(path, name);
                     const stat = _fs.statSync(filePath);
@@ -36,13 +34,12 @@ class $index {
                 files = _.map(files, (file) => {
                     let relativeFile = file.replace(/\.(ts|tsx)$/gi, '');
                     let pascalName = $util.pascalNaming(relativeFile);
-                    return tempFn(relativeFile, pascalName)
+                    return tempFn(relativeFile, pascalName);
                 });
 
                 // 生成index.ts文件
-                _fs.writeFileSync(indexPath, files.join('\n'), {encoding: 'utf-8'});
+                _fs.writeFileSync(indexPath, files.join('\n'), { encoding: 'utf-8' });
             }
-
         });
     }
 
@@ -52,15 +49,12 @@ class $index {
         let temp = _.map(svgs, (file) => {
             let relativeFile = _relative(indexPath, file.filedir);
             let pascalName = $util.pascalNaming(file.filename);
-            return tempFn(relativeFile, pascalName)
+            return tempFn(relativeFile, pascalName);
         });
 
         // 生成index.ts文件
-        _fs.writeFileSync(indexPath, temp.join('\n'), {encoding: 'utf-8'});
-
+        _fs.writeFileSync(indexPath, temp.join('\n'), { encoding: 'utf-8' });
     }
-
-
 }
 
 module.exports = new $index();
