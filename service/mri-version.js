@@ -31,14 +31,17 @@ class MriVersion {
     }
 
     init(fn) {
+        let currentBranch = $util.getBranch();
+        if (currentBranch === 'test' || currentBranch === 'master') {
+            return false;
+        }
+
         let currentVersion = this.getCurrentVersion();
         let targetVersion = this.getTargetVersion();
         let isUpdate = targetVersion && this.compareVersion(targetVersion, currentVersion);
         fn(isUpdate, targetVersion, currentVersion);
         return isUpdate;
     }
-
-
 }
 
 const $MriVersion = new MriVersion();
