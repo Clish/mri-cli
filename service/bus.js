@@ -16,6 +16,11 @@ const $Upgrade = require('./upgrade');
 const $log = require('./log');
 
 class Bus {
+
+    get root() {
+        return $root.getRoot();
+    }
+
     /**
      * 判断当前目录在不在根目录下
      * - 绝大部分命令需要在根目录下运行
@@ -29,7 +34,7 @@ class Bus {
     当前目录不是MRI项目的根目录
     请切换到根目录后重新执行命令`);
 
-            const rootPath = $root.getRoot();
+            const rootPath = this.root;
 
             console.log(`
                 cd ${rootPath}
@@ -155,10 +160,15 @@ class Bus {
      * 生成UMI约定式路由文件
      */
     pages(theme, env) {
+
         if (!$pages(theme, env)) {
             console.error(red(`\n    路由文件写入失败 \n    请查看src/theme/${theme}/${theme}-routes.ts文件是否正确`));
             process.exit(0);
         }
+
+        // 写入HTML模板文件 document.ejs
+        let htmlTemplatePath = _path.join(__dirname, '../template/project/pages/document.ejs');
+        _shell.exec(`cp ${htmlTemplatePath} ${this.root}/src/pages`);
     }
 
     /**

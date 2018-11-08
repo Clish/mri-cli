@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+    <script type="text/javascript">
+        // auth sso get code and redirect
+        let {search} = location, key = 'code';
+        let reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)", "i");
+        let r = search.substr(1).match(reg);
+        let code = r && r[2];
+        if(code){
+            window.sessionStorage.setItem('AUTH_CODE', code);
+            url = location.href.replace(`${key}=${code}`, '');
+            url = url.replace(/\?[#/]{0,}$/, '');
+            url = url.replace(/&[#/]{0,}$/, '');
+            location.replace(url);
+        }
+    </script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>

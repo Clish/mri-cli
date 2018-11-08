@@ -32,6 +32,7 @@ class $template {
         let template = _fs.readFileSync(templatePath, 'utf-8');
         return _ejs.render(template, params);
     }
+
 }
 
 module.exports = new $template();
