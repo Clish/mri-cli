@@ -45,7 +45,7 @@ const <%=upperName%>Routes = {
      *      //-> title 页面title
      *      title?: string
      *
-     *      //-> redirect 页面跳转 <Redirect to='${redirect}' />
+     *      //-> redirect 页面跳转 <Redirect to='redirect' />
      *      redirect?: string
      * }
      */
