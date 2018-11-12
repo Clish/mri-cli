@@ -2,7 +2,7 @@
 
 'use strict';
 
-const _program    = require('commander');
+const _program = require('commander');
 const _spawn = require('cross-spawn');
 const _shell = require('shelljs');
 const _path = require('path');
@@ -26,9 +26,9 @@ _program
     .parse(process.argv);
 
 let theme = _program.args[0];
-let {remove} = _program;
+let { remove } = _program;
 
-if(!theme) {
+if (!theme) {
     _program.help();
     return void 0;
 }
@@ -40,8 +40,8 @@ let isTheme = _exists(themePath);
 /**
  * 删除 theme
  */
-if(remove) {
-    if(!isTheme) {
+if (remove) {
+    if (!isTheme) {
         console.log(_chalk.red(`\n错误::: 要删除的主题${theme}不存在 \n`));
         console.log(`可以使用下面命令新建主题\n\nmri theme ${theme}`);
         return void 0;
@@ -62,7 +62,7 @@ if(remove) {
     return void 0;
 }
 
-if(isTheme) {
+if (isTheme) {
     console.log(_chalk.red(`\n错误::: 主题${theme}已存在 \n`));
     return void 0;
 }
@@ -79,11 +79,7 @@ console.log(`\n
 /**
  * 异步执行 mri interface
  */
-const runner = _spawn('mri', ['index'], { stdio: "inherit" });
+const runner = _spawn('mri', ['index'], { stdio: 'inherit' });
 runner.on('close', () => {
-    _spawn('mri', ['interface', '-i'], { stdio: "inherit" });
+    _spawn('mri', ['interface', '-i'], { stdio: 'inherit' });
 });
-
-
-
-

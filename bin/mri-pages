@@ -2,23 +2,31 @@
 
 'use strict';
 
-const program = require('commander');
-const fse = require('fs-extra');
-const exists = require('fs').existsSync;
-const readFile = require('fs').readFileSync;
-const join = require('path').join;
+const _program = require('commander');
+const _fse = require('fs-extra');
+const _exists = require('fs').existsSync;
+const _readFile = require('fs').readFileSync;
+const _join = require('path').join;
 const _ = require('lodash');
-const chalk = require('chalk');
+const _chalk = require('chalk');
+
+const $pages = require('../service/pages');
 
 const DEF_PAGES_PATH = './src/pages';
 const DEF_INDEX = 'index';
 
-program
+_program
     .usage('[options]')
     .parse(process.argv);
 
-const theme = program.args[0];
+const theme = _program.args[0];
 
+if(!theme) {
+    process.exit(0);
+    return void 0;
+}
+
+$pages(theme);
 
 
 
