@@ -83,7 +83,6 @@ function newProject({args = []}, root) {
         outPath = outPath.replace(/\{theme\}-/gi, '');
         outPath = outPath.replace(/\.ejs/gi, '');
         let content = _fs.readFileSync(_join(filePath, name), {encoding: 'utf8'});
-        console.log(outPath, content, tmpParams);
         _fse.outputFileSync(outPath, _.template(content)(tmpParams));
         console.log(_chalk.green(`---=> ${outPath}`));
     });
