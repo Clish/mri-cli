@@ -3,17 +3,16 @@
 <head>
     <script type="text/javascript">
         // auth sso get code and redirect
-        var location = window.location, sessionStorage = window.sessionStorage;
-        var search = location.search, key = 'code';
+        var search = window.location.search, key = 'code';
         var reg = new RegExp('(^|&)' + key + '=([^&]*)(&|$)', 'i');
         var r = search.substr(1).match(reg);
         var code = r ? r[2] : void 0;
         if(code){
-            sessionStorage.setItem('AUTH_CODE', code);
-            url = location.href.replace( key + '=' + code, '');
+            window.sessionStorage.setItem('AUTH_CODE', code);
+            url = window.location.href.replace( key + '=' + code, '');
             url = url.replace(/\?[#/]{0,}$/, '');
             url = url.replace(/&[#/]{0,}$/, '');
-            location.replace(url);
+            window.location.replace(url);
         }
     </script>
 </head>
