@@ -19,7 +19,7 @@ if [ -n ]; then
     fi
 fi
 
-
+git pull
 git add .
 git commit -am "$_commit"
 
