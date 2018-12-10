@@ -29,7 +29,7 @@ module.exports = (helper) => {
         process.exit(0);
     }
 
-    let copy = `copy/${currentBranch}`;
+    let copy = `copy-${branch}/${currentBranch}`;
 
     $log.debug([
         '************************************************************************',
@@ -40,6 +40,7 @@ module.exports = (helper) => {
         `* - 解决冲突的临时副本${copy}，提交到远程origin`,
         `* - 在远程代码库 merge request ${copy} 到 ${branch}`,
         `* - 成功merge代码后，请删除临时副本分支`,
+        _chalk.green`* - 千万别将 copy test 分支 merge 到 master`,
         '************************************************************************',
     ]);
 
