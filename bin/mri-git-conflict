@@ -1,0 +1,33 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const _program = require('commander');
+const _shell = require('shelljs');
+const _ = require('lodash');
+const _chalk = require('chalk');
+
+const $git = require('../service/git');
+const $root = require('../service/root');
+
+const $_gitConflict = require('../process/git-conflict');
+
+const helper = () => {
+    console.log('\n', 'THEMES');
+    $root.getThemes();
+    console.log('\n');
+};
+
+/**
+ * ----------------
+ * 主程序
+ * ----------------
+ */
+
+_program
+    .usage('merge [branch]')
+    .option('-f --force', '强力模式，删除已存在创建临时副本分支')
+    .on('--help', helper)
+    .parse(process.argv);
+
+$_gitConflict();

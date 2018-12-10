@@ -12,14 +12,12 @@ const _ = require('lodash');
 const _chalk = require('chalk');
 const _path = require('path');
 const _program = require('commander');
-const {log, error, debug} = console;
-const {green, red, yellow, grey} = _chalk;
+const { log, error, debug } = console;
+const { green, red, yellow, grey } = _chalk;
 
 module.exports = function env(theme, mri_env) {
-
-    console.log(theme);
-
     let path = `./src/theme/${theme}/${theme}-umi.js`;
+    let PROGRESS = process.env.PROGRESS;
 
     // 默认配置
     let def = {
@@ -31,16 +29,19 @@ module.exports = function env(theme, mri_env) {
         // BASE_URL: void 0,
         // TSLINT: 'none',
         // ESLINT: 'none',
-        MRI_DEVICE: 'pc'
+        MRI_DEVICE: 'pc',
+        PROGRESS
     };
 
     let defNoSet = {
         BROWSER: 1,
     };
 
+
+
     let mri;
 
-    if(_fs.existsSync(path)) {
+    if (_fs.existsSync(path)) {
         log(`${grey(`!!! 从 ${path} 读取环境变量 `)}`);
         let info = _fs.readFileSync(path, 'utf-8');
         info = eval(info) || {};
@@ -50,9 +51,9 @@ module.exports = function env(theme, mri_env) {
         mri = Object.assign(mri, envConfig[mri_env] || {});
     }
 
-    let {PORT, BROWSER, BABEL_CACHE} = _program;
+    let { PORT, BROWSER, BABEL_CACHE } = _program;
 
-    let self = {PORT, BROWSER, BABEL_CACHE};
+    let self = { PORT, BROWSER, BABEL_CACHE };
 
     self = _.omitBy(self, _.isNil);
     def = _.omitBy(def, _.isNil);
@@ -60,26 +61,25 @@ module.exports = function env(theme, mri_env) {
 
     let config = Object.assign(def, mri, self);
 
-    if(theme !== config.theme) {
+    if (theme !== config.theme) {
         error(red('主题信息错误'), theme, config.theme);
         return void 0;
     }
 
     // log(`\n\n---=> 读取环境变量`);
 
-    log(`${('::: 运行环境 => ')} ${mri_env} (不可更改)`);
-    log(`${('::: 主题 => ')} ${config.theme}`);
+    log(`${'::: 运行环境 => '} ${mri_env} (不可更改)`);
+    log(`${'::: 主题 => '} ${config.theme}`);
 
     log(config);
 
     let env_ = [];
     _.each(config, (value, key) => {
-
-        if(defNoSet[key] === value) {
+        if (defNoSet[key] === value) {
             value = void 0;
         }
 
-        if(key !== 'theme' && value !== void 0) {
+        if (key !== 'theme' && value !== void 0) {
             env_.push(`${key}=${value}`);
         }
     });
@@ -88,6 +88,6 @@ module.exports = function env(theme, mri_env) {
 
     return {
         env,
-        config
+        config,
     };
 };
