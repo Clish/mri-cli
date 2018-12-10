@@ -12,7 +12,7 @@ const _chalk = require('chalk');
 const $git = require('../service/git');
 
 _program
-    .usage('<feature|release|hotfix> theme [option]')
+    .usage('<feature|release|hotfix|conflict> theme [option]')
     .parse(process.argv);
 
 const args = process.argv.slice(3);
