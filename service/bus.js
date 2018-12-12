@@ -14,9 +14,9 @@ const $env = require('./env');
 const $util = require('./util');
 const $Upgrade = require('./upgrade');
 const $log = require('./log');
+const $_gco = require('../process/gco');
 
 class Bus {
-
     get root() {
         return $root.getRoot();
     }
@@ -42,6 +42,11 @@ class Bus {
 
             process.exit(0);
         }
+    }
+
+    setBranch() {
+        let branch = $util.getBranch();
+        $_gco(branch, false, 'umi dev');
     }
 
     /**
@@ -160,7 +165,6 @@ class Bus {
      * 生成UMI约定式路由文件
      */
     pages(theme, env) {
-
         if (!$pages(theme, env)) {
             console.error(red(`\n    路由文件写入失败 \n    请查看src/theme/${theme}/${theme}-routes.ts文件是否正确`));
             process.exit(0);
@@ -193,7 +197,7 @@ class Bus {
         if (_program['force']) {
             _shell.exec(`
                 rm -rf node_modules/.cache
-                lsof -i :${config.PORT}|grep node|awk '{print $2}'|grep -v PID|xargs kill -9
+                lsof -i :${config.PORT}|grep node|awk '{print $2}'| grep -v PID | xargs kill -9
             `);
 
             env = env.replace('BABEL_CACHE=1', 'BABEL_CACHE=none');

@@ -1,9 +1,6 @@
 const _chalk = require('chalk');
 
-const $template = require('./template');
-
 class Log {
-
     log(msg) {
         let args = typeof msg === 'string' ? [...arguments] : [...msg];
         console.log(args.join('\n'));
@@ -30,11 +27,12 @@ class Log {
     }
 
     template(params = {}, templatePath, color = 'cyan') {
+        const $template = require('./template');
         let txt = $template.render(params, templatePath);
         console.log(_chalk[color](txt));
     }
-
 }
 
 const $log = new Log();
+
 module.exports = $log;

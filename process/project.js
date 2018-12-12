@@ -31,6 +31,8 @@ module.exports = (MRIEnv) => {
      */
     $Bus.inRoot();
 
+    $Bus.setBranch();
+
     /**
      * 主题（项目）校验
      * - 判断 theme 是否存在
@@ -63,7 +65,7 @@ module.exports = (MRIEnv) => {
     $Bus.pages(theme, MRIEnv);
 
     /**
-     * 生成mri关联的手机
+     * 生成mri关联的文件
      */
     $Bus.mrifile(theme, MRIEnv);
 

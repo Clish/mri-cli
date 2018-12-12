@@ -1,15 +1,18 @@
+
 const _fs = require('fs');
 const _ = require('lodash');
 const _path = require('path');
 const _chalk = require('chalk');
 const _shell = require('shelljs');
 
+const $log = require('./log');
+
 const judges = {
     node_modules: 1,
     'package.json': 1,
 };
 
-class $root {
+class Root {
     judgeRoot(path = process.cwd()) {
         let status = false;
         let files = _fs.readdirSync(path);
@@ -48,11 +51,9 @@ class $root {
     getThemes(path, theme) {
         let themePath = _path.join(this.getRoot(path), './src/theme');
 
-        if(!_fs.existsSync(themePath)) {
-
+        if (!_fs.existsSync(themePath)) {
             return void 0;
         }
-
 
         let files = _fs.readdirSync(themePath);
         let themes = [];
@@ -100,6 +101,17 @@ class $root {
             ${command}
         `);
     }
+
+    run(fn) {
+        let isRoot = this.judgeRoot();
+        if (isRoot) {
+            fn && fn();
+        } else {
+            $log.error(['- 当前路径错误，请切换到项目根目录进行操作', _chalk.white(`\n  cd ${this.getRoot()}\n`)]);
+        }
+    }
 }
 
-module.exports = new $root();
+let $root = new Root();
+
+module.exports = $root;

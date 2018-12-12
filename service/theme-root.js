@@ -26,7 +26,7 @@ module.exports = function initThemeRoot(theme, env) {
      */
 
     let paths = [
-        '../template/approot/.theme.ejs',
+        // '../template/approot/.theme.ejs',
         '../template/approot/src/theme/config.mri.ts.ejs',
         '../template/approot/src/theme/route-guard.mri.ts.ejs',
         '../template/approot/src/theme/const-env.mri.ts.ejs',

@@ -27,7 +27,7 @@ module.exports = (helper) => {
      * feature 只能在release下创建
      */
 
-    let branch = _shell.exec(branchGrep).stdout;
+    let branch = _shell.exec(branchGrep, { silent: true}).stdout;
     branch = branch.replace(/\n/g, '');
 
     if (!branch) {

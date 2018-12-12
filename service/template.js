@@ -11,7 +11,8 @@ const _relative = require('relative');
 const { log, error, debug } = console;
 const { green, red, yellow, grey } = _chalk;
 
-const $root = require('../service/root');
+const $root = require('./root');
+
 let root = $root.getRoot();
 
 class $template {
