@@ -13,8 +13,16 @@ const $template = require('../service/template');
 
 module.exports = (branch, force, where) => {
     let infoPath = _path.join(process.cwd(), './.theme');
-    let info = JSON.parse(_fs.readFileSync(infoPath, 'utf-8') || '{}');
-    let { branches } = info;
+    let exist = _fs.existsSync(infoPath);
+    let info = {};
+
+    try {
+        if (exist) {
+            info = JSON.parse(_fs.readFileSync(infoPath, 'utf-8') || '{}');
+        }
+    } catch (e) {}
+
+    let { branches = [] } = info;
 
     if (branches && branches.length && !where) {
         $log.debug('\n最近打开过的Branch: \n');
