@@ -33,9 +33,6 @@ module.exports = (MRIEnv) => {
      */
     $Bus.inRoot();
 
-    // 服务器不操作
-    !service && $Bus.setBranch();
-
     /**
      * 主题（项目）校验
      * - 判断 theme 是否存在
@@ -55,6 +52,9 @@ module.exports = (MRIEnv) => {
      * 判断是否要升级系统
      */
     $Bus.mriUpdate();
+
+    // 服务器不操作
+    !service && $Bus.setBranch();
 
     /**
      * 校验是否要安装包
