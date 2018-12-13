@@ -2,7 +2,7 @@ import BaseConst from './base.const';
 
 const <%=upperName%>Const = {
 
-    ...baseConst,
+    ...BaseConst,
 
     // 环境常量（默认值，prod）
     'ENV': 'dev',

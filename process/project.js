@@ -26,12 +26,15 @@ module.exports = (MRIEnv) => {
 
     const theme = _program.args[0];
 
+    let { service } = _program;
+
     /**
      * 所有的命令均要在在根目录上运行
      */
     $Bus.inRoot();
 
-    $Bus.setBranch();
+    // 服务器不操作
+    !service && $Bus.setBranch();
 
     /**
      * 主题（项目）校验

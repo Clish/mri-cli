@@ -27,6 +27,7 @@ module.exports = function command(env) {
         .option('-i, --INTERFACE', '生成const interface文件')
         .option('-d, --debug', '生成const interface文件')
         .option('-m, --mri [mri]', 'mri所在路径（no ln)')
+        .option('-s, --service [name]', '服务器环境')
         .version(_pk.version);
     if(env === 'dev') {
         _program
