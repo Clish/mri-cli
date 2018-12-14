@@ -24,12 +24,6 @@ module.exports = (branch, force, where) => {
 
     let { branches = [] } = info;
 
-    if (branches && branches.length && !where) {
-        $log.debug('\n最近打开过的Branch: \n');
-        _.each(branches, (branch, inx) => console.log(inx, branch));
-        $log.log('');
-    }
-
     if (branch) {
         // 区别输入为 branches index 或 branch name
         if (/^[0-9]{1,}$/.test(branch)) {
@@ -56,6 +50,8 @@ module.exports = (branch, force, where) => {
             { silent: true },
         );
 
+        $log.warn(`\n- 即将切换到分支: ${branch}\n`);
+
         if (validLocalBranch.replace(/\s/g, '')) {
             _shell.exec(`
                 git checkout ${branch}
@@ -75,5 +71,11 @@ module.exports = (branch, force, where) => {
         branches.slice(0, 20);
         info.branches = branches;
         _fse.outputFileSync(infoPath, JSON.stringify(info));
+    }
+
+    if (branches && branches.length) {
+        $log.debug('\n最近打开过的分支: \n');
+        _.each(branches, (branch, inx) => console.log(inx, branch));
+        $log.log('');
     }
 };
