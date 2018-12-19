@@ -14,7 +14,7 @@ const $env = require('./env');
 const $util = require('./util');
 const $Upgrade = require('./upgrade');
 const $log = require('./log');
-const $_gco = require('../process/gco');
+const $gco = require('../process/gco');
 
 class Bus {
     get root() {
@@ -46,7 +46,7 @@ class Bus {
 
     setBranch() {
         let branch = $util.getBranch();
-        $_gco(branch, false, 'umi dev');
+        $gco.record(branch);
     }
 
     /**
@@ -71,7 +71,15 @@ class Bus {
      *  |- release/theme/v{version} 是否创建
      */
     theme(theme) {
-        console.log(_chalk.green`:::-=> 正在检测theme`);
+        if (!theme) {
+            let branch = $util.getBranch();
+            let themes = $util.getThemes();
+            let ins = _.intersection(themes, branch.split('/'));
+            if (ins && ins.length === 1) {
+                [theme] = ins;
+            }
+        }
+
         let status = true;
 
         if (!theme) {
@@ -82,18 +90,18 @@ class Bus {
         }
 
         if (!status) {
-            console.log(
-                _chalk.red(
-                    `
-    当前输入的theme(${theme})不存在
-    请检查重新输入`,
-                    _chalk.white(`\n\n    或输入\n    mri theme ${theme || 'themeName'} \n    创建theme`),
-                ),
-            );
+            $log.error([
+                `- 当前输入的theme -=> ${theme || ''}, 错误或未创建`,
+                `- 请检查`,
+                `- 或输入, 下列命令，创建theme \n`,
+                _chalk.white(`  mri theme ${theme || 'themeName'} \n`),
+            ]);
 
             $root.printThemes();
-
             process.exit(0);
+        } else {
+            $log.warn(['----------------------------------', `- theme start -=> ${theme}`, `----------------------------------`]);
+            return theme;
         }
     }
 
@@ -112,6 +120,16 @@ class Bus {
                 $log.template({ updateVersion, currentVersion }, '../template/others/update-version.ejs');
 
                 let updateBranch = `release/mri/v${updateVersion}`;
+                let updateHotfixBranch = `hotfix/mri/v${updateVersion}`;
+
+                if ($util.execSimple(`git branch -r | grep 'origin/release/mri/v${updateVersion}'`)) {
+                    updateBranch = `release/mri/v${updateVersion}`;
+                } else if($util.execSimple(`git branch -r | grep 'origin/hotfix/mri/v${updateVersion}'`)) {
+                    updateBranch = `hotfix/mri/v${updateVersion}`;
+                } else {
+                    $log.warn('升级失败，没有找到相关资源');
+                    return void 0;
+                }
 
                 let update = _shell.exec(`
                     git add . && git commit -am 'ready update MRI@${updateVersion}'
