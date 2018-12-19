@@ -7,8 +7,10 @@
 
 'use strict';
 
+const $root = require('../service/root');
 const $_project = require('../process/project');
-
 const MRI_ENV = 'dev';
 
-$_project(MRI_ENV);
+$root.run(() => {
+    $_project(MRI_ENV);
+});

@@ -18,26 +18,6 @@ const TEMPLATE_PATH = '../template/project/pages/{module.name}/index.tsx.ejs';
 
 const $template = require('./template');
 
-let writeFile = (path, name, route) => {
-    let { title } = route;
-    title = title ? `title: ${title}` : '';
-    // todo 改成 ejs
-    _fse.outputFileSync(
-        path,
-        `
-/**
- * ${title}
- */
-import $theme from 'src/theme';
-const module = $theme.getModule('${name}');
-const component = module.component;
-export default component;
-    `,
-    );
-
-    log(`${green('::: pages 文件生成 => ')} ${path}`);
-};
-
 /**
  * 根据路径读取 routes 配置信息
  * @param theme
@@ -115,6 +95,7 @@ const writePages = (routes) => {
                 name,
                 ...route
             }, TEMPLATE_PATH, _path.join(filePath, `${DEF_INDEX}.tsx`) );
+
             log(`${green('::: pages 文件生成 => ')} ${targetPath}`);
         });
     });

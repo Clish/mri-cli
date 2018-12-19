@@ -126,8 +126,6 @@ module.exports = {
         return stdio.stdout.replace('\n', '');
     },
 
-
-
     // loadts(path) {
     //
     //     try {
@@ -267,5 +265,59 @@ module.exports = {
         });
 
         return _.template(commentFile)({ ...options, ...obj });
+    },
+
+    /**
+     * 获得所有的themes
+     * @return {Array}
+     */
+    getThemes() {
+        let themePath = _path.join(process.cwd(), './src/theme');
+        let files = _fs.readdirSync(themePath);
+        let themes = [];
+
+        _.forEach(files, (filename) => {
+            let filePath = _path.join(themePath, filename);
+            let fsStats = _fs.statSync(filePath);
+            if (fsStats.isDirectory()) {
+                themes.push(filename);
+            }
+        });
+
+        return themes;
+    },
+
+    /**
+     * 获得 .theme 文件信息
+     */
+    getThemeInfo(fn) {
+        let infoPath = _path.join(process.cwd(), './.theme');
+
+        if (_fs.existsSync(infoPath)) {
+            try {
+                return JSON.parse(_fs.readFileSync(infoPath, 'utf-8') || '{}');
+            } catch (e) {
+                fn && fn(e);
+                return {};
+            }
+        } else {
+            fn && fn();
+            return {};
+        }
+    },
+
+    setThemeInfo(info) {
+        let infoPath = _path.join(process.cwd(), './.theme');
+        _fse.outputFileSync(infoPath, JSON.stringify(info));
+    },
+
+    /**
+     * 获得shell.exec结果简约方式
+     * @param command
+     * @return {*}
+     */
+    execSimple(command) {
+        let result = _shell.exec(command, { silent: true });
+        return result.replace(/^(\s|\n){0,}/g, '').replace(/(\s|\n){0,}$/g, '');
     },
 };

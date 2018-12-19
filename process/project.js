@@ -24,14 +24,9 @@ module.exports = (MRIEnv) => {
      */
     $command(MRIEnv);
 
-    const theme = _program.args[0];
+    let theme = _program.args[0];
 
     let { service } = _program;
-
-    /**
-     * 所有的命令均要在在根目录上运行
-     */
-    $Bus.inRoot();
 
     /**
      * 主题（项目）校验
@@ -40,7 +35,7 @@ module.exports = (MRIEnv) => {
      *  |- {tag}_{version}
      *  |- release/theme/v{version} 是否创建
      */
-    $Bus.theme(theme);
+    theme = $Bus.theme(theme);
 
     /**
      * fetch 代码
@@ -54,7 +49,7 @@ module.exports = (MRIEnv) => {
     $Bus.mriUpdate();
 
     // 服务器不操作
-    !service && $Bus.setBranch();
+    !service && $Bus.setBranch('mri dev');
 
     /**
      * 校验是否要安装包
