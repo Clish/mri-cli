@@ -1,7 +1,7 @@
 const _chalk = require('chalk');
 const _ = require('lodash');
 
-const $util = require('../service/util');
+const $util = require('../lib/common/util');
 
 class Log {
     log(msg) {

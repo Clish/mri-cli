@@ -7,7 +7,7 @@ const _fse = require('fs-extra');
 const _ = require('lodash');
 
 const $root = require('../service/root');
-const $util = require('../service/util');
+const $util = require('../lib/common/util');
 const $log = require('../service/log');
 const $template = require('../service/template');
 
@@ -101,4 +101,5 @@ class GCO {
 }
 
 let $gco = new GCO();
+
 module.exports = $gco;

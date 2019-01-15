@@ -3,7 +3,7 @@ const _join = _path.join;
 const _ = require('lodash');
 const _program = require('commander');
 const $index = require('../service/index');
-const $util = require('../service/util');
+const $util = require('../lib/common/util');
 const $root = require('../service/root');
 
 module.exports = () => {

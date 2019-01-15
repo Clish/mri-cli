@@ -9,7 +9,7 @@ const _chalk = require('chalk');
 const _path = require('path');
 
 const $root = require('./root');
-const $util = require('./util');
+const $util = require('../lib/common/util');
 const $log = require('./log');
 
 class MriVersionUpgrade {

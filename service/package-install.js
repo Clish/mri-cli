@@ -6,7 +6,7 @@ const _shell = require('shelljs');
 const _program = require('commander');
 const _join = _path.join;
 
-const $util = require('./util');
+const $util = require('../lib/common/util');
 
 class PackageInstall {
     installSaves(saves) {

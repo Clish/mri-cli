@@ -3,7 +3,7 @@ const { join } = require('path');
 const chalk    = require('chalk');
 const _        = require('lodash');
 const shell    = require('shelljs');
-const $util    = require('../service/util');
+const $util    = require('../lib/common/util');
 const moment   = require('moment');
 
 const funcs     = ['release', 'hotfix', 'feature', 'update'];

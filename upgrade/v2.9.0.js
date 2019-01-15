@@ -6,7 +6,7 @@ const _shell = require('shelljs');
 const _ = require('lodash');
 
 const $root = require('../service/root');
-const $util = require('../service/util');
+const $util = require('../lib/common/util');
 
 module.exports = function() {
     /**

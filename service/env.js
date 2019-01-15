@@ -5,7 +5,7 @@
  * 默认 < config.js 配置 < 启动命令设置的环境变量
  */
 
-const _util = require('./util');
+const _util = require('../lib/common/util');
 const _fs = require('fs');
 const _fse = require('fs-extra');
 const _ = require('lodash');

@@ -3,7 +3,7 @@
  * 构建umi的pages
  */
 
-const _util = require('./util');
+const _util = require('../lib/common/util');
 const _fs = require('fs');
 const _fse = require('fs-extra');
 const _ = require('lodash');
