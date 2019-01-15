@@ -21,6 +21,10 @@ const $run = require('../service/run');
 
 const $upgrade = require('../upgrade/v2.9.0');
 
+const loading = require('loading-cli');
+
+
+
 _program
     .usage('test [options]')
     .option('-m, --mri [mri]', 'mri所在路径（no ln)')
@@ -31,11 +35,14 @@ $run.root(() => {
         $run.upgrade(() => {
             $run.branch('dev', () => {
                 // $upgrade();
+
+                // console.debug(1111111);
+
+
             });
         });
     });
 });
-
 
 // console.debug(_program);
 
@@ -55,9 +62,7 @@ $run.root(() => {
 
 // 批量删除 branch
 
-
 // _shell.exec(`git branch -l 'release/demo*'`)
-
 
 // $Bus.mriUpdate();
 

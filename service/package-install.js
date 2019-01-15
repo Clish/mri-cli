@@ -127,13 +127,12 @@ class PackageInstall {
         return result;
     }
 
-    install(func) {
+    install() {
         let config = $util.getMriRC();
         let { saves, devs, globals } = config || {};
         this.installDevs(devs);
         this.installSaves(saves);
         this.installGlobals(globals);
-        func && func();
     }
 }
 

@@ -4,6 +4,7 @@ const _chalk = require('chalk');
 const _path = require('path');
 const _fs = require('fs');
 const _program = require('commander');
+const _loading =  require('loading-cli');
 const _spawn = require('cross-spawn');
 
 const $MriVersion = require('./mri-version-upgrade');
@@ -55,12 +56,16 @@ class Bus {
      * - 自动执行部分代码
      */
     fetch() {
-        console.log(_chalk.green`:::-=> 正在获取MRI配置文件`);
+        console.log(_chalk.green`:::-=> 正在获取MRI配置文件 --`);
+        let loaded = _loading('abcd').start();
+        console.debug('o)o', 0);
         _shell.exec(`
             git fetch -u origin mri-common:mri-common
             git checkout mri-common -- .mrirc.js
             git rm --cache  .mrirc.js > /dev/null
         `);
+        console.debug('o)o', 1);
+        loaded.stop();
     }
 
     /**
@@ -70,7 +75,7 @@ class Bus {
      *  |- {tag}_{version}
      *  |- release/theme/v{version} 是否创建
      */
-    theme(theme) {
+    theme(theme, env) {
         if (!theme) {
             let branch = $util.getBranch();
             let themes = $util.getThemes();
@@ -100,83 +105,15 @@ class Bus {
             $root.printThemes();
             process.exit(0);
         } else {
-            $log.warn(['----------------------------------', `- theme start -=> ${theme}`, `----------------------------------`]);
+            $log.log([
+                '----------------------------------',
+                `- theme start -=> ${theme}`,
+                `- theme env -=> ${env}`,
+                `----------------------------------`]
+            );
             return theme;
         }
     }
-
-    /**
-     * 升级MRI version
-     */
-    mriUpdate() {
-        // todo
-        // 判断分支， test, master 分支不升级version
-        // test, master 应该通过 merge request 来升级版本
-
-        console.log(_chalk.green`:::-=> 正在检测是否升级MRI版本`);
-
-        $MriVersion.init((isUpdate, updateVersion, currentVersion) => {
-            if (isUpdate) {
-                $log.template({ updateVersion, currentVersion }, '../template/others/update-version.ejs');
-
-                let updateBranch = `release/mri/v${updateVersion}`;
-                let updateHotfixBranch = `hotfix/mri/v${updateVersion}`;
-
-                if ($util.execSimple(`git branch -r | grep 'origin/release/mri/v${updateVersion}'`)) {
-                    updateBranch = `release/mri/v${updateVersion}`;
-                } else if($util.execSimple(`git branch -r | grep 'origin/hotfix/mri/v${updateVersion}'`)) {
-                    updateBranch = `hotfix/mri/v${updateVersion}`;
-                } else {
-                    $log.warn('升级失败，没有找到相关资源');
-                    return void 0;
-                }
-
-                let update = _shell.exec(`
-                    git add . && git commit -am 'ready update MRI@${updateVersion}'
-                    git fetch -u origin ${updateBranch}:${updateBranch}
-                    echo '升级当前MRI版本 -> ${updateBranch}'
-                    git merge --no-ff ${updateBranch}
-                `);
-
-                if (update.code !== 0) {
-                    _shell.exec(`
-                        ${$util.mri()} index
-                    `);
-
-                    _shell.exit(1);
-
-                    $log.debug(`oOo 升级到MRI@${updateVersion}失败`, `    -----------------------------`, `    请手动解决冲突`);
-
-                    process.exit(0);
-                } else {
-                    _shell.exec(
-                        `
-                        git tag -l | xargs git tag -d 2>/dev/null
-                        git remote update origin --prune 2>/dev/null
-                        git fetch -u origin mri-common:mri-common 2>/dev/null
-                        git checkout mri-common -- .mrirc.js 2>/dev/null
-                        git rm --cache  .mrirc.js 2>/dev/null
-                        npm version ${updateVersion} 
-                    `,
-                        { silent: true },
-                    );
-                }
-            }
-        });
-    }
-
-    /**
-     * 判断是否安装包
-     */
-    // install() {
-    //     const _program = require('commander');
-    //     const rcPath = _path.join(process.cwd(), './.mrirc.js');
-    //     if (_program['noInstall'] || !_fs.existsSync(rcPath)) {
-    //         return void 0;
-    //     }
-    //
-    //     $Upgrade.install(rcPath);
-    // }
 
     /**
      * 生成UMI约定式路由文件

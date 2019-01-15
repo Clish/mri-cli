@@ -4,6 +4,7 @@
 const _program = require('commander');
 const _chalk = require('chalk');
 const _shell = require('shelljs');
+const _loading =  require('loading-cli');
 const { log, error, debug } = console;
 const { green, red, yellow, grey } = _chalk;
 
@@ -35,26 +36,7 @@ module.exports = (MRIEnv) => {
      *  |- {tag}_{version}
      *  |- release/theme/v{version} 是否创建
      */
-    theme = $Bus.theme(theme);
-
-    /**
-     * fetch 代码
-     * 更新 .mrirc.js 文件
-     */
-    $Bus.fetch();
-
-    /**
-     * 判断是否要升级系统
-     */
-    $Bus.mriUpdate();
-
-    // 服务器不操作
-    !service && $Bus.setBranch('mri dev');
-
-    /**
-     * 校验是否要安装包
-     */
-    $Bus.install();
+    theme = $Bus.theme(theme, MRIEnv);
 
     /**
      * 生成umi约定式路由文件

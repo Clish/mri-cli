@@ -15,7 +15,7 @@ const MRI_ENV = 'dev';
 $run.root(() => {
     $run.package(() => {
         $run.upgrade(() => {
-            $run.branch(MRI_ENV, () => {
+            $run.branch('all', () => {
                 $_project(MRI_ENV);
             });
         });

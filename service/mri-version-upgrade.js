@@ -26,7 +26,7 @@ class MriVersionUpgrade {
         return version || 0;
     }
 
-    upgrade(func = _.noop) {
+    upgrade() {
         let currentVersion = this.getCurrentVersion();
         let updateVersion = this.getUpdateVersion();
 
@@ -88,11 +88,7 @@ class MriVersionUpgrade {
                         git add . && git commit -am 'upgrade mri ${currentVersion} -> v${updateVersion}'
                     `,
                 );
-
-                func();
             }
-        } else {
-            func();
         }
     }
 }
