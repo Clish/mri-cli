@@ -12,7 +12,11 @@ const judges = {
     'package.json': 1,
 };
 
+
 class Root {
+    /**
+     * @deprecated
+     */
     judgeRoot(path = process.cwd()) {
         let status = false;
         let files = _fs.readdirSync(path);
@@ -102,6 +106,9 @@ class Root {
         `);
     }
 
+    /**
+     * @deprecated
+     */
     run(fn) {
         let isRoot = this.judgeRoot();
         if (isRoot) {

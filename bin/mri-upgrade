@@ -5,13 +5,13 @@
 // mri upgrade [-r] [packageNames]
 
 const program = require('commander');
-const upgrade = require('../service/upgrade');
+const upgrade = require('../service/package-install');
 
 program
     .usage('[options] [packageNames]')
     .option('-r, --reinstall', 'reinstall all packages')
     .parse(process.argv);
 
-upgrade(program);
+// upgrade(program);
 
 

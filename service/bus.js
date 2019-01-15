@@ -6,13 +6,13 @@ const _fs = require('fs');
 const _program = require('commander');
 const _spawn = require('cross-spawn');
 
-const $MriVersion = require('./mri-version');
+const $MriVersion = require('./mri-version-upgrade');
 const $root = require('./root');
 const $pages = require('./pages');
 const $initThemeRoot = require('./theme-root');
 const $env = require('./env');
 const $util = require('./util');
-const $Upgrade = require('./upgrade');
+const $Upgrade = require('./package-install');
 const $log = require('./log');
 const $gco = require('../process/gco');
 
@@ -168,16 +168,15 @@ class Bus {
     /**
      * 判断是否安装包
      */
-    install() {
-        console.log(_chalk.green`:::-=> 正在检测是否安装相关包`);
-        const _program = require('commander');
-        const rcPath = _path.join(process.cwd(), './.mrirc.js');
-        if (_program['notInstall'] || !_fs.existsSync(rcPath)) {
-            return void 0;
-        }
-
-        $Upgrade.install(rcPath);
-    }
+    // install() {
+    //     const _program = require('commander');
+    //     const rcPath = _path.join(process.cwd(), './.mrirc.js');
+    //     if (_program['noInstall'] || !_fs.existsSync(rcPath)) {
+    //         return void 0;
+    //     }
+    //
+    //     $Upgrade.install(rcPath);
+    // }
 
     /**
      * 生成UMI约定式路由文件

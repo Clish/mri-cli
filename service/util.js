@@ -12,18 +12,55 @@ const _program = require('commander');
 const { log, error, debug } = console;
 const { green, red, yellow, grey } = _chalk;
 
+const MC = require('../service/constant');
+
 module.exports = {
-    ifnvl(src, target) {
-        return _.isNil(src) ? target : src;
+    upArray(value) {
+        return _.isArray(value) ? value : [value];
     },
 
-    run(condition, truefn, falsefn) {
-        truefn = truefn || (() => void 0);
-        falsefn = falsefn || (() => void 0);
-        if (typeof condition === 'function') {
-            condition = condition();
+    /**
+     * 判断当前地址是否为项目的根目录
+     * @param path
+     * @return {boolean}
+     */
+    judgeRoot(path = process.cwd()) {
+        let status = false;
+        let files = _fs.readdirSync(path);
+
+        if (files && files.length > 0) {
+            let matchTime = 0;
+            _.each(files, (name) => {
+                if (MC.ROOT_JUDGE[name]) {
+                    matchTime++;
+                }
+
+                if (matchTime === _.size(MC.ROOT_JUDGE)) {
+                    status = true;
+                    return false;
+                }
+            });
         }
-        return condition ? truefn(condition) : falsefn();
+        return status;
+    },
+
+    /**
+     * 获得当前项目所在的根目录
+     * @param path
+     * @return {string}
+     */
+    getRoot(path = process.cwd()) {
+        if (!this.judgeRoot(path)) {
+            let path2 = _path.join(path, '..');
+            if (path2 === path) {
+                console.log(_chalk.red('当前路径错误'));
+                return void 0;
+            } else {
+                return this.getRoot(path2);
+            }
+        } else {
+            return path;
+        }
     },
 
     runCmd(cmd, args, fn) {
@@ -77,6 +114,11 @@ module.exports = {
     },
 
     loadjs(path) {
+
+        if (!_fs.existsSync(path)) {
+            return void 0;
+        }
+
         // 支持es6语法
         try {
             let { code, map, ast } = _babel.transformFileSync(path, {
@@ -124,6 +166,11 @@ module.exports = {
     getBranch() {
         let stdio = _shell.exec(`git branch | grep '*' | cut -c 3-`, { silent: true });
         return stdio.stdout.replace('\n', '');
+    },
+
+    isDevBranch() {
+        let branch = this.getBranch();
+        return branch !== 'master' && branch !== 'test';
     },
 
     // loadts(path) {
@@ -306,6 +353,11 @@ module.exports = {
         }
     },
 
+    getMriRC() {
+        let path = MC.PATH_MRIRC;
+        return this.loadjs(path);
+    },
+
     setThemeInfo(info) {
         let infoPath = _path.join(process.cwd(), './.theme');
         _fse.outputFileSync(infoPath, JSON.stringify(info));
@@ -320,4 +372,13 @@ module.exports = {
         let result = _shell.exec(command, { silent: true });
         return result.replace(/^(\s|\n){0,}/g, '').replace(/(\s|\n){0,}$/g, '');
     },
+
+    execSilent(command) {
+        _shell.exec(command, { silent: true });
+    },
+
+    isNothingCommit() {
+        let stdout = _shell.exec(`git status | grep 'nothing to commit'`);
+        return !stdout.code;
+    }
 };

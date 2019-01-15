@@ -7,10 +7,17 @@
 
 'use strict';
 
-const $root = require('../service/root');
+const $run = require('../service/run');
 const $_project = require('../process/project');
+
 const MRI_ENV = 'dev';
 
-$root.run(() => {
-    $_project(MRI_ENV);
+$run.root(() => {
+    $run.package(() => {
+        $run.upgrade(() => {
+            $run.branch(MRI_ENV, () => {
+                $_project(MRI_ENV);
+            });
+        });
+    });
 });

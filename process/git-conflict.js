@@ -55,12 +55,12 @@ module.exports = (helper) => {
 
     _shell.exec(`
         
-        git pull origin ${currentBranch}
+        git pull origin ${currentBranch} 
         
         git checkout ${branch} 
         
         git pull origin ${branch}
-        
+       
         git checkout -b ${copy}
         
         if [ $? -ne 0 ]; then

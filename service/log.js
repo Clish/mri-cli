@@ -1,29 +1,38 @@
 const _chalk = require('chalk');
+const _ = require('lodash');
+
+const $util = require('../service/util');
 
 class Log {
     log(msg) {
-        let args = typeof msg === 'string' ? [...arguments] : [...msg];
-        console.log(args.join('\n'));
+        msg = $util.upArray(msg);
+        console.log(msg.join('\n'));
     }
 
     error(msg) {
-        let args = typeof msg === 'string' ? [...arguments] : [...msg];
-        console.log(_chalk.red(args.join('\n')));
+        console.log(_chalk.red(msg.join('\n')));
+    }
+
+    errorWrap(msg) {
+        msg = $util.upArray(msg);
+        console.error(_chalk.red('----------------------------------------------'));
+        _.each(msg, (message) => console.error(message));
+        console.error(_chalk.red('----------------------------------------------'));
     }
 
     warn(msg) {
-        let args = typeof msg === 'string' ? [...arguments] : [...msg];
-        console.log(_chalk.yellow(args.join('\n')));
+        msg = $util.upArray(msg);
+        console.log(_chalk.yellow(msg.join('\n')));
     }
 
     notice(msg) {
-        let args = typeof msg === 'string' ? [...arguments] : [...msg];
-        console.log(_chalk.green(args.join('\n')));
+        msg = $util.upArray(msg);
+        console.log(_chalk.green(msg.join('\n')));
     }
 
     debug(msg) {
-        let args = typeof msg === 'string' ? [...arguments] : [...msg];
-        console.log(_chalk.cyan(args.join('\n')));
+        msg = $util.upArray(msg);
+        console.log(_chalk.cyan(msg.join('\n')));
     }
 
     template(params = {}, templatePath, color = 'cyan') {

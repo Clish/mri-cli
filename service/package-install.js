@@ -8,7 +8,7 @@ const _join = _path.join;
 
 const $util = require('./util');
 
-class Upgrade {
+class PackageInstall {
     installSaves(saves) {
         let pkgs = this.getPkgs(saves, 'saves');
         if (pkgs.length) {
@@ -112,11 +112,7 @@ class Upgrade {
                 if (type === 'globals') {
                     console.log(
                         _chalk.red(
-                            [
-                                '需要使用下面命令手动安装全局包',
-                                `yarn global add ${pathname} (推荐)`,
-                                `或 npm i ${pathname} -g`
-                            ].join(
+                            ['需要使用下面命令手动安装全局包', `yarn global add ${pathname} (推荐)`, `或 npm i ${pathname} -g`].join(
                                 '\n  ',
                             ),
                         ),
@@ -131,13 +127,16 @@ class Upgrade {
         return result;
     }
 
-    install(path) {
-        let config = $util.loadjs(path);
-        let { saves, devs, globals } = config;
+    install(func) {
+        let config = $util.getMriRC();
+        let { saves, devs, globals } = config || {};
         this.installDevs(devs);
         this.installSaves(saves);
         this.installGlobals(globals);
+        func && func();
     }
 }
 
-module.exports = new Upgrade();
+let $install = new PackageInstall();
+
+module.exports = $install;
