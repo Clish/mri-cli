@@ -9,7 +9,7 @@ const _path = require('path');
 const _exists = require('fs').existsSync;
 const _chalk = require('chalk');
 
-const $newProject = require('../service/mri-theme');
+const $newProject = require('../lib/module/project-create/project-create');
 const $root = require('../service/root');
 
 const helper = () => {

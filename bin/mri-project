@@ -1,0 +1,65 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const _program = require('commander');
+const _spawn = require('cross-spawn');
+const _shell = require('shelljs');
+const _path = require('path');
+const _exists = require('fs').existsSync;
+const _chalk = require('chalk');
+
+const $root = require('../service/root');
+const $run = require('../lib/common/run');
+const $log = require('../lib/common/log');
+const $bus = require('../lib/services/bus');
+
+_program
+    .usage('<name> [options]')
+    .description('创建管理 mri project')
+    .option('--remove', '删除该project')
+    .option('--force', '强力模式')
+    .parse(process.argv);
+
+let [project] = _program.args;
+
+/**
+ * 创建项目 project
+ *
+ *
+ */
+
+$run.root(() => {
+
+    /**
+     * 项目名(project name)不能为空
+     */
+    if (!project) {
+        $log.errorWrap([`- 项目名(project name) 不能为空`]);
+
+        /**
+         * 展示已创建的project
+         */
+        $bus.showProjects();
+
+        process.exit(0);
+
+        return void 0;
+    }
+
+    $log.noticeWrap([
+        `oOo 创建项目(project)\n`,
+        `- 切换至master分支，判断project是否创建`,
+        `- 若project未创建，则基于master创建项目名的分支`,
+        `- 在新分支创建 project`,
+        `- ${_chalk.green('(重要)')} 提交PR，由管理员确认创建新的项目\n`,
+        `- master 未创建的 project, 不能创建基于该project的release, hotfix 等`
+    ]);
+
+    $run.gco('master', () => {
+
+        // 判断 project 是否存在
+        
+
+    });
+});

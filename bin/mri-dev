@@ -8,7 +8,7 @@
 'use strict';
 const _program = require('commander');
 const $run = require('../lib/common/run');
-const $_project = require('../lib/module/project');
+const $_projectStart = require('../lib/module/project-start');
 
 const pk = require('../package.json');
 const MRI_ENV = 'dev';
@@ -31,9 +31,11 @@ _program.parse(process.argv);
 
 $run.branch('all', () => {
     $run.root(() => {
-        $run.package(() => {
-            $run.upgrade(() => {
-                $_project(MRI_ENV);
+        $run.mri(() => {
+            $run.package(() => {
+                $run.upgrade(() => {
+                    $_projectStart(MRI_ENV);
+                });
             });
         });
     });

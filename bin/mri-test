@@ -15,7 +15,7 @@ const _shell = require('shelljs');
 const _spawn = require('cross-spawn');
 const _chalk = require('chalk');
 
-const $log = require('../service/log');
+const $log = require('../lib/common/log');
 const $util = require('../lib/common/util');
 const $run = require('../lib/common/run');
 

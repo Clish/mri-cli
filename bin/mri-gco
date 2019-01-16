@@ -12,9 +12,9 @@ const _ = require('lodash');
 
 const $root = require('../service/root');
 const $util = require('../lib/common/util');
-const $log = require('../service/log');
+const $log = require('../lib/common/log');
 const $template = require('../service/template');
-const $gco = require('../process/gco');
+const $gco = require('../lib/services/gco');
 
 _program
     .usage('gco <branch|index> [options]')

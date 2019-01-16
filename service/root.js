@@ -5,7 +5,7 @@ const _path = require('path');
 const _chalk = require('chalk');
 const _shell = require('shelljs');
 
-const $log = require('./log');
+const $log = require('../lib/common/log');
 
 const judges = {
     node_modules: 1,

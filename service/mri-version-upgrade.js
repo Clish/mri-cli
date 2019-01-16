@@ -10,7 +10,7 @@ const _path = require('path');
 
 const $root = require('./root');
 const $util = require('../lib/common/util');
-const $log = require('./log');
+const $log = require('../lib/common/log');
 
 class MriVersionUpgrade {
     // 根据package.json 取得当前的版本

@@ -4,7 +4,7 @@ const _ = require('lodash');
 const _chalk = require('chalk');
 
 const $root = require('../service/root');
-const $log = require('../service/log');
+const $log = require('../lib/common/log');
 
 module.exports = (type = 'release', helper) => {
     let [theme, version] = _.trim(_program.args[0] || '').split('::');
