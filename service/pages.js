@@ -42,6 +42,7 @@ const analysisRoutes = (theme, env) => {
 
         info = info.replace(/\n/g, '');
         info = info.replace(/component?:(.*?)([,}])/g, 'component: "$1"$2');
+        info = info.replace(/subLayout?:(.*?)(],)/g, '');
         info = info.replace(/subLayout?:(.*?)([,}])/g, 'subLayout: "$1"$2');
         info = info.replace(/layout?:(.*?)([,}])/g, 'layout: "$1"$2');
         info = info.replace(/^.*?let.*?=(.*)?[;]export default.*$/g, '$1');
