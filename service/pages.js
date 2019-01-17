@@ -40,12 +40,15 @@ const analysisRoutes = (theme, env) => {
             return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? '' : word;
         });
 
-        info = info.replace(/\n/g, '');
-        info = info.replace(/component?:(.*?)([,}])/g, 'component: "$1"$2');
-        info = info.replace(/subLayout?:(.*?)([,}])/g, 'subLayout: "$1"$2');
-        info = info.replace(/layout?:(.*?)([,}])/g, 'layout: "$1"$2');
-        info = info.replace(/^.*?let.*?=(.*)?[;]export default.*$/g, '$1');
-        info = info.replace(/^.*?const.*?=(.*)?[;]export default.*$/g, '$1');
+        info = info.replace(/^\s{0,}import.*$/gm, '');
+        info = info.replace(/^\s{0,}(const|let)(.*)require.*$/gm, '');
+        info = info.replace(/^\s{0,}require.*$/gm, '');
+        info = info.replace(/^\s{0,}(let|const)(.*)Routes = {/gm, '{');
+        info = info.replace(/(layout?):(.*?)([,]$|$)/gm, '$1: "$2"$3');
+        info = info.replace(/(subLayout?):(.*?)([,]$|$)/gm, '$1: "$2"$3');
+        info = info.replace(/(component?):(.*?)([,]$|$)/gm, '$1: "$2"$3');
+        info = info.replace(/}\s{0,};/gm, '}');
+        info = info.replace(/^\s{0,}export default.*$/gm, '');
 
         log(`---=> 检测路由配置信息`);
 
@@ -123,3 +126,4 @@ module.exports = function pages(theme) {
     // 根据 routes 配置信息，写入 pages
     return writePages(routes);
 };
+
