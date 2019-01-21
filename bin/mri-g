@@ -1,0 +1,51 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const _program = require('commander');
+const _spawn = require('cross-spawn');
+const _shell = require('shelljs');
+const _path = require('path');
+const _exists = require('fs').existsSync;
+const _chalk = require('chalk');
+
+const $log = require('../lib/common/log');
+const $run = require('../lib/common/run');
+
+_program
+    .usage('<unit> [options]')
+    .description('创建相关组件')
+    .option('--remove', '是否使用BabelCache模式')
+    .option('--widget', '忽略安装包更新')
+    .parse(process.argv);
+
+/**
+ * 新建文件
+ *
+ * mri g component
+ * mri g c
+ * mri g widget
+ * mri g w
+ */
+let [unit] = _program.args;
+
+if (!unit) {
+
+    $log.errorWrap([
+        `- 请输入将要创建的组件类型名称`,
+        `- mri g component \${name}`,
+        `- mri g widget \${name}`,
+    ]);
+
+    process.exit(0);
+}
+
+$run.root(() => {
+    $run.gco('master', () => {
+
+
+
+
+
+    });
+});
