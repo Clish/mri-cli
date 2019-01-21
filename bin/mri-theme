@@ -9,13 +9,14 @@ const _path = require('path');
 const _exists = require('fs').existsSync;
 const _chalk = require('chalk');
 
-const $newProject = require('../lib/services/project/project');
-const $root = require('../service/root');
+const $log = require('../lib/common/log');
 
-const helper = () => {
-    console.log('\n', 'THEMES');
-    $root.getThemes();
-    console.log('\n');
+const helper = (theme) => {
+    theme = theme || '';
+    $log.logWrap([
+        `- mri theme 已废除原有功能, 之后将另有他用`,
+        `- 请使用替换命令 mri project ${theme}`,
+    ])
 };
 
 _program
@@ -26,60 +27,6 @@ _program
     .parse(process.argv);
 
 let theme = _program.args[0];
-let { remove } = _program;
 
-if (!theme) {
-    _program.help();
-    return void 0;
-}
+helper(theme);
 
-let root = $root.getRoot();
-let themePath = _path.join(root, `./src/theme/${theme}`);
-let isTheme = _exists(themePath);
-
-/**
- * 删除 theme
- */
-if (remove) {
-    if (!isTheme) {
-        console.log(_chalk.red(`\n错误::: 要删除的主题${theme}不存在 \n`));
-        console.log(`可以使用下面命令新建主题\n\nmri theme ${theme}`);
-        return void 0;
-    }
-
-    _shell.cd(`${root}`);
-    _shell.exec(`
-        rm -rf ${themePath}
-        
-        echo ${theme} 删除成功
-        echo
-        echo common/const/${theme}-const.ts
-        echo common/services/${theme}-services.ts
-        echo 以上关联的公用文件，暂不删除
-        echo 若有需要，请手动删除
-    `);
-
-    return void 0;
-}
-
-if (isTheme) {
-    console.log(_chalk.red(`\n错误::: 主题${theme}已存在 \n`));
-    return void 0;
-}
-
-$newProject(_program, root);
-
-console.log(`\n
-    theme ${theme} 创建成功！
-    
-    使用下面命令启动主题
-    mri dev ${theme}
-`);
-
-/**
- * 异步执行 mri interface
- */
-const runner = _spawn('mri', ['index'], { stdio: 'inherit' });
-runner.on('close', () => {
-    _spawn('mri', ['interface', '-i'], { stdio: 'inherit' });
-});
