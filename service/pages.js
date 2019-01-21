@@ -43,7 +43,7 @@ const analysisRoutes = (theme, env) => {
         info = info.replace(/^\s{0,}import.*$/gm, '');
         info = info.replace(/^\s{0,}(const|let)(.*)require.*$/gm, '');
         info = info.replace(/^\s{0,}require.*$/gm, '');
-        info = info.replace(/^\s{0,}(let|const)(.*)Routes = {/gm, '{');
+        info = info.replace(/^\s*?(let|const)(.*?)Routes(.*?)=\s*?{/gm, '{');
         info = info.replace(/(layout?):(.*?)([,]$|$)/gm, '$1: "$2"$3');
         info = info.replace(/(subLayout?):(.*?)([,]$|$)/gm, '$1: "$2"$3');
         info = info.replace(/(component?):(.*?)([,]$|$)/gm, '$1: "$2"$3');
