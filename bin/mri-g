@@ -2,6 +2,7 @@
 
 'use strict';
 
+const _ = require('lodash');
 const _program = require('commander');
 const _spawn = require('cross-spawn');
 const _shell = require('shelljs');
@@ -11,6 +12,7 @@ const _chalk = require('chalk');
 
 const $log = require('../lib/common/log');
 const $run = require('../lib/common/run');
+const $generate = require('../lib/services/generate/generate');
 
 _program
     .usage('<unit> [options]')
@@ -27,9 +29,10 @@ _program
  * mri g widget
  * mri g w
  */
-let [unit] = _program.args;
+let [unit, name] = _program.args;
+let {remove} = _program;
 
-if (!unit) {
+if (!unit || !name) {
 
     $log.errorWrap([
         `- 请输入将要创建的组件类型名称`,
@@ -41,11 +44,14 @@ if (!unit) {
 }
 
 $run.root(() => {
-    $run.gco('master', () => {
-
-
-
-
-
-    });
+    if(remove) {
+        $log.logWrap([
+            `- mri 不提供删除组件`,
+            `- 请使用 IDE 或 编辑器 删除`,
+            `- 因为IDE或编辑器拥有组件是否被引用的功能`,
+            `- 避免正在使用的组件被误删`
+        ]);
+    } else {
+        $generate.generate(unit, name);
+    }
 });
