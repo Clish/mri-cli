@@ -16,6 +16,7 @@ const _ = require('lodash');
 const _chalk = require('chalk');
 
 const $_gitFeature = require('../process/git-feature');
+const $git = require('../lib/services/git');
 
 const helper = () => {
     console.log('\n', 'THEMES');
@@ -30,14 +31,18 @@ const helper = () => {
  */
 
 _program
-    .usage('gr <theme> [options]')
+    .usage('gf <theme> [options]')
     .option('--force', '强力开启')
     .option('--start', '创建release')
     .option('--ver [version]', '当前版本号')
     .on('--help', helper)
     .parse(process.argv);
 
-$_gitFeature();
+// $_gitFeature();
+
+// console.debug($git.getVersionWithTag('social'));
+// console.debug($git.getVersionWithBranch('social'));
+console.debug($git.getProjectVersion('social'));
 
 
 
