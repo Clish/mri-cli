@@ -6,8 +6,8 @@ const _program = require('commander');
 
 const $run = require('../lib/common/run');
 const $log = require('../lib/common/log');
-const $project = require('../lib/services/project/project');
 const $git = require('../lib/services/git');
+const $_branch = require('../lib/module/branch');
 
 /**
  * ----------------
@@ -19,51 +19,10 @@ _program
     .option('-f, --force', '强力开启')
     .parse(process.argv);
 
-let projectVersion = _program.args[0];
-let { force } = _program;
-let project, version;
-
-if (projectVersion) {
-    [project, version] = projectVersion.split('::');
-}
-
-if (!project) {
-    project = $git.getProjectWithBranch();
-}
-
-if (!project) {
-    $log.errorWrap([
-        `- project name 请使用下面命令生成reelase`,
-        `| mri git release \${project}::version`,
-        `| mri gr \${project}::version`,
-        ``,
-        `如：mri gr social::1.0.1`,
-    ]);
-
-    $project.showProjects();
-
-    process.exit(0);
-}
-
-if (!version) {
-    version = $git.getProjectPatchVersion(project, 'y');
-}
-
-if (!($project.existProject(project) && force)) {
-}
-
-console.debug(version);
-
-process.exit(0);
-
 $run.branch('master', () => {
     $run.root(() => {
-        $run.mri(() => {
-            $run.package(() => {
-                $run.upgrade(() => {
-                    $_projectStart(MRI_ENV);
-                });
-            });
+        $_branch.getPatch('release', (project, version) => {
+            $_branch.create(project, version);
         });
     });
 });
