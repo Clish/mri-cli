@@ -42,7 +42,8 @@ _program
 
 // console.debug($git.getVersionWithTag('social'));
 // console.debug($git.getVersionWithBranch('social'));
-console.debug($git.getProjectVersion('social'));
+// console.debug($git.getProjectVersion('social'));
+// console.debug($git.getProjectPatchVersion('social', 'z'));
 
 
 

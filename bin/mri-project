@@ -44,7 +44,7 @@ $run.root(() => {
             return void 0;
         }
 
-        let branch = $project.getProjectBranch(project);
+        let branch = $project.getCopyProjectBranch(project);
 
         if(remove) {
 
