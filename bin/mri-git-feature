@@ -32,4 +32,4 @@ _program
     .on('--help', helper)
     .parse(process.argv);
 
-$_gitFeature();
+console.log(`该功能已废弃`);
