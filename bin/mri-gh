@@ -2,36 +2,4 @@
 
 'use strict';
 
-const _program = require('commander');
-
-const $_gitRelease = require('../process/git-release');
-const $root = require('../service/root');
-
-const helper = () => {
-    console.log('\n', 'THEMES');
-    $root.getThemes();
-    console.log('\n');
-};
-
-/**
- * ----------------
- * 主程序
- * ----------------
- */
-
-_program
-    .usage('gr <theme> [options]')
-    .option('--force', '强力开启')
-    .option('--start', '创建release')
-    .option('--ver [version]', '当前版本号')
-    .on('--help', helper)
-    .parse(process.argv);
-
-$_gitRelease('hotfix', helper);
-
-
-
-
-
-
-
+require('./mri-git-hotfix');

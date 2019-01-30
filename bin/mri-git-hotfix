@@ -2,17 +2,12 @@
 
 'use strict';
 
-// mri git [feature|hotfix|hotfix] [start|finish] branchName
-
 const _program = require('commander');
-const $root = require('../service/root');
-const $_gitRelease = require('../process/git-release');
 
-const helper = () => {
-    console.log('\n', 'THEMES');
-    $root.getThemes();
-    console.log('\n');
-};
+const $run = require('../lib/common/run');
+const $log = require('../lib/common/log');
+const $git = require('../lib/services/git');
+const $_branch = require('../lib/module/branch');
 
 /**
  * ----------------
@@ -20,14 +15,15 @@ const helper = () => {
  * ----------------
  */
 _program
-    .usage('hotfix <theme>')
-    .option('--force', '强力开启')
-    .option('--start', '创建hotfix')
-    .option('--ver [version]', '当前版本号')
-    .on('--help', helper)
+    .usage('hotfix <projectname:version> [options]')
+    .option('-f, --force', '强力开启')
+    .option('-x, --xVersion', '创建x版本')
     .parse(process.argv);
 
-$_gitRelease('hotfix');
-
-
-
+$run.branch('master', (project) => {
+    $run.root(() => {
+        $_branch.getPatch(project, 'hotfix', (taskType, project, version) => {
+            $_branch.create(taskType, project, version);
+        });
+    });
+});

@@ -17,12 +17,13 @@ const $_branch = require('../lib/module/branch');
 _program
     .usage('release <projectname:version> [options]')
     .option('-f, --force', '强力开启')
+    .option('-x, --xVersion', '创建x版本')
     .parse(process.argv);
 
-$run.branch('master', () => {
+$run.branch('master', (project) => {
     $run.root(() => {
-        $_branch.getPatch('release', (project, version) => {
-            $_branch.create(project, version);
+        $_branch.getPatch(project, 'release', (taskType, project, version) => {
+            $_branch.create(taskType, project, version);
         });
     });
 });
