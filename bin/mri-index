@@ -11,6 +11,7 @@
 
 const _program = require('commander');
 const $_index = require('../process/index');
+const $_tuning = require('../lib/services/tuning/tuning');
 
 _program
     .usage('index [options]')
@@ -21,4 +22,6 @@ _program
     .option('--widgets', '只生成widgets index文件')
     .parse(process.argv);
 
-$_index();
+// $_index();
+
+$_tuning.indexServices();
