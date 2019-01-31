@@ -47,7 +47,7 @@ class $interface {
         let constPath = path || this.constPath();
         let indexPath = _join(constPath, './index.ts');
 
-        _shell.rm('-rf', indexPath);
+        // _shell.rm('-rf', indexPath);
 
         _fs.readdir(this.constPath(), (error, files) => {
             if(error) {
@@ -85,6 +85,9 @@ class $interface {
 
         // 编译index文件，加快编译速度
         this.createIndex((indexPath) => {
+
+            console.debug(this.tsc(indexPath).join(' '));
+
             _shell.exec(`
                 ${this.tsc(indexPath).join(' ')}
             `);
@@ -135,7 +138,7 @@ class $interface {
                 mv $i ${groupDir}
             done
             
-            rm -rf ${outDir}
+            # rm -rf ${outDir}
         `);
 
         cb && cb();
@@ -174,9 +177,9 @@ class $interface {
         let isExist = _fs.existsSync(interfaceDir);
         let isRun = isForce || !isExist;
 
-        if(isRun) {
+        if(true) {
 
-            isExist && _shell.rm('-rf', interfaceDir);
+            // isExist && _shell.rm('-rf', interfaceDir);
 
             this.createDeclaration(() => {
                 this.groupDts(() => {
