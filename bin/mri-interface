@@ -3,5 +3,6 @@
 'use strict';
 
 
+console.log(`该功能已废弃`);
 
 
