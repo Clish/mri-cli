@@ -6,6 +6,8 @@ const _chalk = require('chalk');
 const $root = require('../service/root');
 const $log = require('../lib/common/log');
 
+
+
 module.exports = (helper) => {
     let branch = _program.args[0];
     let { force } = _program;

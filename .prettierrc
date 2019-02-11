@@ -8,5 +8,4 @@
     "arrowParens": "always",
     "bracketSpacing": true,
     "parser": "babylon"
-
 }

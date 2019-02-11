@@ -7,16 +7,12 @@ const _shell = require('shelljs');
 const _ = require('lodash');
 const _chalk = require('chalk');
 
-const $git = require('../service/git');
-const $root = require('../service/root');
+const $run = require('../lib/common/run');
+const $log = require('../lib/common/log');
+const $git = require('../lib/common/git');
+const $_branch = require('../lib/module/branch');
 
 const $_gitConflict = require('../process/git-conflict');
-
-const helper = () => {
-    console.log('\n', 'THEMES');
-    $root.getThemes();
-    console.log('\n');
-};
 
 /**
  * ----------------
@@ -25,9 +21,20 @@ const helper = () => {
  */
 
 _program
-    .usage('merge [branch]')
+    .usage('conflict [model]')
     .option('-f --force', '强力模式，删除已存在创建临时副本分支')
-    .on('--help', helper)
+    .option('-r --remove', '删除copy副本')
     .parse(process.argv);
 
-$_gitConflict();
+const { remove, force } = _program;
+const [target] = _program.args;
+
+$run.root(() => {
+    if (remove) {
+        $log.title(`删除副本分支`);
+        $_branch.removeCopyBranch(target);
+    } else {
+        $log.title(`创建副本分支，解决冲突`);
+        $_branch.createCopyBranch(force, target);
+    }
+});
