@@ -12,28 +12,43 @@ const _chalk = require('chalk');
 const $git = require('../service/git');
 
 _program
-    .usage('<feature|release|hotfix|conflict> theme [option]')
+    .command('release [project::version]', '生成release分支(一次发布内容)')
+    .command('hotfix [project::version]', '生成hotfix分支(紧急修复)')
+    .command('feature [project::version]', '生成feature分支(单元功能)')
+    .command('conflict [model]', '创建副本(copy)解决冲突')
+    .command('checkout [branch]', '切换分支')
     .parse(process.argv);
 
-const args = process.argv.slice(3);
-let subCmd = _program.args[0];
+// @todo reply
+// echo -n "Print file? [y/n]: "
+// read
+// if [ "$REPLY" = "y" ]; then
+// lpr $TEMP_FILE
+// fi
 
-if(!subCmd) {
-    _program.help();
-} else {
-    const bin = executable(subCmd);
-    !bin ? _program.help() : wrap(_spawn(bin, args, {stdio: 'inherit'}));
-}
-
-function wrap(sp) {
-    sp.on('close', function(code) {
-        process.exit(code);
-    });
-}
-
-function executable(subCmd) {
-    let file = _path.join(__dirname, 'mri-git-' + subCmd);
-    if(_exists(file)) {
-        return file;
-    }
-}
+// _program
+//     .usage('<feature|release|hotfix|conflict> theme [option]')
+//     .parse(process.argv);
+//
+// const args = process.argv.slice(3);
+// let subCmd = _program.args[0];
+//
+// if(!subCmd) {
+//     _program.help();
+// } else {
+//     const bin = executable(subCmd);
+//     !bin ? _program.help() : wrap(_spawn(bin, args, {stdio: 'inherit'}));
+// }
+//
+// function wrap(sp) {
+//     sp.on('close', function(code) {
+//         process.exit(code);
+//     });
+// }
+//
+// function executable(subCmd) {
+//     let file = _path.join(__dirname, 'mri-git-' + subCmd);
+//     if(_exists(file)) {
+//         return file;
+//     }
+// }

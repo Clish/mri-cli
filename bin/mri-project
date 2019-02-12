@@ -22,6 +22,7 @@ _program
     .option('--remove', '删除该project')
     .parse(process.argv);
 
+
 let [project] = _program.args;
 let {remove} = _program;
 

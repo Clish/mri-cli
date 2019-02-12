@@ -22,8 +22,8 @@ _program
 
 $run.branch('master', (project) => {
     $run.root(() => {
-        $_branch.getPatch(project, 'hotfix', (taskType, project, version) => {
-            $_branch.create(taskType, project, version);
+        $_branch.getPatch(project, 'hotfix', (model, project, version) => {
+            $_branch.create(model, project, version);
         });
     });
 });

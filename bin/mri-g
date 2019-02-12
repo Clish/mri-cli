@@ -17,8 +17,6 @@ const $generate = require('../lib/services/generate/generate');
 _program
     .usage('<unit> [options]')
     .description('创建相关组件')
-    .option('--remove', '是否使用BabelCache模式')
-    .option('--widget', '忽略安装包更新')
     .parse(process.argv);
 
 /**
@@ -31,6 +29,8 @@ _program
  */
 let [unit, name] = _program.args;
 let {remove} = _program;
+
+console.debug(_program.args);
 
 if (!unit || !name) {
 
