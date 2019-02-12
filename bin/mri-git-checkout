@@ -22,6 +22,8 @@ _program
     .option('-f, --force', '强制执行，将未提交的文件commit')
     .parse(process.argv);
 
+$log.title(`快速切换分支`);
+
 $root.run(() => {
     let [branch] = _program.args;
     let { force } = _program;

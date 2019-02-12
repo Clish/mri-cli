@@ -8,6 +8,7 @@
 'use strict';
 const _program = require('commander');
 const $run = require('../lib/common/run');
+const $log = require('../lib/common/log');
 const $_projectStart = require('../lib/module/project-start');
 
 const pk = require('../package.json');
@@ -25,6 +26,8 @@ _program
     .version(pk.version);
 
 _program.parse(process.argv);
+
+$log.title(`mri prod [project] 项目生成环境打包代码`);
 
 $run.branch('prod', () => {
     $run.root(() => {

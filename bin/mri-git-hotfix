@@ -20,6 +20,8 @@ _program
     .option('-x, --xVersion', '创建x版本')
     .parse(process.argv);
 
+$log.title(`mri git hotfix [project::version] 生成热修复分支`);
+
 $run.branch('master', (project) => {
     $run.root(() => {
         $_branch.getPatch(project, 'hotfix', (model, project, version) => {

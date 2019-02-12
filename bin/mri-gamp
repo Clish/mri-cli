@@ -6,6 +6,8 @@ const _program = require('commander');
 const _shell = require('shelljs');
 const _chalk = require('chalk');
 
+const $log = require('../lib/common/log');
+
 _program
     .usage('gamp <message> [options]')
     .option('-n, --not-push', '不支持 git push')
@@ -14,6 +16,8 @@ _program
         console.log('没有新的文件文件变化，不push文件');
     })
     .parse(process.argv);
+
+$log.title(`mri git amp 快速提交代码`);
 
 let message = _program.args[0];
 let force = _program['force'];

@@ -29,6 +29,8 @@ _program
 const { remove, force } = _program;
 const [target] = _program.args;
 
+$log.title(`mri git conflict 生成${target}副本分支, 解决冲突`);
+
 $run.root(() => {
     if (remove) {
         $log.title(`删除副本分支`);

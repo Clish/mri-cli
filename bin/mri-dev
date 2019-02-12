@@ -8,6 +8,7 @@
 'use strict';
 const _program = require('commander');
 const $run = require('../lib/common/run');
+const $log = require('../lib/common/log');
 const $_projectStart = require('../lib/module/project-start');
 
 const pk = require('../package.json');
@@ -28,6 +29,8 @@ _program
     .version(pk.version);
 
 _program.parse(process.argv);
+
+$log.title(`mri dev [project] 启动项目`);
 
 $run.branch('all', () => {
     $run.root(() => {

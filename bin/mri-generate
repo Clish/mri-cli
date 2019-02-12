@@ -28,28 +28,23 @@ _program
  * mri g w
  */
 let [unit, name] = _program.args;
-let {remove} = _program;
+let { remove } = _program;
 
-console.debug(_program.args);
+$log.title(`mri g [unit] 生成单元模块`);
 
 if (!unit || !name) {
-
-    $log.errorWrap([
-        `- 请输入将要创建的组件类型名称`,
-        `- mri g component \${name}`,
-        `- mri g widget \${name}`,
-    ]);
+    $log.errorWrap([`- 请输入将要创建的组件类型名称`, `- mri g component \${name}`, `- mri g widget \${name}`]);
 
     process.exit(0);
 }
 
 $run.root(() => {
-    if(remove) {
+    if (remove) {
         $log.logWrap([
             `- mri 不提供删除组件`,
             `- 请使用 IDE 或 编辑器 删除`,
             `- 因为IDE或编辑器拥有组件是否被引用的功能`,
-            `- 避免正在使用的组件被误删`
+            `- 避免正在使用的组件被误删`,
         ]);
     } else {
         $generate.generate(unit, name);

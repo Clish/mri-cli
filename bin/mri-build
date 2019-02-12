@@ -8,6 +8,7 @@
 const _program = require('commander');
 
 const $run = require('../lib/common/run');
+const $log = require('../lib/common/log');
 const $_projectStart = require('../lib/module/project-start');
 
 const pk = require('../package.json');
@@ -22,9 +23,10 @@ _program
     .option('-i, --interface', '生成const interface文件')
     .option('-d, --debug', 'debug 模式')
     .option('-s, --service [name]', '服务器环境')
-    .version(pk.version);
+    .version(pk.version)
+    .parse(process.argv);
 
-_program.parse(process.argv);
+$log.title(`mri test [project] 编译系统，发布测试环境`);
 
 $run.branch('test', () => {
     $run.root(() => {

@@ -12,7 +12,18 @@ const pk = require('../package.json');
 
 _program
     .version(pk.version)
-    .command('g [name]', '生成单元模型')
+    .command('theme [name]', '暂时废除该命令')
+
+    .command('dev [project]', '生成单元模型')
+    .command('build [project]', '生成单元模型')
+    .alias('test')
+    .command('prod [project]', '生成单元模型')
+
+    .command('generate [unit]', '生成单元模型')
+    .alias('g')
+    .command('project [name]', '生成新的项目(project)')
+    .alias('p')
+
     .command('git [name]', 'git组合命令')
 
     .command('git-release [project::version]', '生成release分支(一次发布内容)')
