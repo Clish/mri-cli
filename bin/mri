@@ -12,6 +12,7 @@ const pk = require('../package.json');
 
 _program
     .version(pk.version)
+
     .command('theme [name]', '暂时废除该命令')
 
     .command('dev [project]', '生成单元模型')
@@ -34,6 +35,8 @@ _program
     .alias('gf')
     .command('git-conflict [model]', '创建副本(copy)解决冲突')
     .alias('gcf')
+
     .command('git-checkout [branch]', '切换分支')
     .alias('gco')
+
     .parse(process.argv);

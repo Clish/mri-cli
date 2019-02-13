@@ -20,8 +20,9 @@ _program
     .usage('gco <branch|index> [options]')
     .description('快速切换分支')
     .option('-f, --force', '强制执行，将未提交的文件commit')
-    .option('--commit [commitTxt]', '将未提交的文件提交到本地，git add . && git commit')
-    .option('--push [commitTxt]', '将未提交的文件推送到远程，git add . && git commit && git push')
+    .option('--stash [value]', '提交到缓存区')
+    .option('--commit [value]', '将未提交的文件提交到本地，git add . && git commit')
+    .option('--push [value]', '将未提交的文件推送到远程，git add . && git commit && git push')
     .parse(process.argv);
 
 $log.title(`mri gco [branch | branchIndex] 快速切换分支`);
