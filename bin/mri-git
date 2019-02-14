@@ -18,8 +18,6 @@ _program
     .command('conflict [model]', '创建副本(copy)解决冲突')
     .command('checkout [branch]', '切换分支')
 
-
-
     .parse(process.argv);
 
 // @todo reply
