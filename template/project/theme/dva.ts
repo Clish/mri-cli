@@ -5,7 +5,7 @@
  * @author ...
  */
 
-import $theme from 'src/theme';
+import $theme from 'src/project';
 import { MrServices } from 'masterrt';
 import mu from 'mzmu';
 import { $pool, $utils, $intl } from 'src/services';

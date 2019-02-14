@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- *  mri dev ${theme}
+ *  mri dev ${project}
  *  启动 MRI 项目
  */
 
@@ -9,15 +9,18 @@
 const _program = require('commander');
 const $run = require('../lib/common/run');
 const $log = require('../lib/common/log');
+const $task = require('../lib/services/task');
 const $_projectStart = require('../lib/module/project-start');
 
 const pk = require('../package.json');
-const MRI_ENV = 'dev';
+const task = 'dev';
 
 _program
     .usage('mri dev [options]')
     .description('运行MRI的开发环境')
-    .description('更多的环境变量\n  参考 https://umijs.org/guide/env-variables.html\n  在src/theme/${theme}/${theme}-config.js 中进行配置')
+    .description(
+        '更多的环境变量\n  参考 https://umijs.org/guide/env-variables.html\n  在src/project/${project}/${project}-config.js 中进行配置',
+    )
     .option('-c, --BABEL_CACHE', '是否使用BabelCache模式')
     .option('-n, --no-install', '忽略安装包更新')
     .option('-i, --interface', '生成const interface文件')
@@ -37,7 +40,8 @@ $run.branch('all', () => {
         $run.mri(() => {
             $run.package(() => {
                 $run.upgrade(() => {
-                    $_projectStart(MRI_ENV);
+                    let project = _program.args[0];
+                    $task.run(task, project);
                 });
             });
         });

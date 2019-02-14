@@ -61,15 +61,15 @@ module.exports = function env(theme, mri_env) {
 
     let config = Object.assign(def, mri, self);
 
-    if (theme !== config.theme) {
-        error(red('主题信息错误'), theme, config.theme);
+    if (theme !== config.project) {
+        error(red('主题信息错误'), theme, config.project);
         return void 0;
     }
 
     // log(`\n\n---=> 读取环境变量`);
 
     log(`${'::: 运行环境 => '} ${mri_env} (不可更改)`);
-    log(`${'::: 主题 => '} ${config.theme}`);
+    log(`${'::: 主题 => '} ${config.project}`);
 
     log(config);
 
@@ -79,7 +79,7 @@ module.exports = function env(theme, mri_env) {
             value = void 0;
         }
 
-        if (key !== 'theme' && value !== void 0) {
+        if (key !== 'project' && value !== void 0) {
             env_.push(`${key}=${value}`);
         }
     });

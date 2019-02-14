@@ -53,7 +53,7 @@ class Root {
     }
 
     getThemes(path, theme) {
-        let themePath = _path.join(this.getRoot(path), './src/theme');
+        let themePath = _path.join(this.getRoot(path), './src/project');
 
         if (!_fs.existsSync(themePath)) {
             return void 0;
@@ -75,12 +75,12 @@ class Root {
         return theme ? _.find(themes, (v) => v === theme) : themes;
     }
 
-    printThemes(theme) {
-        let themePath = _path.join(this.getRoot(), './src/theme');
+    printProjects(theme) {
+        let themePath = _path.join(this.getRoot(), './src/project');
         let files = _fs.readdirSync(themePath);
 
         if (files) {
-            console.log(_chalk.yellow(`\n   MRI THEMES`));
+            console.log(_chalk.yellow(`\n   MRI PROJECTS`));
         }
 
         _.forEach(files, (filename) => {

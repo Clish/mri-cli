@@ -12,7 +12,7 @@ const { log, error, debug } = console;
 const { green, red, yellow, grey } = _chalk;
 
 /**
- * 该页用来创建 src/theme root 文件
+ * 该页用来创建 src/project root 文件
  * 避免使用 require.expression (动态路径)，引入资源文件，导致所有的模块都被打包
  * @param theme
  * @param env
@@ -22,17 +22,17 @@ module.exports = function initThemeRoot(theme, env) {
     // console.log(_upperCamelCase('one-loreal'));
 
     /**
-     * 创建 src/theme/index.ts 文件
+     * 创建 src/project/index.ts 文件
      */
 
     let paths = [
-        // '../template/approot/.theme.ejs',
-        '../template/approot/src/theme/config.mri.ts.ejs',
-        '../template/approot/src/theme/route-guard.mri.ts.ejs',
-        '../template/approot/src/theme/const-env.mri.ts.ejs',
-        '../template/approot/src/theme/dva.mri.ts.ejs',
-        '../template/approot/src/theme/preload.mri.ts.ejs',
-        '../template/approot/src/theme/preset.mri.ts.ejs',
+        // '../template/approot/.project.ejs',
+        '../template/approot/src/project/config.mri.ts.ejs',
+        '../template/approot/src/project/route-guard.mri.ts.ejs',
+        '../template/approot/src/project/const-env.mri.ts.ejs',
+        '../template/approot/src/project/dva.mri.ts.ejs',
+        '../template/approot/src/project/preload.mri.ts.ejs',
+        '../template/approot/src/project/preset.mri.ts.ejs',
     ];
 
     _.each(paths, (path) => {
@@ -49,8 +49,8 @@ module.exports = function initThemeRoot(theme, env) {
             { silent: true },
         );
 
-        log(green('::: theme root 文件生成 =>'), path__);
+        log(green('::: project root 文件生成 =>'), path__);
     });
 
-    log('---=> theme root 文件写入完成');
+    log('---=> project root 文件写入完成');
 };

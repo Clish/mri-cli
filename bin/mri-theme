@@ -21,7 +21,7 @@ const helper = (theme) => {
 
 _program
     .usage('<name> [options]')
-    .description('创建管理 mri theme')
+    .description('创建管理 mri project')
     .option('--remove', '删除该theme')
     .on('--help', helper)
     .parse(process.argv);

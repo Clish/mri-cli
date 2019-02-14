@@ -28,7 +28,7 @@ _program
 // fi
 
 // _program
-//     .usage('<feature|release|hotfix|conflict> theme [option]')
+//     .usage('<feature|release|hotfix|conflict> project [option]')
 //     .parse(process.argv);
 //
 // const args = process.argv.slice(3);

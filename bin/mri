@@ -13,7 +13,7 @@ const pk = require('../package.json');
 _program
     .version(pk.version)
 
-    .command('theme [name]', '暂时废除该命令')
+    .command('project [name]', '暂时废除该命令')
 
     .command('dev [project]', '生成单元模型')
     .command('build [project]', '生成单元模型')
