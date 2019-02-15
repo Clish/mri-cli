@@ -9,10 +9,10 @@
 const _program = require('commander');
 const $run = require('../lib/common/run');
 const $log = require('../lib/common/log');
-const $_projectStart = require('../lib/module/project-start');
+const $task = require('../lib/services/task');
 
 const pk = require('../package.json');
-const MRI_ENV = 'prod';
+const task = 'prod';
 
 _program
     .usage('mri test [options]')
@@ -23,18 +23,22 @@ _program
     .option('-i, --interface', '生成const interface文件')
     .option('-d, --debug', 'debug 模式')
     .option('-s, --service [name]', '服务器环境')
+    .option('-b, --branch', '不切换到test, 当前分支下运行命令')
     .version(pk.version);
 
 _program.parse(process.argv);
 
 $log.title(`mri prod [project] 项目生成环境打包代码`);
 
-$run.branch('prod', () => {
+let branch = _program.branch ? 'all' : 'master';
+
+$run.branch(branch, () => {
     $run.root(() => {
         $run.mri(() => {
             $run.package(() => {
                 $run.upgrade(() => {
-                    $_projectStart(MRI_ENV);
+                    let project = _program.args[0];
+                    $task.run(task, project);
                 });
             });
         });

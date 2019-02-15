@@ -10,7 +10,6 @@ const _program = require('commander');
 const $run = require('../lib/common/run');
 const $log = require('../lib/common/log');
 const $task = require('../lib/services/task');
-const $_projectStart = require('../lib/module/project-start');
 
 const pk = require('../package.json');
 const task = 'dev';
