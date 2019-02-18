@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const _program = require('commander');
+const _shell = require('shelljs');
+const $log = require('../lib/common/log');
+
+_program.usage('').parse(process.argv);
+
+let [name] = _program.args;
+
+if (name) {
+    $log.errorWrap([`- 命令不存在 mri ${name}`]);
+}
+
+_shell.exec(`mri --help`);
