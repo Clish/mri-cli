@@ -13,7 +13,6 @@ const $root = require('../service/root');
 const $run = require('../lib/common/run');
 const $log = require('../lib/common/log');
 const $util = require('../lib/common/util');
-const $bus = require('../lib/services/bus');
 const $project = require('../lib/services/project/project');
 
 _program

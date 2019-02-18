@@ -10,7 +10,7 @@ const _chalk = require('chalk');
 const $run = require('../lib/common/run');
 const $log = require('../lib/common/log');
 const $git = require('../lib/common/git');
-const $_branch = require('../lib/module/branch');
+const $_branch = require('../lib/services/branch');
 
 const $_gitConflict = require('../process/git-conflict');
 
