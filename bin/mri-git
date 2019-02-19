@@ -18,21 +18,18 @@ _program
     .command('feature [project::version]', '生成feature分支(单元功能)')
     .command('conflict [model]', '创建副本(copy)解决冲突')
     .command('checkout [branch]', '切换分支')
-
     .parse(process.argv);
-
-console.debug(_program);
 
 let [task] = _program.args || [];
 let branch = $git.getCurrentBranch();
 
 if (task === 'pull') {
-    _shell.exec(`git pull orogin ${branch}`);
+    _shell.exec(`git pull origin ${branch}`);
     process.exit(0);
 }
 
 if (task === 'push') {
-    _shell.exec(`git push orogin ${branch}`);
+    _shell.exec(`git push origin ${branch}`);
     process.exit(0);
 }
 
