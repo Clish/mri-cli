@@ -15,10 +15,9 @@ _program
 
     .command('project [name]', '暂时废除该命令')
 
-    .command('dev [project]', '生成单元模型')
-    .command('build [project]', '生成单元模型')
-    .alias('test')
-    .command('prod [project]', '生成单元模型')
+    .command('dev [project]', '本地环境，启动项目')
+    .command('build [project]', '测试环境，打包项目')
+    .command('prod [project]', '生成环境，打包项目')
 
     .command('generate [unit]', '生成单元模型')
     .alias('g')
@@ -39,7 +38,9 @@ _program
     .alias('gcf')
     .command('git-checkout [branch]', '切换分支')
     .alias('gco')
+    .command('git-cp [message]', '快速提交')
+    .alias('gcp')
 
-    .command('404', 'no cmd bin', {isDefault: true})
+    .command('404', 'no cmd bin', { isDefault: true })
 
     .parse(process.argv);

@@ -54,7 +54,7 @@ class MriVersionUpgrade {
 
             if (!$util.isNothingCommit()) {
                 _shell.exec(`
-                     git add . && git commit -am 'ready update MRI@${updateVersion}'
+                     git commit -am 'ready update MRI@${updateVersion}'
                 `);
             }
 
@@ -85,7 +85,7 @@ class MriVersionUpgrade {
                         git checkout mri-common -- .mrirc.js
                         git rm --cache  .mrirc.js
                         npm version ${updateVersion} 
-                        git add . && git commit -am 'upgrade mri ${currentVersion} -> v${updateVersion}'
+                        git commit -am 'upgrade mri ${currentVersion} -> v${updateVersion}'
                     `,
                 );
             }

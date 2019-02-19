@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const _program = require('commander');
+const _shell = require('shelljs');
+const _chalk = require('chalk');
+
+const $log = require('../lib/common/log');
+const $run = require('../lib/common/run');
+const $git = require('../lib/common/git');
+
+_program.usage('gamp <message> [options]').parse(process.argv);
+
+$log.title(`mri gcp [message] 快速commit && push`);
+
+$run.root(() => {
+    let [message] = _program.args;
+    let { force } = _program;
+
+    if (!message) {
+        $log.errorWrap([`- commit message 不能为空`]);
+        process.exit(0);
+    }
+
+    $git.statusChanges({ push: true, message });
+});

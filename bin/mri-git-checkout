@@ -10,9 +10,9 @@ const _fs = require('fs');
 const _fse = require('fs-extra');
 const _ = require('lodash');
 
-const $root = require('../service/root');
 const $util = require('../lib/common/util');
 const $log = require('../lib/common/log');
+const $run = require('../lib/common/run');
 const $template = require('../service/template');
 const $gco = require('../lib/services/gco');
 
@@ -20,15 +20,16 @@ _program
     .usage('gco <branch|index> [options]')
     .description('快速切换分支')
     .option('-f, --force', '强制执行，将未提交的文件commit')
-    .option('--stash [value]', '提交到缓存区')
-    .option('--commit [value]', '将未提交的文件提交到本地，git add . && git commit')
-    .option('--push [value]', '将未提交的文件推送到远程，git add . && git commit && git push')
+    .option('--stash', '提交到缓存区')
+    .option('--commit', '将未提交的文件提交到本地，git add . && git commit')
+    .option('--push', '将未提交的文件推送到远程，git add . && git commit && git push')
     .option('--force', '强力模式，待切换的分支不存在，则创建分支')
+    .option('-m --message [value]', 'message')
     .parse(process.argv);
 
 $log.title(`mri gco [branch | branchIndex] 快速切换分支`);
 
-$root.run(() => {
+$run.root(() => {
     let [branch] = _program.args;
     let { force } = _program;
     $gco.run(branch, force);
