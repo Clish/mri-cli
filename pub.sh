@@ -20,6 +20,7 @@ if [ -n ]; then
 fi
 
 git pull
+git add .
 git commit -am "$_commit"
 
 # 若不手动设置版本号，则自动增长
@@ -39,6 +40,7 @@ if [ $? -eq 0 ]; then
 
     echo ":::::::::::: Git Mark 此次修改信息"
     git pull
+    git add .
     git commit -am "$_ov -> $_version :: $_commit"
     git pull
     git push
