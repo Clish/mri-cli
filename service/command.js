@@ -5,7 +5,7 @@
  * 默认 < config.js 配置 < 启动命令设置的环境变量
  */
 
-const _util = require('./util');
+const _util = require('../lib/common/util');
 const _fs = require('fs');
 const _fse = require('fs-extra');
 const _ = require('lodash');
@@ -19,13 +19,13 @@ const _pk = require('../package.json');
 module.exports = function command(env) {
 
     _program
-        .usage('${theme} [options]')
+        .usage('${project} [options]')
         .description('运行MRI的开发环境')
-        .description('更多的环境变量\n  参考 https://umijs.org/guide/env-variables.html\n  在src/theme/${theme}/${theme}-config.js 中进行配置')
+        .description('更多的环境变量\n  参考 https://umijs.org/guide/env-variables.html\n  在src/project/${project}/${project}-config.js 中进行配置')
         .option('-c, --BABEL_CACHE', '是否使用BabelCache模式')
         .option('-n, --not-install', '忽略安装包更新')
         .option('-i, --INTERFACE', '生成const interface文件')
-        .option('-d, --debug', '生成const interface文件')
+        .option('-d, --debug', 'debug 模式')
         .option('-m, --mri [mri]', 'mri所在路径（no ln)')
         .option('-s, --service [name]', '服务器环境')
         .version(_pk.version);

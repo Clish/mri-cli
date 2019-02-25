@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="zh-CN">
 <head>
     <script type="text/javascript">
         // auth sso get code and redirect
@@ -7,9 +7,9 @@
         var reg = new RegExp('(^|&)' + key + '=([^&]*)(&|$)', 'i');
         var r = search.substr(1).match(reg);
         var code = r ? r[2] : void 0;
-        if(code){
-            window.sessionStorage.setItem('AUTH_CODE', code);
-            url = window.location.href.replace( key + '=' + code, '');
+        if(code && typeof code === 'string'){
+            sessionStorage.setItem('AUTH_CODE', code);
+            url = location.href.replace( key + '=' + code, '');
             url = url.replace(/\?[#/]{0,}$/, '');
             url = url.replace(/&[#/]{0,}$/, '');
             window.location.replace(url);

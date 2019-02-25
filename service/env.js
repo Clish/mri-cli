@@ -5,7 +5,7 @@
  * 默认 < config.js 配置 < 启动命令设置的环境变量
  */
 
-const _util = require('./util');
+const _util = require('../lib/common/util');
 const _fs = require('fs');
 const _fse = require('fs-extra');
 const _ = require('lodash');
@@ -61,15 +61,15 @@ module.exports = function env(theme, mri_env) {
 
     let config = Object.assign(def, mri, self);
 
-    if (theme !== config.theme) {
-        error(red('主题信息错误'), theme, config.theme);
+    if (theme !== config.project) {
+        error(red('主题信息错误'), theme, config.project);
         return void 0;
     }
 
     // log(`\n\n---=> 读取环境变量`);
 
     log(`${'::: 运行环境 => '} ${mri_env} (不可更改)`);
-    log(`${'::: 主题 => '} ${config.theme}`);
+    log(`${'::: 主题 => '} ${config.project}`);
 
     log(config);
 
@@ -79,7 +79,7 @@ module.exports = function env(theme, mri_env) {
             value = void 0;
         }
 
-        if (key !== 'theme' && value !== void 0) {
+        if (key !== 'project' && value !== void 0) {
             env_.push(`${key}=${value}`);
         }
     });

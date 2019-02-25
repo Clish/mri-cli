@@ -2,46 +2,45 @@
 
 'use strict';
 
-const program = require('commander');
-const exists  = require('fs').existsSync;
-const join    = require('path').join;
-const spawn   = require('cross-spawn');
-const chalk   = require('chalk');
-const pk      = require('../package.json');
+const _program = require('commander');
+const _exists = require('fs').existsSync;
+const _join = require('path').join;
+const _spawn = require('cross-spawn');
+const _chalk = require('chalk');
+const _ = require('lodash');
+const pk = require('../package.json');
 
-program
-    .usage('<command> [options]')
+_program
     .version(pk.version)
 
-    .on('--help', echoHelp)
+    .command('project [name]', '暂时废除该命令')
+
+    .command('dev [project]', '本地环境，启动项目')
+    .command('build [project]', '测试环境，打包项目')
+    .command('prod [project]', '生成环境，打包项目')
+
+    .command('generate [unit]', '生成单元模型')
+    .alias('g')
+    .command('project [name]', '生成新的项目(project)')
+    .alias('p')
+
+    .command('adjust', '系统调试调整')
+
+    .command('git [name]', 'git组合命令')
+
+    .command('git-release [project::version]', '生成release分支(一次发布内容)')
+    .alias('gr')
+    .command('git-hotfix [project::version]', '生成hotfix分支(紧急修复)')
+    .alias('gh')
+    .command('git-feature [project::version]', '生成feature分支(单元功能)')
+    .alias('gf')
+    .command('git-conflict [model]', '创建副本(copy)解决冲突')
+    .alias('gcf')
+    .command('git-checkout [branch]', '切换分支')
+    .alias('gco')
+    .command('git-cp [message]', '快速提交')
+    .alias('gcp')
+
+    .command('404', 'no cmd bin', { isDefault: true })
+
     .parse(process.argv);
-
-const args = process.argv.slice(3);
-let subCmd = program.args[0];
-
-if (!subCmd) {
-    program.help();
-} else {
-    const bin = executable(subCmd);
-    !bin ? program.help() : wrap(spawn(bin, args, { stdio: 'inherit' }));
-}
-
-function wrap(sp) {
-    sp.on('close', function(code) {
-        process.exit(code);
-    });
-}
-
-function executable(subCmd) {
-    let file = join(__dirname, 'mri-' + subCmd);
-    if (exists(file)) return file;
-}
-
-function echoHelp() {
-    console.log('\n  Commands:');
-    console.log();
-    console.log(chalk.green('   mri pages   ') + '按路由文件生成pages文件夹');
-    console.log(chalk.green('   mri dev     ') + '运行MRI开发环境');
-    console.log(chalk.green('   mri build   ') + '编译MRI test测试环境项目');
-    console.log(chalk.green('   mri prod    ') + '编译MRI prod生产环境项目');
-}

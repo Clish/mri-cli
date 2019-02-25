@@ -3,7 +3,7 @@
  * 构建umi的pages
  */
 
-const _util = require('./util');
+const _util = require('../lib/common/util');
 const _fs = require('fs');
 const _fse = require('fs-extra');
 const _ = require('lodash');
@@ -25,7 +25,7 @@ const $template = require('./template');
  * @return {{}}
  */
 const analysisRoutes = (theme, env) => {
-    // 根据 theme, 获取 ${theme}-routes.ts 的文件路径
+    // 根据 project, 获取 ${project}-routes.ts 的文件路径
     let path = `./src/theme/${theme}/${theme}-routes.ts`;
 
     if (_fs.existsSync(path)) {
@@ -111,7 +111,7 @@ const writePages = (routes) => {
 module.exports = function pages(theme) {
     /**
      * 删除 pages 文件夹
-     * 根据 theme, 获取 ${theme}-routes.ts 的文件路径
+     * 根据 project, 获取 ${project}-routes.ts 的文件路径
      * 根据路径读取 routes 配置信息
      * 根据 routes 配置信息，写入 pages
      */

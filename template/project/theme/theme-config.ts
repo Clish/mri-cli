@@ -1,5 +1,5 @@
 /**
- * theme <%=name%> config
+ * project <%=name%> config
  * @author ...
  */
 
@@ -13,7 +13,7 @@ import EnvConst from 'src/theme/const-env.mri';
 
 class <%=upperName%>ThemeConfig {
     /**
-     * theme name
+     * project name
      * 主题名称
      * @type {string}
      */

@@ -4,7 +4,7 @@ const _ = require('lodash');
 const _chalk = require('chalk');
 
 const $root = require('../service/root');
-const $log = require('../service/log');
+const $log = require('../lib/common/log');
 
 module.exports = (type = 'release', helper) => {
     let [theme, version] = _.trim(_program.args[0] || '').split('::');
@@ -111,10 +111,10 @@ module.exports = (type = 'release', helper) => {
 
 
     /**
-     * theme::version 都存在
-     * - 判断 git tag -l '{theme}*{version}' 是否存在
+     * project::version 都存在
+     * - 判断 git tag -l '{project}*{version}' 是否存在
      */
-    _shell.exec('git fetch 2>/dev/null');
+    _shell.exec('git fetch 1>/dev/null 2>&1');
     if (!_shell.exec(`git tag -l '${theme}*${version}' | grep -q '${theme}.*${version}'`).code) {
         $log.error(`\noOo tag ${theme}_v${version} 已创建`);
 

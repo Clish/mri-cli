@@ -1,0 +1,71 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const _program = require('commander');
+const _spawn = require('cross-spawn');
+const _shell = require('shelljs');
+const _path = require('path');
+const _exists = require('fs').existsSync;
+const _chalk = require('chalk');
+
+const $root = require('../service/root');
+const $run = require('../lib/common/run');
+const $log = require('../lib/common/log');
+const $util = require('../lib/common/util');
+const $project = require('../lib/services/project/project');
+
+_program
+    .usage('<name> [options]')
+    .description('创建管理 mri project')
+    .option('--remove', '删除该project')
+    .parse(process.argv);
+
+let [project] = _program.args;
+let { remove } = _program;
+
+$log.title(`mri project [name] 生成新的项目`);
+
+$run.root(() => {
+    $run.gco('master', () => {
+        /**
+         * 项目名(project name)不能为空
+         */
+        if (!project) {
+            $log.errorWrap([`- 项目名(project name) 不能为空`]);
+
+            /**
+             * 展示已创建的project
+             */
+            $project.showProjects();
+
+            process.exit(0);
+
+            return void 0;
+        }
+
+        let branch = $project.getCopyProjectBranch(project);
+
+        if (remove) {
+            $log.noticeWrap([
+                `oOo 删除项目(project)\n`,
+                `- 如项目刚创建，未合并到master, 则直接删除带合并分支 ${branch}`,
+                `- 若项目已创建，新建分支 ${branch}, 删除该项目, 提交PR 删除项目`,
+            ]);
+
+            $project.remove(project);
+
+            process.exit(0);
+        }
+
+        $log.noticeWrap([
+            `oOo 创建项目(project)\n`,
+            `- 将切换至Master分支，创建临时分支 copy-project/${project}`,
+            `- 在临时分支写入新项目${project}的信息`,
+            `- 操作人员需要将临时分支MR到Master后，创建新项目才成功`,
+            `- master 未创建的 project, 不能创建基于该project的release, hotfix 等`,
+        ]);
+
+        $project.create(project);
+    });
+});

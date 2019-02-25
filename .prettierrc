@@ -7,6 +7,5 @@
     "jsxBracketSameLine": true,
     "arrowParens": "always",
     "bracketSpacing": true,
-    "parser": "typescript"
-
+    "parser": "babylon"
 }

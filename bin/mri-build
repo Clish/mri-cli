@@ -1,15 +1,46 @@
 #!/usr/bin/env node
 
 /**
- *  mri dev ${theme}
+ *  mri build ${project}
  *  启动 MRI 项目
  */
-
 'use strict';
+const _program = require('commander');
 
-const $_project = require('../process/project');
+const $run = require('../lib/common/run');
+const $log = require('../lib/common/log');
+const $task = require('../lib/services/task');
 
-const MRI_ENV = 'test';
+const pk = require('../package.json');
+const task = 'test';
 
-$_project(MRI_ENV);
 
+_program
+    .usage('mri build [options]')
+    .description('运行MRI的测试环境')
+    .description('更多的环境变量\n  参考 https://umijs.org/guide/env-variables.html\n  在src/project/${project}/${project}-config.js 中进行配置')
+    .option('-c, --BABEL_CACHE', '是否使用BabelCache模式')
+    .option('-n, --no-install', '忽略安装包更新')
+    .option('-i, --interface', '生成const interface文件')
+    .option('-d, --debug', 'debug 模式')
+    .option('-s, --service [name]', '服务器环境')
+    .option('-b, --branch', '不切换到test, 当前分支下运行命令')
+    .version(pk.version)
+    .parse(process.argv);
+
+$log.title(`mri build [project] 在test分支，编译系统，发布测试环境`);
+
+let branch = _program.branch ? 'all' : 'test';
+
+$run.branch(branch, () => {
+    $run.root(() => {
+        $run.mri(() => {
+            $run.package(() => {
+                $run.upgrade(() => {
+                    let project = _program.args[0];
+                    $task.run(task, project);
+                });
+            });
+        });
+    });
+});

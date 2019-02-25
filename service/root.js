@@ -5,14 +5,18 @@ const _path = require('path');
 const _chalk = require('chalk');
 const _shell = require('shelljs');
 
-const $log = require('./log');
+const $log = require('../lib/common/log');
 
 const judges = {
     node_modules: 1,
     'package.json': 1,
 };
 
+
 class Root {
+    /**
+     * @deprecated
+     */
     judgeRoot(path = process.cwd()) {
         let status = false;
         let files = _fs.readdirSync(path);
@@ -49,7 +53,7 @@ class Root {
     }
 
     getThemes(path, theme) {
-        let themePath = _path.join(this.getRoot(path), './src/theme');
+        let themePath = _path.join(this.getRoot(path), './src/project');
 
         if (!_fs.existsSync(themePath)) {
             return void 0;
@@ -71,12 +75,12 @@ class Root {
         return theme ? _.find(themes, (v) => v === theme) : themes;
     }
 
-    printThemes(theme) {
-        let themePath = _path.join(this.getRoot(), './src/theme');
+    printProjects(theme) {
+        let themePath = _path.join(this.getRoot(), './src/project');
         let files = _fs.readdirSync(themePath);
 
         if (files) {
-            console.log(_chalk.yellow(`\n   MRI THEMES`));
+            console.log(_chalk.yellow(`\n   MRI PROJECTS`));
         }
 
         _.forEach(files, (filename) => {
@@ -102,6 +106,9 @@ class Root {
         `);
     }
 
+    /**
+     * @deprecated
+     */
     run(fn) {
         let isRoot = this.judgeRoot();
         if (isRoot) {

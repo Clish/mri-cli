@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const _ = require('lodash');
+const _program = require('commander');
+const _spawn = require('cross-spawn');
+const _shell = require('shelljs');
+const _path = require('path');
+const _exists = require('fs').existsSync;
+const _chalk = require('chalk');
+
+const $log = require('../lib/common/log');
+const $run = require('../lib/common/run');
+const $generate = require('../lib/services/generate/generate');
+
+_program
+    .usage('<unit> [options]')
+    .description('创建相关组件')
+    .parse(process.argv);
+
+/**
+ * 新建文件
+ *
+ * mri g component
+ * mri g c
+ * mri g widget
+ * mri g w
+ */
+let [unit, name] = _program.args;
+let { remove } = _program;
+
+$log.title(`mri g [unit] 生成单元模块`);
+
+if (!unit || !name) {
+    $log.errorWrap([`- 请输入将要创建的组件类型名称`, `- mri g component \${name}`, `- mri g widget \${name}`]);
+
+    process.exit(0);
+}
+
+$run.root(() => {
+    if (remove) {
+        $log.logWrap([
+            `- mri 不提供删除组件`,
+            `- 请使用 IDE 或 编辑器 删除`,
+            `- 因为IDE或编辑器拥有组件是否被引用的功能`,
+            `- 避免正在使用的组件被误删`,
+        ]);
+    } else {
+        $generate.generate(unit, name);
+    }
+});

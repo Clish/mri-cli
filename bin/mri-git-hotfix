@@ -2,17 +2,12 @@
 
 'use strict';
 
-// mri git [feature|hotfix|hotfix] [start|finish] branchName
-
 const _program = require('commander');
-const $root = require('../service/root');
-const $_gitRelease = require('../process/git-release');
 
-const helper = () => {
-    console.log('\n', 'THEMES');
-    $root.getThemes();
-    console.log('\n');
-};
+const $run = require('../lib/common/run');
+const $log = require('../lib/common/log');
+const $git = require('../lib/common/git');
+const $_branch = require('../lib/services/branch');
 
 /**
  * ----------------
@@ -20,14 +15,25 @@ const helper = () => {
  * ----------------
  */
 _program
-    .usage('hotfix <theme>')
-    .option('--force', '强力开启')
-    .option('--start', '创建hotfix')
-    .option('--ver [version]', '当前版本号')
-    .on('--help', helper)
+    .usage('hotfix <projectname:version> [options]')
+    .option('-f, --force', '强力开启')
+    .option('-x, --xVersion', '创建x版本')
+    .option('--stash [value]', '提交到缓存区')
+    .option('--commit [value]', '将未提交的文件提交到本地，git add . && git commit')
+    .option('--push [value]', '将未提交的文件推送到远程，git add . && git commit && git push')
     .parse(process.argv);
 
-$_gitRelease('hotfix');
+$log.title(`mri git hotfix [project::version] 生成热修复分支`);
 
-
-
+$run.branch('master', (project) => {
+    $run.root(() => {
+        $_branch.getPatch(project, 'hotfix', (model, project, version) => {
+            $log.noticeWrap([
+                `- 经计算当前项目(${project})最后一个版本号为v${version.current}`,
+                `- 即将创建当前项目 ${model} 分支`,
+                `- 其版本号为 v${version.target}`,
+            ]);
+            $_branch.create(model, project, version.target);
+        });
+    });
+});

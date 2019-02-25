@@ -3,7 +3,7 @@ const { join } = require('path');
 const chalk    = require('chalk');
 const _        = require('lodash');
 const shell    = require('shelljs');
-const $util    = require('../service/util');
+const $util    = require('../lib/common/util');
 const moment   = require('moment');
 
 const funcs     = ['release', 'hotfix', 'feature', 'update'];
@@ -125,7 +125,7 @@ const git = function(program) {
 **/
 
 /**
- * $ mri git release ${theme}
+ * $ mri git release ${project}
  *
  * 创建新的release
  *
@@ -144,12 +144,12 @@ const git = function(program) {
  *      * git checkout -b 新分支名 master
  *
  * 3. release 名称
-*     - rel/${theme}/${version}
- *    - version 从每个 theme下面的${theme}-umi.js 中获取 （若无 默认1.0.0）
- *    - 创建release后将 version 写回 ${theme}-umi.js, 避免同时存在多条 release
- *    - 执行命令 mri git release ${theme} 若 theme 不存在
- *      * 方案一: 提醒该 theme 不存在，确认是否创建, 用户选择是 -> 先创建分支, 版本默认 0.0.1；再创建 theme
- *      * 方案二: 提醒该 theme 不存在；若要创建新的theme, 使用 mri git release ${theme} -- force -> 先创建分支, 版本默认 0.0.1；再创建 theme
+*     - rel/${project}/${version}
+ *    - version 从每个 theme下面的${project}-umi.js 中获取 （若无 默认1.0.0）
+ *    - 创建release后将 version 写回 ${project}-umi.js, 避免同时存在多条 release
+ *    - 执行命令 mri git release ${project} 若 project 不存在
+ *      * 方案一: 提醒该 project 不存在，确认是否创建, 用户选择是 -> 先创建分支, 版本默认 0.0.1；再创建 project
+ *      * 方案二: 提醒该 project 不存在；若要创建新的theme, 使用 mri git release ${project} -- force -> 先创建分支, 版本默认 0.0.1；再创建 project
  *    - 创建release 成功后，推送到远程，并切换至分支；
  *
  * 4. 因为release 分支不可删，所以没有删除命令
@@ -161,9 +161,9 @@ const git = function(program) {
  * 创建新的feature
  *
  * 1. feature 不能在 master, test, common 三个分支中创建
- * 2. feature 读取当前所在的 release名称，生成新的分支名 feature/${theme}/${version}-beta.x
- *    - beta 也可以从${theme}.umi.js中读取
- *    - theme 从分支名解析而出
+ * 2. feature 读取当前所在的 release名称，生成新的分支名 feature/${project}/${version}-beta.x
+ *    - beta 也可以从${project}.umi.js中读取
+ *    - project 从分支名解析而出
  * 3. feature 不推送远程
  * 4. 若当前代码未提交，逻辑同 R1
  *
@@ -185,7 +185,7 @@ const git = function(program) {
  * 创建hotfix
  *
  * 1. hotfix 只能基于master(同 release)
- * 2. hotfix 分支名 hotfix/${theme}/${version}.rc.x;
+ * 2. hotfix 分支名 hotfix/${project}/${version}.rc.x;
  *    - 创建hotfix， branchName 手写
 *  3. hotfix 推送远程，用于 pr merge master
  * 4. 若当前代码未提交，逻辑同 R1

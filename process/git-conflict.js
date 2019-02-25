@@ -4,7 +4,9 @@ const _ = require('lodash');
 const _chalk = require('chalk');
 
 const $root = require('../service/root');
-const $log = require('../service/log');
+const $log = require('../lib/common/log');
+
+
 
 module.exports = (helper) => {
     let branch = _program.args[0];
@@ -55,12 +57,12 @@ module.exports = (helper) => {
 
     _shell.exec(`
         
-        git pull origin ${currentBranch}
+        git pull origin ${currentBranch} 
         
         git checkout ${branch} 
         
         git pull origin ${branch}
-        
+       
         git checkout -b ${copy}
         
         if [ $? -ne 0 ]; then

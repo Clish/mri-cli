@@ -44,6 +44,7 @@
         "fs-extra": "^7.0.0",
         "globby": "^8.0.1",
         "install": "^0.12.1",
+        "loading-cli": "^1.0.8",
         "lodash": "^4.17.10",
         "mkdirp": "^0.5.1",
         "moment": "^2.22.2",

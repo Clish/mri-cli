@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const _program = require('commander');
+const _shell = require('shelljs');
+
+const $run = require('../lib/common/run');
+const $log = require('../lib/common/log');
+const $git = require('../lib/common/git');
+const $$turning = require('../lib/services/tuning/tuning');
+
+_program
+    .usage('[options]')
+    .description('调整调试文件')
+    .option('--ignore', '忽略文件')
+    .option('--set-upstream', 'git branch --set-upstream-to=origin/{branch} {branch}')
+    .parse(process.argv);
+
+let { ignore, setUpstream } = _program;
+
+$run.root(() => {
+    if (ignore) {
+        $log.title('重置缓存文件');
+        $$turning.rmcache();
+    }
+
+    if (setUpstream) {
+        $log.title('当前分支推送远程并设置upstream');
+        let branch = $git.getCurrentBranch();
+        _shell.exec(`
+            git push origin ${branch}
+            git branch --set-upstream-to=origin/${branch} ${branch}
+        `);
+    }
+});

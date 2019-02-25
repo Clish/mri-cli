@@ -2,8 +2,8 @@
  * <%=title ? 'title: ' + title : ''%>
  */
 import * as React from 'react';
-import $theme from 'src/theme';
-const module = $theme.getModule('<%=name%>');
+import $project from 'src/project';
+const module = $project.getModule('<%=name%>');
 <% if (redirect) { %>
 import Redirect from 'umi/redirect';
 export default () => <Redirect to={'<%=redirect%>'} />
