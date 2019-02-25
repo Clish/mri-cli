@@ -61,7 +61,7 @@ $run.root(() => {
         $log.noticeWrap([
             `oOo 创建项目(project)\n`,
             `- 将切换至Master分支，创建临时分支 copy-project/${project}`,
-            `- 在临时分支写入新项目${project}的信息`
+            `- 在临时分支写入新项目${project}的信息`,
             `- 操作人员需要将临时分支MR到Master后，创建新项目才成功`,
             `- master 未创建的 project, 不能创建基于该project的release, hotfix 等`,
         ]);
