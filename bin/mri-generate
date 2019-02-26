@@ -33,7 +33,11 @@ let { remove } = _program;
 $log.title(`mri g [unit] 生成单元模块`);
 
 if (!unit || !name) {
-    $log.errorWrap([`- 请输入将要创建的组件类型名称`, `- mri g component \${name}`, `- mri g widget \${name}`]);
+    $log.errorWrap([
+        `- 请输入将要创建的组件类型名称`,
+        `- mri g component {name}`,
+        `- mri g widget {name}`
+    ]);
 
     process.exit(0);
 }

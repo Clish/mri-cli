@@ -9,38 +9,63 @@ const _spawn = require('cross-spawn');
 const _chalk = require('chalk');
 const _ = require('lodash');
 const pk = require('../package.json');
+const $util = require('../lib/common/util.js');
+
+// yarn global not support sub-command
+
+// _program
+//     .version(pk.version)
+//
+//     .command('project [name]', '暂时废除该命令')
+//
+//     .command('dev [project]', '本地环境，启动项目')
+//     .command('build [project]', '测试环境，打包项目')
+//     .command('prod [project]', '生成环境，打包项目')
+//
+//     .command('generate [unit]', '生成单元模型')
+//     .alias('g')
+//     .command('project [name]', '生成新的项目(project)')
+//     .alias('p')
+//
+//     .command('adjust', '系统调试调整')
+//
+//     .command('git [name]', 'git组合命令')
+//
+//     .command('git-release [project::version]', '生成release分支(一次发布内容)')
+//     .alias('gr')
+//     .command('git-hotfix [project::version]', '生成hotfix分支(紧急修复)')
+//     .alias('gh')
+//     .command('git-feature [project::version]', '生成feature分支(单元功能)')
+//     .alias('gf')
+//     .command('git-conflict [model]', '创建副本(copy)解决冲突')
+//     .alias('gcf')
+//     .command('git-checkout [branch]', '切换分支')
+//     .alias('gco')
+//     .command('git-cp [message]', '快速提交')
+//     .alias('gcp')
+//
+//     .command('404', 'no cmd bin', { isDefault: true })
+//
+//     .parse(process.argv);
 
 _program
+    .usage('<command> [options]')
     .version(pk.version)
-
-    .command('project [name]', '暂时废除该命令')
-
-    .command('dev [project]', '本地环境，启动项目')
-    .command('build [project]', '测试环境，打包项目')
-    .command('prod [project]', '生成环境，打包项目')
-
-    .command('generate [unit]', '生成单元模型')
-    .alias('g')
-    .command('project [name]', '生成新的项目(project)')
-    .alias('p')
-
-    .command('adjust', '系统调试调整')
-
-    .command('git [name]', 'git组合命令')
-
-    .command('git-release [project::version]', '生成release分支(一次发布内容)')
-    .alias('gr')
-    .command('git-hotfix [project::version]', '生成hotfix分支(紧急修复)')
-    .alias('gh')
-    .command('git-feature [project::version]', '生成feature分支(单元功能)')
-    .alias('gf')
-    .command('git-conflict [model]', '创建副本(copy)解决冲突')
-    .alias('gcf')
-    .command('git-checkout [branch]', '切换分支')
-    .alias('gco')
-    .command('git-cp [message]', '快速提交')
-    .alias('gcp')
-
-    .command('404', 'no cmd bin', { isDefault: true })
-
     .parse(process.argv);
+
+const args = process.argv.slice(3);
+let subCmd = _program.args[0];
+
+let cmdMap = {
+    gr: 'git-release',
+    gh: 'git-hotfix',
+    p: 'project',
+    g: 'generate',
+    gcf: 'git-conflict',
+    gco: 'git-checkout',
+    gcp: 'git-cp'
+};
+
+let bin = cmdMap[subCmd] || subCmd;
+bin = _join(__dirname, `mri-${bin}`);
+$util.bash(bin, args);
