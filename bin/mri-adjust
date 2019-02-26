@@ -15,6 +15,7 @@ _program
     .description('调整调试文件')
     .option('--ignore', '忽略文件')
     .option('--set-upstream', 'git branch --set-upstream-to=origin/{branch} {branch}')
+    .option('--clear', '清理文件，会到该分支初始状态（未提交代码）')
     .parse(process.argv);
 
 let { ignore, setUpstream } = _program;
@@ -31,6 +32,14 @@ $run.root(() => {
         _shell.exec(`
             git push origin ${branch}
             git branch --set-upstream-to=origin/${branch} ${branch}
+        `);
+    }
+
+    if (clear) {
+        $log.title('清理文件，会到该分支初始状态（未提交代码）');
+        _shell.exec(`
+            git checkout .
+            git clean -df
         `);
     }
 });

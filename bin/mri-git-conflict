@@ -27,16 +27,16 @@ _program
     .parse(process.argv);
 
 const { remove, force } = _program;
-const [target] = _program.args;
+const [target = 'test'] = _program.args;
 
-$log.title(`mri git conflict 生成${target}副本分支, 解决冲突`);
+
 
 $run.root(() => {
     if (remove) {
         $log.title(`删除副本分支`);
-        $_branch.removeCopyBranch(target);
+        $_branch.removeCopyBranch();
     } else {
-        $log.title(`创建副本分支，解决冲突`);
+        $log.title(`mri git conflict 生成${target}副本分支, 解决冲突`);
         $_branch.createCopyBranch(force, target);
     }
 });
