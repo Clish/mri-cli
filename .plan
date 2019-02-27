@@ -47,3 +47,11 @@ mri electron (p5) 打包桌面版（打包 chrome）创建包，打包
 --==--
 polyfill -> 适应配置 （polyfill.io browser user agent）
 modern mode
+
+### 本地安装 cli
+
+sudo npm install -g
+
+（卸载 需删除 /usr/local/lib/node_modules/mri-cli )
+
+/Users/Mizi/.config/yarn/global/node_modules/.bin/mri
