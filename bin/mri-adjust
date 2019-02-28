@@ -18,7 +18,7 @@ _program
     .option('--clear', '清理文件，会到该分支初始状态（未提交代码）')
     .parse(process.argv);
 
-let { ignore, setUpstream } = _program;
+let { ignore, setUpstream, clear } = _program;
 
 $run.root(() => {
     if (ignore) {
