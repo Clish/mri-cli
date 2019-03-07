@@ -25,6 +25,7 @@ _program
     .option('-d, --debug', 'debug 模式')
     .option('-s, --service [name]', '服务器环境')
     .option('-b, --branch', '不切换到test, 当前分支下运行命令')
+    .option('-f, --force', '不切换到test, 当前分支下运行命令')
     .version(pk.version)
     .parse(process.argv);
 
