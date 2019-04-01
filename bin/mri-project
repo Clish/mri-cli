@@ -19,10 +19,18 @@ _program
     .usage('<name> [options]')
     .description('创建管理 mri project')
     .option('--remove', '删除该project')
+    .option('--show', '快速查看projects')
     .parse(process.argv);
 
 let [project] = _program.args;
-let { remove } = _program;
+let { remove, show } = _program;
+
+if(show) {
+    $log.title(`查看当前分支下的projects`);
+    $project.showProjects();
+    process.exit(0);
+}
+
 
 $log.title(`mri project [name] 生成新的项目`);
 
