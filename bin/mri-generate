@@ -37,6 +37,7 @@ if (!unit || !name) {
         `- 请输入将要创建的组件类型名称`,
         `- mri g component {name}`,
         `- mri g widget {name}`
+        `- mri g block {name}`
     ]);
 
     process.exit(0);
