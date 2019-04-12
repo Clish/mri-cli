@@ -8,7 +8,13 @@ const module = $project.getModule('<%=name%>');
 import Redirect from 'umi/redirect';
 export default () => <Redirect to={'<%=redirect%>'} />
 <% } else { %>
+import { MrComponent } from 'masterrt';
+import $jsx from 'src/services/jsx.services';
+const module = $project.getModule('dashboard');
 const component = module.component;
-export default component;
+
+export default () => {
+  return <MrComponent component={$project.getLayout()}>{$jsx.recursion($project.getSubLayout(), component)}</MrComponent>;
+};
 <% } %>
 
