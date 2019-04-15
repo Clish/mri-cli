@@ -7,6 +7,7 @@ const _compareVersion = require('compare-versions');
 const _shell = require('shelljs');
 const _chalk = require('chalk');
 const _path = require('path');
+const _join = _path.join;
 
 const $root = require('./root');
 const $util = require('../lib/common/util');
@@ -26,6 +27,9 @@ class MriVersionUpgrade {
         return version || 0;
     }
 
+    /**
+     * MRI版本升级总程序
+     */
     upgrade() {
         let currentVersion = this.getCurrentVersion();
         let updateVersion = this.getUpdateVersion();
@@ -37,6 +41,11 @@ class MriVersionUpgrade {
                 `-----------------------------------`,
             ]);
 
+            let upgradeJS = _join(__dirname, `../upgrade/v${updateVersion}.js`);
+            if ($util.existPath(upgradeJS, true)) {
+                require(upgradeJS)();
+            }
+
             let updateBranch = '';
 
             if ($util.execSimple(`git branch -r | grep 'origin/release/mri/v${updateVersion}'`)) {
@@ -47,8 +56,10 @@ class MriVersionUpgrade {
                 $log.errorWrap([
                     `- 升级到MRI@${updateVersion}失败`,
                     `- 没有找到相关资源`,
-                    `- 请提交ISSUES (http://code.admaster.co/ipg/mri/issues)`
+                    `- 请提交ISSUES (http://code.admaster.co/ipg/mri/issues)`,
+                    `- 或尝试手动merge ${updateBranch}`,
                 ]);
+
                 return void 0;
             }
 
@@ -66,14 +77,7 @@ class MriVersionUpgrade {
             `);
 
             if (update.code !== 0) {
-                $log.errorWrap([
-                    `- 升级到MRI@${updateVersion}失败`,
-                    `- 文件产生了冲突`,
-                    `- 请手动解决冲突`
-                ]);
-
-                process.exit(0);
-
+                $log.errorWrap([`- 升级到MRI@${updateVersion}失败`, `- 文件产生了冲突`, `- 请手动解决冲突`]);
             } else {
                 $util.execSilent(
                     `   
@@ -82,9 +86,8 @@ class MriVersionUpgrade {
                         # git remote update origin --prune 
                         
                         # 更新 mri-common 信息
-                        git fetch -u origin mri-common:mri-common 
-                        git checkout mri-common -- .mrirc.js
-                        git rm --cache  .mrirc.js
+                        git fetch -u origin mri-common:mri-common  
+                        git checkout mri-common -- .mrirc.js 1>/dev/null &2>1
                         npm version ${updateVersion} 
                         git add .
                         git commit -am 'upgrade mri ${currentVersion} -> v${updateVersion}'
