@@ -1,1 +1,2 @@
-export {default as <%=className%>} from './<%=fileName%>';
+import {default as <%=className%>} from './<%=fileName%>';
+export default <%=className%>;

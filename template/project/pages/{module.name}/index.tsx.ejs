@@ -14,7 +14,9 @@ const module = $project.getModule('dashboard');
 const component = module.component;
 
 export default () => {
-  return <MrComponent component={$project.getLayout()}>{$jsx.recursion($project.getSubLayout(), component)}</MrComponent>;
+  return (<MrComponent component={$project.getLayout()}>
+      {$jsx.recursion($project.getSubLayout(), component)}
+    </MrComponent>);
 };
 <% } %>
 
