@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+
+/**
+ *  mri dev ${project}
+ *  启动 MRI 项目
+ */
+
+'use strict';
+const _program = require('commander');
+const $run = require('../lib/common/run');
+const $log = require('../lib/common/log');
+const $task = require('../lib/services/task');
+
+const pk = require('../package.json');
+const task = 'dev';
+
+_program
+    .usage('mri init')
+    .description('初始化MRI系统')
+    .version(pk.version);
+
+_program.parse(process.argv);
+
+$log.title(`mri init 初始化系统`);
+
+
+

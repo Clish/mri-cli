@@ -12,6 +12,7 @@ const _join = _path.join;
 const $root = require('./root');
 const $util = require('../lib/common/util');
 const $log = require('../lib/common/log');
+const $load = require('../lib/common/load');
 
 class MriVersionUpgrade {
     // 根据package.json 取得当前的版本
@@ -23,7 +24,7 @@ class MriVersionUpgrade {
 
     // 根据.mrirc.js 获得需要更新的版本
     getUpdateVersion() {
-        let { version } = $util.getMriRC() || {};
+        let { version } = $load.mrirc() || {};
         return version || 0;
     }
 

@@ -35,8 +35,8 @@ let branch = _program.branch ? 'all' : 'test';
 
 $run.branch(branch, () => {
     $run.root(() => {
-        $run.mri(() => {
-            $run.package(() => {
+        $run.package(() => {
+            $run.mri(() => {
                 $run.upgrade(() => {
                     let project = _program.args[0];
                     $task.run(task, project);
