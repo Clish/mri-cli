@@ -9,7 +9,7 @@ const $log = require('../lib/common/log');
 
 const judges = {
     node_modules: 1,
-    'package.json': 1,
+    '.git': 1,
 };
 
 

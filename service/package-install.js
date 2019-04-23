@@ -7,6 +7,7 @@ const _program = require('commander');
 const _join = _path.join;
 
 const $util = require('../lib/common/util');
+const $load = require('../lib/common/load');
 
 class PackageInstall {
     installSaves(saves) {
@@ -36,6 +37,7 @@ class PackageInstall {
         let pkgs = this.getPkgs(devs, 'devs');
         if (pkgs.length) {
             pkgs = pkgs.join(' ');
+
             console.log(`安装包 --dev ${pkgs}`);
 
             if (_program['debug']) {
@@ -128,7 +130,7 @@ class PackageInstall {
     }
 
     install() {
-        let config = $util.getMriRC();
+        let config = $load.mrirc();
         let { saves, devs, globals } = config || {};
         this.installDevs(devs);
         this.installSaves(saves);
