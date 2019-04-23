@@ -35,8 +35,8 @@ $log.title(`mri dev [project] 启动项目`);
 
 $run.branch('all', () => {
     $run.root(() => {
-        $run.package(() => {
-            $run.mri(() => {
+        $run.mri(() => {
+            $run.package(() => {
                 $run.upgrade(() => {
                     let project = _program.args[0];
                     $task.run(task, project);
@@ -45,4 +45,3 @@ $run.branch('all', () => {
         });
     });
 });
-
