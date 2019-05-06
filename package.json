@@ -1,7 +1,9 @@
 {
   "name": "mri-cli",
-  "version": "1.8.1",
-  "scripts": { "pub": "bash ./pub.sh" },
+  "version": "1.8.2",
+  "scripts": {
+    "pub": "bash ./pub.sh"
+  },
   "dependencies": {
     "@babel/core": "7.4.4",
     "@babel/parser": "7.4.4",
@@ -62,6 +64,8 @@
   "license": "MIT",
   "description": "",
   "main": "index.js",
-  "bin": { "mri": "./bin/mri" },
+  "bin": {
+    "mri": "./bin/mri"
+  },
   "author": "clish wang"
 }
