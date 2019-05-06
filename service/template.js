@@ -13,8 +13,6 @@ const { green, red, yellow, grey } = _chalk;
 
 const $root = require('./root');
 
-let root = $root.getRoot();
-
 class $template {
     /**
      * 写入文件
@@ -23,6 +21,7 @@ class $template {
      * @param targetPath
      */
     create(params = {}, templatePath, targetPath) {
+        let root = $root.getRoot();
         targetPath = _path.join(root, targetPath);
         let render = this.render(params, templatePath);
         _fse.outputFileSync(targetPath, render);
@@ -33,7 +32,6 @@ class $template {
         let template = _fs.readFileSync(templatePath, 'utf-8');
         return _ejs.render(template, params);
     }
-
 }
 
 module.exports = new $template();

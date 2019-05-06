@@ -12,13 +12,13 @@ const $log = require('../lib/common/log');
 const $task = require('../lib/services/task');
 
 const pk = require('../package.json');
-const task = 'test';
-
 
 _program
     .usage('mri build [options]')
     .description('运行MRI的测试环境')
-    .description('更多的环境变量\n  参考 https://umijs.org/guide/env-variables.html\n  在src/project/${project}/${project}-config.js 中进行配置')
+    .description(
+        '更多的环境变量\n  参考 https://umijs.org/guide/env-variables.html\n  在src/project/${project}/${project}-config.js 中进行配置',
+    )
     .option('-c, --BABEL_CACHE', '是否使用BabelCache模式')
     .option('-n, --no-install', '忽略安装包更新')
     .option('-i, --interface', '生成const interface文件')
@@ -31,15 +31,25 @@ _program
 
 $log.title(`mri build [project] 在test分支，编译系统，发布测试环境`);
 
-let branch = _program.branch ? 'all' : 'test';
+const task = 'test';
+const branch = _program.branch ? 'all' : 'test';
+const project = _program.args[0];
 
+// 在当前分支下执行工作
 $run.branch(branch, () => {
+    // 在根目录下工作
     $run.root(() => {
-        $run.mri(() => {
-            $run.package(() => {
-                $run.upgrade(() => {
-                    let project = _program.args[0];
-                    $task.run(task, project);
+        // mri react 启动初始化工作
+        $run.init(() => {
+            // mri 配置初始化
+            $run.mri(() => {
+                // mri 项目JS package 管理
+                $run.package(() => {
+                    // mri 版本管理
+                    $run.upgrade(() => {
+                        // 启动其项目
+                        $task.run(task, project);
+                    });
                 });
             });
         });

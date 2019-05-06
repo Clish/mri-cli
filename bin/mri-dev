@@ -12,7 +12,6 @@ const $log = require('../lib/common/log');
 const $task = require('../lib/services/task');
 
 const pk = require('../package.json');
-const task = 'dev';
 
 _program
     .usage('mri dev [options]')
@@ -33,15 +32,26 @@ _program.parse(process.argv);
 
 $log.title(`mri dev [project] 启动项目`);
 
+const task = 'dev';
+const project = _program.args[0];
+
+// 在当前分支下执行工作
 $run.branch('all', () => {
+    // 在根目录下工作
     $run.root(() => {
-        $run.mri(() => {
-            $run.package(() => {
-                $run.upgrade(() => {
-                    let project = _program.args[0];
-                    $task.run(task, project);
+        // mri react 启动初始化工作
+        $run.init(() => {
+            // mri 配置初始化
+            $run.mri(() => {
+                // mri 项目JS package 管理
+                $run.package(() => {
+                    // mri 版本管理
+                    $run.upgrade(() => {
+                        // 启动其项目
+                        $task.run(task, project);
+                    });
                 });
             });
-        });
+        })
     });
 });

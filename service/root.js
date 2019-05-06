@@ -1,4 +1,3 @@
-
 const _fs = require('fs');
 const _ = require('lodash');
 const _path = require('path');
@@ -7,17 +6,17 @@ const _shell = require('shelljs');
 
 const $log = require('../lib/common/log');
 
-const judges = {
-    node_modules: 1,
-    '.git': 1,
-};
-
-
 class Root {
     /**
      * @deprecated
      */
-    judgeRoot(path = process.cwd()) {
+    judgeRoot(
+        path = process.cwd(),
+        judges = {
+            node_modules: 1,
+            '.git': 1,
+        },
+    ) {
         let status = false;
         let files = _fs.readdirSync(path);
 
@@ -42,7 +41,8 @@ class Root {
         if (!this.judgeRoot(path)) {
             let path2 = _path.join(path, '..');
             if (path2 === path) {
-                console.log(_chalk.red('当前路径错误'));
+                // console.debug( new Error('--'))
+                console.log(_chalk.red('- 当前路径错误'));
                 return void 0;
             } else {
                 return this.getRoot(path2);

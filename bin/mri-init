@@ -1,18 +1,20 @@
 #!/usr/bin/env node
 
 /**
- *  mri dev ${project}
- *  启动 MRI 项目
+ * 初始化系统
+ * - 判断根目录
+ * - 生成 package.json 文件
+ * - 安装包
  */
 
 'use strict';
 const _program = require('commander');
 const $run = require('../lib/common/run');
 const $log = require('../lib/common/log');
-const $task = require('../lib/services/task');
+const $tuning = require('../lib/services/tuning/tuning');
+const $root = require('../service/root');
 
 const pk = require('../package.json');
-const task = 'dev';
 
 _program
     .usage('mri init')
@@ -23,5 +25,21 @@ _program.parse(process.argv);
 
 $log.title(`mri init 初始化系统`);
 
+let isRoot = $root.judgeRoot(process.cwd(), {
+    src: 1,
+    '.git': 1,
+});
 
+if (isRoot) {
+    // mri react 启动初始化工作
+    $run.init(() => {
+        // mri 配置初始化
+        $run.mri(() => {
+            // mri 项目JS package 管理
+            $run.package(() => {
+                $log.debug([`- 系统初始化完毕`])
+            });
+        });
+    })
 
+}
