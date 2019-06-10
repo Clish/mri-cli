@@ -8,8 +8,21 @@ const _join = _path.join;
 
 const $util = require('../lib/common/util');
 const $load = require('../lib/common/load');
+const $template = require('../lib/common/template');
+const MC = require('../lib/common/constant');
 
 class PackageInstall {
+    writeResolutions(resolutions) {
+        if (resolutions) {
+            let pkg = $load.pkg();
+            if (!_.isEqual(resolutions, pkg.resolutions || {})) {
+                pkg.resolutions = resolutions;
+                let content = $template.format(JSON.stringify(pkg));
+                $template.out(content, _join(process.cwd(), MC.PATH_PKG));
+            }
+        }
+    }
+
     installSaves(saves) {
         let pkgs = this.getPkgs(saves, 'saves');
         if (pkgs.length) {
@@ -131,7 +144,9 @@ class PackageInstall {
 
     install() {
         let config = $load.mrirc();
-        let { saves, devs, globals } = config || {};
+        let { saves, devs, globals, resolutions } = config || {};
+
+        this.writeResolutions(resolutions);
         this.installDevs(devs);
         this.installSaves(saves);
         this.installGlobals(globals);
