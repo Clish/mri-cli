@@ -12,11 +12,11 @@ interface <%=className%>State {}
 
 export default class <%=className%> extends React.Component<<%=className%>Props, <%=className%>State> {
 
-    state: any = {
-
+    state = {
     };
 
-    // constructor() {}
+    constructor() {
+    }
 
     render () {
         return (<div><%=className%> <%=type%></div>);
