@@ -16,6 +16,12 @@ const $generate = require('../lib/services/generate/generate');
 
 _program
     .usage('<unit> [options]')
+    .option('-p, --path [path]', '按路径生成')
+    .option('-P, --props', '组件是否显示props')
+    .option('-c, --component [component]', '将生成的内容生成在component下')
+    .option('-w, --widget [widget]', '将生成的内容生成在widget下')
+    .option('-b, --block [block]', '将生成的内容生成在block下')
+    .option('-h, --hook [hook]', '将生成的内容生成在hook下')
     .description('创建相关组件')
     .parse(process.argv);
 
@@ -28,7 +34,7 @@ _program
  * mri g w
  */
 let [unit, name] = _program.args;
-let { remove } = _program;
+let { remove, props, component, widget, block, hook, path } = _program;
 
 $log.title(`mri g [unit] 生成单元模块`);
 
@@ -36,8 +42,7 @@ if (!unit || !name) {
     $log.errorWrap([
         `- 请输入将要创建的组件类型名称`,
         `- mri g component {name}`,
-        `- mri g widget {name}`
-        `- mri g block {name}`
+        `- mri g widget {name}``- mri g block {name}``- mri g hook {name}`,
     ]);
 
     process.exit(0);
@@ -52,6 +57,6 @@ $run.root(() => {
             `- 避免正在使用的组件被误删`,
         ]);
     } else {
-        $generate.generate(unit, name);
+        $generate.generate(unit, name, { props, component, widget, block, hook, path });
     }
 });
