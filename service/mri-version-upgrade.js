@@ -79,6 +79,7 @@ class MriVersionUpgrade {
 
             if (update.code !== 0) {
                 $log.errorWrap([`- 升级到MRI@${updateVersion}失败`, `- 文件产生了冲突`, `- 请手动解决冲突`]);
+                process.exit(0);
             } else {
                 $util.execSilent(
                     `   
