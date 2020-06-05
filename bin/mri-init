@@ -26,8 +26,8 @@ _program.parse(process.argv);
 $log.title(`mri init 初始化系统`);
 
 let isRoot = $root.judgeRoot(process.cwd(), {
-    src: 1,
-    '.git': 1,
+    src: 1
+    // '.git': 1,
 });
 
 if (isRoot) {

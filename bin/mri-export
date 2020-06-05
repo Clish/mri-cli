@@ -1,0 +1,121 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const _program = require('commander');
+const _shell = require('shelljs');
+const _path = require('path');
+const _fs = require('fs');
+const _fse = require('fs-extra');
+const _ = require('lodash');
+
+const $run = require('../lib/common/run');
+const $log = require('../lib/common/log');
+const $git = require('../lib/common/git');
+const $util = require('../lib/common/util');
+const $template = require('../lib/common/template');
+const $$turning = require('../lib/services/tuning/tuning');
+
+_program
+    .usage('mri export [project]')
+    .description('调整调试文件')
+    .parse(process.argv);
+
+let [project, path] = _program.args;
+
+if (!project) {
+    $log.error([`项目名不能为空`]);
+    process.exit(0);
+}
+
+$run.root(() => {
+    let path = _path.resolve(process.cwd(), `../mri-exports/${project}`);
+    let cwd = process.cwd();
+    $log.title(`mri export 导出项目 ${project}`);
+    $log.log([`-导出路径: ${path}`]);
+
+    // 删除已有目录
+    _fse.removeSync(path);
+    // 新建目录
+    _fse.mkdirpSync(path);
+    // 项目文件
+    copy(`${proj(project)}`, `${path}/src/project/${project}`);
+    // 资源文件
+    copy(`${root(`./public/assets/${project}`)}`, `${path}/public/assets/${project}`);
+    // 配置文件
+    _.each(_fse.readdirSync(root()), (filename) => {
+        let filedir = root(filename);
+        let stats = _fs.statSync(filedir);
+        if (
+            stats.isFile() &&
+            filename !== '.DS_Store' &&
+            filename !== 'yarn-error.log' &&
+            filename !== '.mritemp' &&
+            filename !== '.mrirc.js'
+        ) {
+            copy(filedir, `${path}/${filename}`);
+        }
+    });
+    // src基本文件
+    _.each(_fse.readdirSync(root('./src')), (filename) => {
+        let filedir = root(`./src/${filename}`);
+        let stats = _fs.statSync(filedir);
+        if (stats.isFile() && filename !== '.DS_Store') {
+            copy(filedir, `${path}/src/${filename}`);
+        }
+    });
+    // 复制const文件
+    copy(`${root(`./src/common/const/base.const.ts`)}`, `${path}/src/common/const/base.const.ts`);
+    copy(`${root(`./src/common/const/${project}.const.ts`)}`, `${path}/src/common/const/${project}.const.ts`);
+    // 复制 layouts
+    copy(`${root(`./src/layouts`)}`, `${path}/src/layouts`);
+    // 复制 components
+    copy(`${root(`./src/components/${project}`)}`, `${path}/src/components/${project}`);
+    copy(`${root(`./src/components/p-404`)}`, `${path}/src/components/p-404`);
+    // 复制widgets
+    copy(`${root(`./src/widgets/${project}`)}`, `${path}/src/widgets/${project}`);
+    // 复制 services
+    copy(`${root(`./src/common/providers`)}`, `${path}/src/common/providers`);
+    copy(`${root(`./src/common/layouts`)}`, `${path}/src/common/layouts`);
+    copy(`${root(`./src/common/common.less`)}`, `${path}/src/common/common.less`);
+    copy(`${root(`./src/common/services/base`)}`, `${path}/src/common/services/base`);
+    copy(`${root(`./src/common/services/store.services.ts`)}`, `${path}/src/common/services/store.services.ts`);
+    copy(`${root(`./src/common/services/${project}.services.ts`)}`, `${path}/src/common/services/${project}.services.ts`);
+    copy(`${root(`./src/services`)}`, `${path}/src/services`);
+
+    // 从 export 中读取package.json 覆盖已有的 package.json
+    copy(`${root(`./exports/${project}/package.json`)}`, `${path}/package.json`);
+
+    /**
+     * 特殊情况
+     * 读取exports下的exports.json
+     */
+    let { copyfiles } = $util.loadJSON(root(`./exports/${project}/exports.json`));
+    _.each(copyfiles, (file) => {
+        copy(root(file), _path.join(path, file));
+    });
+
+    /**
+     * 修改.gitignore
+     */
+    try {
+        let ignorePath = `${path}/.gitignore`;
+        let text = $template.read(ignorePath);
+        text = text.replace(/package.json/g, '');
+        $template.out(text, ignorePath);
+    } catch (e) {}
+});
+
+function root(path = '') {
+    return _path.resolve(process.cwd(), path);
+}
+
+function proj(project, path = '') {
+    return _path.resolve(root(`./src/project/${project}`), path);
+}
+
+function copy(src, target) {
+    if ($util.existPath(src, true)) {
+        _fse.copySync(src, target);
+    }
+}

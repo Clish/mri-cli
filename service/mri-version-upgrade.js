@@ -13,6 +13,7 @@ const $root = require('./root');
 const $util = require('../lib/common/util');
 const $log = require('../lib/common/log');
 const $load = require('../lib/common/load');
+const MC = require('../lib/common/constant');
 
 class MriVersionUpgrade {
     // 根据package.json 取得当前的版本
@@ -32,6 +33,10 @@ class MriVersionUpgrade {
      * MRI版本升级总程序
      */
     upgrade() {
+        if (!$util.existPath(MC.PATH_MRIRC)) {
+            return void 0;
+        }
+
         let currentVersion = this.getCurrentVersion();
         let updateVersion = this.getUpdateVersion();
 
