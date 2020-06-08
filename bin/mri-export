@@ -51,6 +51,7 @@ $run.root(() => {
             filename !== '.DS_Store' &&
             filename !== 'yarn-error.log' &&
             filename !== '.mritemp' &&
+            filename !== '.mriroot' &&
             filename !== '.mrirc.js'
         ) {
             copy(filedir, `${path}/${filename}`);
@@ -104,6 +105,18 @@ $run.root(() => {
         text = text.replace(/package.json/g, '');
         $template.out(text, ignorePath);
     } catch (e) {}
+
+    /**
+     * 生成 .mrirc.js
+     */
+    $template.out(
+        `
+        module.exports = {
+            model: 'single'
+        }
+    `,
+        `${path}/.mrirc.js`,
+    );
 });
 
 function root(path = '') {
