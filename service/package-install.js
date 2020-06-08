@@ -131,10 +131,23 @@ class PackageInstall {
 
     install() {
         let config = $load.mrirc();
-        let { saves, devs, globals } = config || {};
-        this.installDevs(devs);
-        this.installSaves(saves);
-        this.installGlobals(globals);
+
+        if (config.model === 'single') {
+            if (_shell.which('yarn')) {
+                _shell.exec(`
+                    yarn 
+                `);
+            } else {
+                _shell.exec(`
+                    npm i 
+                `);
+            }
+        } else {
+            let { saves, devs, globals } = config || {};
+            this.installDevs(devs);
+            this.installSaves(saves);
+            this.installGlobals(globals);
+        }
     }
 }
 

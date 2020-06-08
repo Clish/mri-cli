@@ -37,6 +37,12 @@ class MriVersionUpgrade {
             return void 0;
         }
 
+        let config = $load.mrirc();
+
+        if (config.model === 'single') {
+            return void 0;
+        }
+
         let currentVersion = this.getCurrentVersion();
         let updateVersion = this.getUpdateVersion();
 
