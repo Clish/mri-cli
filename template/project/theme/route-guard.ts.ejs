@@ -4,7 +4,7 @@
  * @return {boolean} 返回 true 守卫放行， 返回false 守卫阻止
  */
 
-import $theme from 'src/project';
+import $theme from '@/project';
 
 export default function RouteGuard(module: any, props?: any): boolean {
     const <%=upperName%>Const: any = $theme.getProviders('<%=upperName%>Const');
