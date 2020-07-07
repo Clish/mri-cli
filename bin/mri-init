@@ -3,7 +3,7 @@
 /**
  * 初始化系统
  * - 判断根目录
- * - 生成 package.json 文件
+ * - 生成 package.json.ejs 文件
  * - 安装包
  */
 
@@ -26,7 +26,7 @@ _program.parse(process.argv);
 $log.title(`mri init 初始化系统`);
 
 let isRoot = $root.judgeRoot(process.cwd(), {
-    src: 1
+    src: 1,
     // '.git': 1,
 });
 
@@ -37,9 +37,8 @@ if (isRoot) {
         $run.mri(() => {
             // mri 项目JS package 管理
             $run.package(() => {
-                $log.debug([`- 系统初始化完毕`])
+                $log.debug([`- 系统初始化完毕`]);
             });
         });
-    })
-
+    });
 }

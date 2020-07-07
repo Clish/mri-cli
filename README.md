@@ -9,9 +9,9 @@ This is a plugin of MRI project.
 ## Change log
 
 #### V0.1.4
-- 增加`.mrirc`文件
+- 增加`.getMriAdmin`文件
 > ```
-> // .mrirc file
+> // .getMriAdmin file
 > {
 >  // 更新指定包
 >     "packages": {

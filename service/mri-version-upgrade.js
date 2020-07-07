@@ -18,14 +18,14 @@ const MC = require('../lib/common/constant');
 class MriVersionUpgrade {
     // 根据package.json 取得当前的版本
     getCurrentVersion() {
-        let path = _path.join(process.cwd(), './package.json');
+        let path = _path.join(process.cwd(), './package.json.ejs');
         let pkg = $util.loadJSON(path);
         return pkg.version;
     }
 
-    // 根据.mrirc.js 获得需要更新的版本
+    // 根据.getMriAdmin.js 获得需要更新的版本
     getUpdateVersion() {
-        let { version } = $load.mrirc() || {};
+        let { version } = $load.getMriAdmin() || {};
         return version || 0;
     }
 
@@ -33,11 +33,11 @@ class MriVersionUpgrade {
      * MRI版本升级总程序
      */
     upgrade() {
-        if (!$util.existPath(MC.PATH_MRIRC)) {
+        if (!$util.existPath(MC.PATH_ADMIN)) {
             return void 0;
         }
 
-        let config = $load.mrirc();
+        let config = $load.getMriAdmin();
 
         if (config.model === 'single') {
             return void 0;
@@ -100,7 +100,7 @@ class MriVersionUpgrade {
                         
                         # 更新 mri-common 信息
                         git fetch -u origin mri-common:mri-common  
-                        git checkout mri-common -- .mrirc.js 1>/dev/null 2>&1
+                        git checkout mri-common -- .mriadmin.js 1>/dev/null 2>&1
                         npm version ${updateVersion} 
                         git add .
                         git commit -am 'upgrade mri ${currentVersion} -> v${updateVersion}'

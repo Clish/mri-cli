@@ -114,7 +114,8 @@ class Root {
         if (isRoot) {
             fn && fn();
         } else {
-            $log.error(['- 当前路径错误，请切换到项目根目录进行操作', _chalk.white(`\n  cd ${this.getRoot()}\n`)]);
+            let path = this.getRoot();
+            $log.error(['- 当前路径错误，请切换到项目根目录进行操作', path ? _chalk.white(`\n  cd ${path}\n`) : '']);
         }
     }
 }
