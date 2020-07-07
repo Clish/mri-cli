@@ -73,7 +73,7 @@ $run.root(async () => {
     } catch (e) {}
 
     /**
-     * 生成 .mrirc.js
+     * 生成 .getMriAdmin.js
      */
     $log.log([`- create ${exportPath}/.mrirc.js`]);
     $template.out(

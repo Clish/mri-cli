@@ -130,7 +130,7 @@ class PackageInstall {
     }
 
     install() {
-        let config = $load.mrirc();
+        let config = $load.getMriAdmin();
 
         if (config.model === 'single') {
             if (_shell.which('yarn')) {
