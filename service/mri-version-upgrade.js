@@ -18,7 +18,7 @@ const MC = require('../lib/common/constant');
 class MriVersionUpgrade {
     // 根据package.json 取得当前的版本
     getCurrentVersion() {
-        let path = _path.join(process.cwd(), './package.json.ejs');
+        let path = _path.join(process.cwd(), './package.json');
         let pkg = $util.loadJSON(path);
         return pkg.version;
     }
@@ -33,11 +33,7 @@ class MriVersionUpgrade {
      * MRI版本升级总程序
      */
     upgrade() {
-        if (!$util.existPath(MC.PATH_ADMIN)) {
-            return void 0;
-        }
-
-        let config = $load.getMriAdmin();
+        let config = $load.getMriRC();
 
         if (config.model === 'single') {
             return void 0;
@@ -45,6 +41,8 @@ class MriVersionUpgrade {
 
         let currentVersion = this.getCurrentVersion();
         let updateVersion = this.getUpdateVersion();
+
+        console.debug('ooOooOoo', currentVersion, updateVersion);
 
         if ($util.isDevBranch() && _compareVersion(updateVersion, currentVersion)) {
             $log.log([

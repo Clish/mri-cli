@@ -85,7 +85,7 @@ class PackageInstall {
     }
 
     getPkgs(pkgs, type) {
-        let projectNodeModule = (name) => _join(process.cwd(), 'node_modules', name, 'package.json.ejs');
+        let projectNodeModule = (name) => _join(process.cwd(), 'node_modules', name, 'package.json');
         let globalNodeModule = () => _join(__dirname, '../package.json');
 
         let pathMap = {
@@ -130,7 +130,7 @@ class PackageInstall {
     }
 
     install() {
-        let config = $load.getMriAdmin();
+        let config = $load.getMriRC();
 
         if (config.model === 'single') {
             if (_shell.which('yarn')) {
@@ -143,7 +143,7 @@ class PackageInstall {
                 `);
             }
         } else {
-            let { saves, devs, globals } = config || {};
+            let { saves, devs, globals } = $load.getMriAdmin() || {};
             this.installDevs(devs);
             this.installSaves(saves);
             this.installGlobals(globals);
