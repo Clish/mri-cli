@@ -13,7 +13,7 @@
         "antd": "3.13.0",
         "antd-mobile": "2.2.2",
         "classnames": "2.2.6",
-        "jquery": "3.3.1",
+        "jquery": "3.5.0",
         "marko": "4.12.3-0",
         "masterrt": "1.8.11",
         "mobx": "4.3.0",
