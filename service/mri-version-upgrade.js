@@ -18,7 +18,7 @@ const MC = require('../lib/common/constant');
 class MriVersionUpgrade {
     // 根据package.json 取得当前的版本
     getCurrentVersion() {
-        let path = _path.join(process.cwd(), './package.json');
+        let path = _path.join(process.cwd(), './package.json.ejs');
         let pkg = $util.loadJSON(path);
         return pkg.version;
     }

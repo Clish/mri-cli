@@ -8,6 +8,7 @@ const _path = require('path');
 const _fs = require('fs');
 const _fse = require('fs-extra');
 const _ = require('lodash');
+const _inquirer = require('inquirer');
 
 const $run = require('../lib/common/run');
 const $log = require('../lib/common/log');
@@ -28,16 +29,179 @@ if (!project) {
     process.exit(0);
 }
 
-$run.root(() => {
-    let path = _path.resolve(process.cwd(), `../mri-exports/${project}`);
-    let cwd = process.cwd();
-    $log.title(`mri export 导出项目 ${project}`);
-    $log.log([`-导出路径: ${path}`]);
+$run.root(async () => {
+    // 检测 exports/{project}
+    // 若无，生成配置信息
+    // 读取配置信息
+    // 导出项目
 
-    // 删除已有目录
-    _fse.removeSync(path);
-    // 新建目录
-    _fse.mkdirpSync(path);
+    // 创建 export config 文件
+    const { exportPath: ep, targetProjects = [], asyncPackage, copyfiles } = await createExportConfig(project);
+    let exportPath = _path.resolve(process.cwd(), ep);
+
+    $log.title(`mri export 导出项目 ${project}`);
+
+    // 更新 package.json
+    if (asyncPackage) {
+        createPackage(project, _path.resolve(process.cwd(), `./exports/${project}/package.json`));
+    }
+
+    // 初始化导出目录
+    await initExport(project, exportPath);
+
+    // 导出项目
+    $log.log([`- 导出项目 ${project} 关联文件`]);
+    exportProject(project, exportPath);
+
+    // 导出关联项目
+    if (targetProjects.length) {
+        targetProjects.forEach((project) => {
+            $log.log([`- 导出关联项目 ${project}`]);
+            exportProject(project, exportPath);
+        });
+    }
+
+    /**
+     * 修改.gitignore
+     */
+    try {
+        $log.log([`- modify ${exportPath}/.gitignore`]);
+        let ignorePath = `${exportPath}/.gitignore`;
+        let text = $template.read(ignorePath);
+        text = text.replace(/\/package\.json/g, '');
+        $template.out(text, ignorePath);
+    } catch (e) {}
+
+    /**
+     * 生成 .mrirc.js
+     */
+    $log.log([`- create ${exportPath}/.mrirc.js`]);
+    $template.out(
+        `
+        module.exports = {
+            model: 'single'
+        }
+    `,
+        `${exportPath}/.mrirc.js`,
+    );
+
+    /**
+     * create package.json
+     */
+    $log.log([`- create ${exportPath}/package.json`]);
+    copy(`${root(`./exports/${project}/package.json`)}`, `${exportPath}/package.json`);
+
+    $log.log([`- 导出成功: ${exportPath}`]);
+});
+
+/**
+ * 导出目录初始化
+ */
+async function initExport(project, exportPath) {
+    // 判断导出目录下是否存在 node_modules 文件
+    // 若有 提示是否 删除
+    const nodeModulesPath = `${exportPath}/node_modules`;
+    if ($util.existPath(nodeModulesPath, true)) {
+        const answer = await _inquirer.prompt([
+            {
+                message: `导出路径下拥有node_modules文件夹`,
+                type: 'list',
+                name: 'delete',
+                choices: [
+                    {
+                        name: '不删除node_modules',
+                        value: false,
+                    },
+                    {
+                        name: '删除node_modules',
+                        value: true,
+                    },
+                ],
+            },
+        ]);
+
+        if (answer.delete) {
+            // 删除已有目录
+            _fse.removeSync(exportPath);
+            // 新建目录
+            _fse.mkdirpSync(exportPath);
+        } else {
+            const files = _fse.readdirSync(exportPath);
+            (files || []).forEach((name) => {
+                if (name !== 'node_modules') _fse.removeSync(`${exportPath}/${name}`);
+            });
+        }
+    } else {
+        _fse.mkdirpSync(exportPath);
+    }
+}
+
+/**
+ * 创建配置文件
+ */
+async function createExportConfig(project) {
+    const exportConfigPath = _path.resolve(process.cwd(), `./exports/${project}/exports.json`);
+
+    if (!$util.existPath(exportConfigPath, true)) {
+        const answer = await _inquirer.prompt([
+            {
+                type: 'list',
+                name: 'config',
+                message: '该项目未设置导出配置',
+                choices: [
+                    { name: '使用默认配置, 继续导出项目', value: 'set' },
+                    { name: '生成配置文件，手动修改配置后再导出项目', value: 'exist' },
+                ],
+            },
+        ]);
+
+        if (answer) {
+            // 生成配置文件 exports.json
+            let path = _path.resolve(__dirname, '../template/exports/exports.json.ejs');
+            $template.product(
+                path,
+                {
+                    project,
+                },
+                exportConfigPath,
+            );
+
+            // 生成 package.json
+            createPackage(project, _path.resolve(process.cwd(), `./exports/${project}/package.json`));
+
+            if (answer.config === 'exist') {
+                process.exit(0);
+            }
+        }
+    }
+
+    return $util.loadJSON(exportConfigPath);
+}
+
+// 生成 create package
+function createPackage(project, exportPath) {
+    // 若项目的根目录下没有package.json
+    // 那就由系统的模板给出
+    const rootPackagePath = _path.resolve(process.cwd(), `./package.json`);
+    const templatePackagePath = _path.resolve(__dirname, `../lib/services/tuning/template/package.json`);
+    const path = $util.existPath(rootPackagePath, true) ? rootPackagePath : templatePackagePath;
+
+    // 添加 script 脚本命令
+    const pkg = $util.loadJSON(path);
+    pkg.scripts = {
+        ...pkg.scripts,
+        start: `./node_modules/.bin/mri dev ${project}`,
+        build: `./node_modules/.bin/mri prod ${project}`,
+    };
+    $template.out($template.format(JSON.stringify(pkg)), `${exportPath}/package.json`);
+}
+
+/**
+ * 导出项目
+ * @param project
+ * @param path
+ */
+function exportProject(project, path) {
     // 项目文件
     copy(`${proj(project)}`, `${path}/src/project/${project}`);
     // 资源文件
@@ -86,9 +250,6 @@ $run.root(() => {
     // 复制models
     copy(`${root(`./src/models/${project}`)}`, `${path}/src/models/${project}`);
 
-    // 从 export 中读取package.json 覆盖已有的 package.json
-    copy(`${root(`./exports/${project}/package.json`)}`, `${path}/package.json`);
-
     /**
      * 特殊情况
      * 读取exports下的exports.json
@@ -97,38 +258,32 @@ $run.root(() => {
     _.each(copyfiles, (file) => {
         copy(root(file), _path.join(path, file));
     });
+}
 
-    /**
-     * 修改.gitignore
-     */
-    try {
-        let ignorePath = `${path}/.gitignore`;
-        let text = $template.read(ignorePath);
-        text = text.replace(/\/package\.json/g, '');
-        $template.out(text, ignorePath);
-    } catch (e) {}
-
-    /**
-     * 生成 .mrirc.js
-     */
-    $template.out(
-        `
-        module.exports = {
-            model: 'single'
-        }
-    `,
-        `${path}/.mrirc.js`,
-    );
-});
-
+/**
+ * 返回MRI根目录
+ * @param path
+ * @return {string}
+ */
 function root(path = '') {
     return _path.resolve(process.cwd(), path);
 }
 
+/**
+ * 返回项目根目录
+ * @param project
+ * @param path
+ * @return {string}
+ */
 function proj(project, path = '') {
     return _path.resolve(root(`./src/project/${project}`), path);
 }
 
+/**
+ * 拷贝目录
+ * @param src
+ * @param target
+ */
 function copy(src, target) {
     if ($util.existPath(src, true)) {
         _fse.copySync(src, target);

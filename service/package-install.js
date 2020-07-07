@@ -85,7 +85,7 @@ class PackageInstall {
     }
 
     getPkgs(pkgs, type) {
-        let projectNodeModule = (name) => _join(process.cwd(), 'node_modules', name, 'package.json');
+        let projectNodeModule = (name) => _join(process.cwd(), 'node_modules', name, 'package.json.ejs');
         let globalNodeModule = () => _join(__dirname, '../package.json');
 
         let pathMap = {
