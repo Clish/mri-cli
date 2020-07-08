@@ -43,7 +43,7 @@ $run.root(async () => {
 
     // 更新 package.json
     if (asyncPackage) {
-        createPackage(project, _path.resolve(process.cwd(), `./exports/${project}/package.json`));
+        createPackage(project, _path.resolve(process.cwd(), `./exports/${project}/copyfiles/package.json`));
     }
 
     // 初始化导出目录
@@ -88,8 +88,7 @@ $run.root(async () => {
     /**
      * create package.json
      */
-    $log.log([`- create ${exportPath}/package.json`]);
-    copy(`${root(`./exports/${project}/package.json`)}`, `${exportPath}/package.json`);
+    copy(`${root(`./exports/${project}/copyfiles`)}`, `${exportPath}/`, true);
 
     $log.log([`- 导出成功: ${exportPath}`]);
 });
@@ -167,7 +166,7 @@ async function createExportConfig(project) {
             );
 
             // 生成 package.json
-            createPackage(project, _path.resolve(process.cwd(), `./exports/${project}/package.json`));
+            createPackage(project, _path.resolve(process.cwd(), `./exports/${project}/copyfiles/package.json`));
 
             if (answer.config === 'exist') {
                 process.exit(0);
@@ -284,8 +283,11 @@ function proj(project, path = '') {
  * @param src
  * @param target
  */
-function copy(src, target) {
+function copy(src, target, log) {
     if ($util.existPath(src, true)) {
+        if (log) {
+            $log.log([`- copy ${src} to ${target}`]);
+        }
         _fse.copySync(src, target);
     }
 }

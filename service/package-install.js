@@ -133,15 +133,16 @@ class PackageInstall {
         let config = $load.getMriRC();
 
         if (config.model === 'single') {
-            if (_shell.which('yarn')) {
-                _shell.exec(`
-                    yarn 
-                `);
-            } else {
-                _shell.exec(`
-                    npm i 
-                `);
-            }
+            // single 模式不自动更新包
+            // if (_shell.which('yarn')) {
+            //     _shell.exec(`
+            //         yarn
+            //     `);
+            // } else {
+            //     _shell.exec(`
+            //         npm i
+            //     `);
+            // }
         } else {
             let { saves, devs, globals } = $load.getMriAdmin() || {};
             this.installDevs(devs);
