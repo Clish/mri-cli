@@ -98,7 +98,10 @@ class MriVersionUpgrade {
                         
                         # 更新 mri-common 信息
                         git fetch -u origin mri-common:mri-common  
-                        git checkout mri-common -- .mriadmin.js 1>/dev/null 2>&1
+                        git checkout mri-common -- mriadmin.js 1>/dev/null 2>&1
+                        rm -rf .mriadmin.js
+                        mv mriadmin.js .mriadmin.js
+                        git rm --cache mriadmin.js
                         npm version ${updateVersion} 
                         git add .
                         git commit -am 'upgrade mri ${currentVersion} -> v${updateVersion}'
