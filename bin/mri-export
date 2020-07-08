@@ -193,7 +193,7 @@ function createPackage(project, exportPath) {
         start: `./node_modules/.bin/mri dev ${project}`,
         build: `./node_modules/.bin/mri prod ${project}`,
     };
-    $template.out($template.format(JSON.stringify(pkg)), `${exportPath}/package.json`);
+    $template.out($template.format(JSON.stringify(pkg)), `${exportPath}`);
 }
 
 /**
