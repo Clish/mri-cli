@@ -95,13 +95,6 @@ class MriVersionUpgrade {
                         # 为什么这里要更新tag信息？
                         # git tag -l | xargs git tag -d 
                         # git remote update origin --prune 
-                        
-                        # 更新 mri-common 信息
-                        git fetch -u origin mri-common:mri-common  
-                        git checkout mri-common -- mriadmin.js 1>/dev/null 2>&1
-                        rm -rf .mriadmin.js
-                        mv mriadmin.js .mriadmin.js
-                        git rm --cache mriadmin.js
                         npm version ${updateVersion} 
                         git add .
                         git commit -am 'upgrade mri ${currentVersion} -> v${updateVersion}'
