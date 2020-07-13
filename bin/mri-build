@@ -45,11 +45,11 @@ $run.branch(branch, () => {
             $run.mri(() => {
                 // mri 项目JS package 管理
                 $run.package(() => {
+                    // 启动其项目
+                    $task.run(task, project);
                     // mri 版本管理
-                    $run.upgrade(() => {
-                        // 启动其项目
-                        $task.run(task, project);
-                    });
+                    // 编译，生产，测试环境版本不升级
+                    // $run.upgrade(() => {});
                 });
             });
         });
