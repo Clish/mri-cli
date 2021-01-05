@@ -14,7 +14,7 @@
         "@babel/preset-typescript": "7.3.3",
         "@babel/register": "7.4.4",
         "@svgr/core": "^2.1.1",
-        "axios": "^0.18.0",
+        "axios": "^0.21.1",
         "broccoli-typescript-compiler": "^3.0.1",
         "chalk": "^2.4.1",
         "cheerio": "^1.0.0-rc.2",
